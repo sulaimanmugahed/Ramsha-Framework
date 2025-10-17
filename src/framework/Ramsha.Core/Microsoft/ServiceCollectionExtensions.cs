@@ -39,8 +39,23 @@ public static class ServiceCollectionExtensions
 
     public async static Task<IRamshaAppWithExternalServiceProvider> AddApplicationAsync(
         [NotNull] this IServiceCollection services,
-        [NotNull] Type startupModuleType,
+         Action<DefaultStartupModuleBuilder>? defaultModuleBuilder = null,
         Action<AppCreationOptions>? optionsAction = null)
+    {
+        var fluentModuleBuilder = new DefaultStartupModuleBuilder();
+        defaultModuleBuilder?.Invoke(fluentModuleBuilder);
+
+        var defaultModule = fluentModuleBuilder.Build();
+        var defaultModuleType = defaultModule.GetType();
+        services.AddSingleton(defaultModuleType, defaultModule);
+
+        return await AppFactory.CreateAsync(defaultModuleType, services, optionsAction, defaultModule);
+    }
+
+    public async static Task<IRamshaAppWithExternalServiceProvider> AddApplicationAsync(
+      [NotNull] this IServiceCollection services,
+      [NotNull] Type startupModuleType,
+      Action<AppCreationOptions>? optionsAction = null)
     {
         return await AppFactory.CreateAsync(startupModuleType, services, optionsAction);
     }

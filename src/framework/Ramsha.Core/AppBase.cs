@@ -30,7 +30,8 @@ public abstract class RamshaAppBase : IRamshaApp
     internal RamshaAppBase(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction)
+        Action<AppCreationOptions>? optionsAction,
+        IRamshaModule? startupModuleInstance = null)
     {
         StartupModuleType = startupModuleType;
         Services = services;
@@ -56,7 +57,7 @@ public abstract class RamshaAppBase : IRamshaApp
         var dependenciesContext = new AppModulesContext();
         services.AddSingleton(dependenciesContext);
 
-        Modules = LoadModules(services, options, dependenciesContext);
+        Modules = LoadModules(services, options, dependenciesContext, startupModuleInstance);
 
         if (!options.SkipConfigureServices)
         {
@@ -131,15 +132,21 @@ public abstract class RamshaAppBase : IRamshaApp
 
 
 
-    protected virtual IReadOnlyList<IModuleDescriptor> LoadModules(IServiceCollection services, AppCreationOptions options, AppModulesContext dependenciesContext)
+    protected virtual IReadOnlyList<IModuleDescriptor> LoadModules(IServiceCollection services, AppCreationOptions options, AppModulesContext dependenciesContext, IRamshaModule? startupModuleInstance = null)
     {
-        return services
-            .GetSingletonInstance<IModuleLoader>()
-            .LoadModules(
+        var loader = services
+            .GetSingletonInstance<IModuleLoader>();
+
+        return startupModuleInstance is null
+        ? loader.LoadModules(
                 services,
                 StartupModuleType,
                 dependenciesContext
-            );
+            )
+        : loader.LoadModules(services,
+                startupModuleInstance,
+                dependenciesContext);
+
     }
 
 

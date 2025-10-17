@@ -10,24 +10,53 @@ public interface IModuleLoader
          IServiceCollection services,
        Type startupModuleType,
        AppModulesContext dependenciesContext
-    );
+);
+    IModuleDescriptor[] LoadModules(
+          IServiceCollection services,
+        IRamshaModule startupModuleInstance,
+        AppModulesContext dependenciesContext
+ );
 }
 public class ModuleLoader : IModuleLoader
 {
-    public IModuleDescriptor[] LoadModules(IServiceCollection services, Type startupModuleType, AppModulesContext dependenciesContext)
+
+    public IModuleDescriptor[] LoadModules(IServiceCollection services, IRamshaModule startupInstance, AppModulesContext moduleContext)
+    {
+        var startupModuleType = startupInstance.GetType();
+        var visited = new HashSet<Type>();
+        var moduleInstances = new Dictionary<Type, IRamshaModule>();
+        var logger = services.GetBootstrapLogger<RamshaAppBase>();
+
+        moduleInstances[startupModuleType] = startupInstance;
+        BuildModule(startupInstance, services, moduleContext);
+
+
+        var dependenciesTypes = moduleContext.GetDependenciesTypes(startupModuleType);
+
+        foreach (var depType in dependenciesTypes)
+        {
+            AddModulesRecursively(services, depType, moduleContext, visited, moduleInstances, logger);
+        }
+
+        return GetDescriptors(moduleContext, startupModuleType, moduleInstances, logger);
+    }
+    public IModuleDescriptor[] LoadModules(IServiceCollection services, Type startupModuleType, AppModulesContext moduleContext)
     {
         var visited = new HashSet<Type>();
         var moduleInstances = new Dictionary<Type, IRamshaModule>();
 
         var logger = services.GetBootstrapLogger<RamshaAppBase>();
 
+        AddModulesRecursively(services, startupModuleType, moduleContext, visited, moduleInstances, logger);
 
-        AddModulesRecursively(services, startupModuleType, dependenciesContext, visited, moduleInstances, logger);
+        return GetDescriptors(moduleContext, startupModuleType, moduleInstances, logger);
+    }
 
-
+    public IModuleDescriptor[] GetDescriptors(AppModulesContext context, Type startupModuleType, Dictionary<Type, IRamshaModule> moduleInstances, ILogger<RamshaAppBase> logger)
+    {
         var moduleDescriptors = new List<ModuleDescriptor>();
         var descriptorMap = new Dictionary<Type, ModuleDescriptor>();
-        foreach (var moduleType in dependenciesContext.GetAllModulesTypes())
+        foreach (var moduleType in context.GetAllModulesTypes())
         {
             var descriptor = CreateModuleDescriptor(moduleType, moduleInstances[moduleType]);
             moduleDescriptors.Add(descriptor);
@@ -36,7 +65,7 @@ public class ModuleLoader : IModuleLoader
 
         foreach (var descriptor in moduleDescriptors)
         {
-            var dependencies = dependenciesContext.GetDependenciesTypes(descriptor.Type);
+            var dependencies = context.GetDependenciesTypes(descriptor.Type);
             foreach (var depType in dependencies)
             {
                 if (descriptorMap.TryGetValue(depType, out var depDescriptor))
@@ -52,6 +81,48 @@ public class ModuleLoader : IModuleLoader
 
         return moduleDescriptors.Cast<IModuleDescriptor>().ToArray();
     }
+
+    private IRamshaModule CreateAndRegisterModuleInstance(Type moduleType, IServiceCollection services, ILogger<RamshaAppBase> logger)
+    {
+        IRamshaModule module;
+        try
+        {
+            module = (IRamshaModule)Activator.CreateInstance(moduleType)!;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to create module instance: {ModuleType}", moduleType.FullName);
+            throw;
+        }
+
+        services.AddSingleton(moduleType, module);
+        return module;
+    }
+
+    private void LoadDependenciesModules(
+          IServiceCollection services,
+         Type moduleType,
+         AppModulesContext context,
+         Dictionary<Type, IRamshaModule> moduleInstances,
+         ILogger<RamshaAppBase> logger)
+    {
+        var visited = new HashSet<Type>();
+
+        var modulesTypes = context.GetDependenciesTypes(moduleType).ToList();
+
+        foreach (var depType in modulesTypes)
+        {
+            AddModulesRecursively(services, depType, context, visited, moduleInstances, logger);
+        }
+
+
+    }
+
+    private void BuildModule(IRamshaModule module, IServiceCollection services, AppModulesContext context)
+    {
+        var builder = new ModuleBuilder(module.GetType(), services, context);
+        module.OnModuleCreating(builder);
+    }
     private void AddModulesRecursively(
          IServiceCollection services,
         Type moduleType,
@@ -64,24 +135,12 @@ public class ModuleLoader : IModuleLoader
 
         if (!moduleInstances.ContainsKey(moduleType))
         {
-            IRamshaModule module;
-            try
-            {
-                module = (IRamshaModule)Activator.CreateInstance(moduleType)!;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to create module instance: {ModuleType}", moduleType.FullName);
-                throw;
-            }
+            var module = CreateAndRegisterModuleInstance(moduleType, services, logger);
             moduleInstances[moduleType] = module;
-            services.AddSingleton(moduleType, module);
-
-            var builder = new ModuleBuilder(moduleType, services, context);
-            module.OnModuleCreating(builder);
+            BuildModule(module, services, context);
         }
 
-        var modulesTypes = context.GetAllModulesTypes().ToList();
+        var modulesTypes = context.GetDependenciesTypes(moduleType).ToList();
 
         foreach (var depType in modulesTypes)
         {

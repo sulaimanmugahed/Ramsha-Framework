@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddAppAsync<TStartupModule>(
+        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAppAsync<TStartupModule>(
              [NotNull] this WebApplicationBuilder builder,
              Action<AppCreationOptions>? optionsAction = null)
              where TStartupModule : IRamshaModule
@@ -31,7 +31,23 @@ namespace Microsoft.Extensions.DependencyInjection
             });
         }
 
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddAppAsync(
+        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAppAsync(
+        [NotNull] this WebApplicationBuilder builder,
+        Action<DefaultStartupModuleBuilder>? moduleBuilder = null,
+        Action<AppCreationOptions>? optionsAction = null)
+        {
+            return await builder.Services.AddApplicationAsync(moduleBuilder, options =>
+            {
+                options.Services.ReplaceConfiguration(builder.Configuration);
+                optionsAction?.Invoke(options);
+                if (string.IsNullOrWhiteSpace(options.Environment))
+                {
+                    options.Environment = builder.Environment.EnvironmentName;
+                }
+            });
+        }
+
+        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAppAsync(
             [NotNull] this WebApplicationBuilder builder,
             [NotNull] Type startupModuleType,
             Action<AppCreationOptions>? optionsAction = null)

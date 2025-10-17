@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public async static Task InitAppAsync([NotNull] this IApplicationBuilder app)
+        public async static Task UseRamshaAppAsync([NotNull] this IApplicationBuilder app)
         {
 
             app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
@@ -37,7 +37,7 @@ namespace Microsoft.AspNetCore.Builder
             await application.InitAsync(app.ApplicationServices);
         }
 
-        public static void InitApp([NotNull] this IApplicationBuilder app)
+        public static void UseRamshaApp([NotNull] this IApplicationBuilder app)
         {
 
             app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;

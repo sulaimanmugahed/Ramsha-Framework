@@ -28,8 +28,14 @@ public class ModuleBuilder
 
     public ModuleBuilder DependsOn<TModule>() where TModule : IRamshaModule
     {
-        _context.InsureModuleExist(typeof(TModule));
-        _context.AddDependency(_moduleType, typeof(TModule));
+        return DependsOn(typeof(TModule));
+    }
+
+
+    public ModuleBuilder DependsOn(Type type)
+    {
+        _context.InsureModuleExist(type);
+        _context.AddDependency(_moduleType, type);
         return this;
     }
 }

@@ -18,11 +18,15 @@ internal class RamshaAppWithExternalServiceProvider : RamshaAppBase, IRamshaAppW
     public RamshaAppWithExternalServiceProvider(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction
+        Action<AppCreationOptions>? optionsAction,
+        IRamshaModule? startupModuleInstance = null
+
+
         ) : base(
             startupModuleType,
             services,
-            optionsAction)
+            optionsAction,
+            startupModuleInstance)
     {
         services.AddSingleton<IRamshaAppWithExternalServiceProvider>(this);
     }

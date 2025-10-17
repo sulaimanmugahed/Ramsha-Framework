@@ -15,7 +15,6 @@ public class AppModule : RamshaModule
         base.OnModuleCreating(moduleBuilder);
 
         moduleBuilder
-        .DependsOn<AspNetCoreModule>()
         .DependsOn<DemoModuleModule>();
     }
 

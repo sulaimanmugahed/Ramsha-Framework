@@ -10,7 +10,8 @@ namespace Ramsha;
 public static class AppFactory
 {
     public async static Task<IRamshaAppWithInternalServiceProvider> CreateAsync<TStartupModule>(
-        Action<AppCreationOptions>? optionsAction = null)
+        Action<AppCreationOptions>? optionsAction = null,
+        IRamshaModule? startupModuleInstance = null)
         where TStartupModule : IRamshaModule
     {
         var app = Create(typeof(TStartupModule), options =>
@@ -52,13 +53,14 @@ public static class AppFactory
     public async static Task<IRamshaAppWithExternalServiceProvider> CreateAsync(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction = null)
+        Action<AppCreationOptions>? optionsAction = null,
+         IRamshaModule? startupModuleInstance = null)
     {
         var app = new RamshaAppWithExternalServiceProvider(startupModuleType, services, options =>
         {
             options.SkipConfigureServices = true;
             optionsAction?.Invoke(options);
-        });
+        },startupModuleInstance);
         await app.ConfigureServicesAsync();
         return app;
     }
@@ -88,8 +90,10 @@ public static class AppFactory
     public static IRamshaAppWithExternalServiceProvider Create(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction = null)
+        Action<AppCreationOptions>? optionsAction = null,
+        IRamshaModule? startupModuleInstance = null
+        )
     {
-        return new RamshaAppWithExternalServiceProvider(startupModuleType, services, optionsAction);
+        return new RamshaAppWithExternalServiceProvider(startupModuleType, services, optionsAction,startupModuleInstance);
     }
 }

@@ -3,23 +3,29 @@ using DemoModule;
 
 var builder = WebApplication.CreateBuilder(args);
 
-await builder.AddAppAsync<AppModule>();
-
-
-builder.Services.AddOpenApi();
+await builder.AddRamshaAppAsync(module =>
+{
+    module
+    .OnCreating(options =>
+    {
+        options.DependsOn<DemoModuleModule>();
+    })
+    .OnConfigureAsync(async context =>
+    {
+        context.Services.AddOpenApi();
+    })
+    .OnInitAsync(async context =>
+    {
+        var logger = context.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("******************** Application Initialized **********************************");
+    });
+});
 
 
 var app = builder.Build();
 
-await app.InitAppAsync();
+await app.UseRamshaAppAsync();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
 
 app.MapGet("get", (ITestService service) =>
 {
