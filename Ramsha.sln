@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aspnetcore", "aspnetcore", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.AspNetCore", "src\framework\aspnetcore\Ramsha.AspNetCore\Ramsha.AspNetCore.csproj", "{D47A0EB0-3A8A-494C-9D4B-BFCE7283E327}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.AspNetCore.Mvc", "src\framework\aspnetcore\Ramsha.AspNetCore.Mvc\Ramsha.AspNetCore.Mvc.csproj", "{E9AFBAF5-0730-491F-A43E-7627479D6F8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,18 @@ Global
 		{D47A0EB0-3A8A-494C-9D4B-BFCE7283E327}.Release|x64.Build.0 = Release|Any CPU
 		{D47A0EB0-3A8A-494C-9D4B-BFCE7283E327}.Release|x86.ActiveCfg = Release|Any CPU
 		{D47A0EB0-3A8A-494C-9D4B-BFCE7283E327}.Release|x86.Build.0 = Release|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Debug|x64.Build.0 = Debug|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Debug|x86.Build.0 = Debug|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Release|x64.ActiveCfg = Release|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Release|x64.Build.0 = Release|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Release|x86.ActiveCfg = Release|Any CPU
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,5 +98,6 @@ Global
 		{8CB31E60-3348-443B-90F8-7C8661D9E852} = {E0AD1809-C64F-3D39-45E0-E424261CE16D}
 		{350EFD0C-C200-624F-5632-DFE8CC4028C5} = {E0AD1809-C64F-3D39-45E0-E424261CE16D}
 		{D47A0EB0-3A8A-494C-9D4B-BFCE7283E327} = {350EFD0C-C200-624F-5632-DFE8CC4028C5}
+		{E9AFBAF5-0730-491F-A43E-7627479D6F8D} = {350EFD0C-C200-624F-5632-DFE8CC4028C5}
 	EndGlobalSection
 EndGlobal

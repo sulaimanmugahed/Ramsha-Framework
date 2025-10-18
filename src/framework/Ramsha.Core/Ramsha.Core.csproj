@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.9" />
     <PackageReference Include="Nito.AsyncEx.Context" Version="5.1.2" />
     <PackageReference Include="System.Management" Version="9.0.9" />
+      <PackageReference Include="System.Linq.Dynamic.Core" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using DemoApp;
 using DemoModule;
+using Ramsha.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,9 @@ await builder.AddRamshaAppAsync(module =>
     module
     .OnCreating(options =>
     {
-        options.DependsOn<DemoModuleModule>();
+        options
+        .DependsOn<DemoModuleModule>()
+        .DependsOn<AspNetCoreMvcModule>();
     })
     .OnConfigureAsync(async context =>
     {
@@ -31,6 +34,8 @@ app.MapGet("get", (ITestService service) =>
 {
     return service.Get();
 });
+
+app.MapControllers();
 
 app.Run();
 
