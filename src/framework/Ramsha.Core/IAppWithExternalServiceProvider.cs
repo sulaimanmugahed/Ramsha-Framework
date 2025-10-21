@@ -47,10 +47,9 @@ internal class RamshaAppWithExternalServiceProvider : RamshaAppBase, IRamshaAppW
         SetServiceProvider(serviceProvider);
     }
 
-    public async Task InitAsync(IServiceProvider serviceProvider)
+    public async Task InitAsync([NotNull] IServiceProvider serviceProvider)
     {
         SetServiceProvider(serviceProvider);
-
         await InitializeModulesAsync();
     }
 

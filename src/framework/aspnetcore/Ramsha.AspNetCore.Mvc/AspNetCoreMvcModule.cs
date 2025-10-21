@@ -18,9 +18,11 @@ public class AspNetCoreMvcModule : RamshaModule
     {
         context.Services.AddControllers();
 
-        context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, RamshaControllerActivator>());
+        //context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, RamshaControllerActivator>());
         base.OnAppConfiguring(context);
     }
+
+
 
 
 

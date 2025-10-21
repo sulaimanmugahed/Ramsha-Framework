@@ -13,6 +13,35 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
+
+    public static IServiceProvider BuildRamshaServiceProvider(this IServiceCollection services, ServiceProviderOptions? options = null, IServiceProviderResolver? resolver = null)
+    {
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
+        return new RamshaServiceProvider(services, options, resolver);
+    }
+
+    public static IServiceCollection AddServiceProviderHook<THook>(
+        this IServiceCollection services,
+        ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        where THook : class, IServiceProviderHook
+    {
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
+        return lifetime switch
+        {
+            ServiceLifetime.Scoped => services.AddScoped<IServiceProviderHook, THook>(),
+            ServiceLifetime.Transient => services.AddTransient<IServiceProviderHook, THook>(),
+            _ => services.AddSingleton<IServiceProviderHook, THook>()
+        };
+    }
+
+    public static IServiceCollection AddServiceProviderResolver<TResolver>(this IServiceCollection services) where TResolver : class, IServiceProviderResolver
+    {
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
+        return services.AddSingleton<IServiceProviderResolver, TResolver>();
+    }
+
+
+
     public static IRamshaAppWithExternalServiceProvider AddApplication<TStartupModule>(
      [NotNull] this IServiceCollection services,
      Action<AppCreationOptions>? optionsAction = null)
@@ -74,8 +103,6 @@ public static class ServiceCollectionExtensions
     {
         return services.GetSingletonInstance<IRamshaHostEnvironment>();
     }
-
-
 
     public static Type? NormalizedImplementationType(this ServiceDescriptor descriptor)
     {

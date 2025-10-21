@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DemoModule;
 using Ramsha;
 using Ramsha.AspNetCore;
+using Ramsha.LocalMessaging;
 
 namespace DemoApp;
 
@@ -15,12 +16,14 @@ public class AppModule : RamshaModule
         base.OnModuleCreating(moduleBuilder);
 
         moduleBuilder
-        .DependsOn<DemoModuleModule>();
+        .DependsOn<DemoModuleModule>()
+        .DependsOn<LocalMessagingModule>();
     }
 
     public override void OnAppConfiguring(ConfigureContext context)
     {
         base.OnAppConfiguring(context);
+
 
     }
 

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteBus" Version="4.0.0" />
+    <PackageReference Include="LiteBus.Commands" Version="4.0.0" />
+    <PackageReference Include="LiteBus.Events" Version="4.0.0" />
+    <PackageReference Include="LiteBus.Extensions.Microsoft.DependencyInjection" Version="4.0.0" />
+    <PackageReference Include="LiteBus.Queries" Version="4.0.0" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ramsha.LocalMessaging.Abstractions\Ramsha.LocalMessaging.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
