@@ -29,15 +29,12 @@ internal static class InternalServiceCollectionExtensions
             );
         }
 
-        services.AddScoped<IRamshaServiceProvider, RamshaServiceProvider>();
+        services.AddServiceProviderHook<PropertyInitializerServiceProviderHook>(ServiceLifetime.Scoped);
         services.TryAddSingleton<IBootstrapLoggerFactory>(new DefaultBootstrapLoggerFactory());
         services.AddTransient<OnAppInitModuleLifecycleContributor>();
         services.AddTransient<OnAppShutdownModuleLifecycleContributor>();
         services.AddSingleton<IModuleManager, ModuleManager>();
         services.TryAddSingleton<IModuleLoader>(moduleLoader);
-
-
-
 
         services.Configure<ModuleLifecycleOptions>(options =>
         {

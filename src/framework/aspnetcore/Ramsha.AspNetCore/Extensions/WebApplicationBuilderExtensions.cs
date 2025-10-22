@@ -16,11 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAppAsync<TStartupModule>(
+        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAsync<TStartupModule>(
              [NotNull] this WebApplicationBuilder builder,
              Action<AppCreationOptions>? optionsAction = null)
              where TStartupModule : IRamshaModule
         {
+            builder.Host.UseRamshaServiceProvider();
             return await builder.Services.AddApplicationAsync<TStartupModule>(options =>
             {
                 options.Services.ReplaceConfiguration(builder.Configuration);
@@ -32,11 +33,12 @@ namespace Microsoft.Extensions.DependencyInjection
             });
         }
 
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAppAsync(
+        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAsync(
         [NotNull] this WebApplicationBuilder builder,
         Action<DefaultStartupModuleBuilder>? moduleBuilder = null,
         Action<AppCreationOptions>? optionsAction = null)
         {
+            builder.Host.UseRamshaServiceProvider();
             return await builder.Services.AddApplicationAsync(moduleBuilder, options =>
             {
                 options.Services.ReplaceConfiguration(builder.Configuration);
@@ -48,11 +50,12 @@ namespace Microsoft.Extensions.DependencyInjection
             });
         }
 
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAppAsync(
+        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAsync(
             [NotNull] this WebApplicationBuilder builder,
             [NotNull] Type startupModuleType,
             Action<AppCreationOptions>? optionsAction = null)
         {
+            builder.Host.UseRamshaServiceProvider();
             return await builder.Services.AddApplicationAsync(startupModuleType, options =>
             {
                 options.Services.ReplaceConfiguration(builder.Configuration);

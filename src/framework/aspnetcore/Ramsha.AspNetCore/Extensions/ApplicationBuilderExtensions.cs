@@ -17,10 +17,9 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public async static Task UseRamshaAppAsync([NotNull] this IApplicationBuilder app)
+        public async static Task UseRamshaAsync([NotNull] this IApplicationBuilder app)
         {
 
-            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
             var application = app.ApplicationServices.GetRequiredService<IRamshaAppWithExternalServiceProvider>();
             var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
@@ -35,9 +34,13 @@ namespace Microsoft.AspNetCore.Builder
             });
 
             await application.InitAsync(app.ApplicationServices);
+
+            var pipeline = app.ApplicationServices.GetRequiredService<IAppPipeline<IApplicationBuilder>>();
+            pipeline.Apply(app);
+
         }
 
-        public static void UseRamshaApp([NotNull] this IApplicationBuilder app)
+        public static void UseRamsha([NotNull] this IApplicationBuilder app)
         {
 
             app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
@@ -55,6 +58,9 @@ namespace Microsoft.AspNetCore.Builder
             });
 
             application.Init(app.ApplicationServices);
+
+            var pipeline = app.ApplicationServices.GetRequiredService<IAppPipeline<IApplicationBuilder>>();
+            pipeline.Apply(app);
         }
     }
 }
