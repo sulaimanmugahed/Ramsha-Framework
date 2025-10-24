@@ -86,7 +86,7 @@ public sealed class DefaultStartupModule : RamshaModule
     internal void AddInitAsyncAction(Func<InitContext, Task> action) => _asyncInitActions.Add(action);
     internal void AddShutdownAsyncAction(Func<ShutdownContext, Task> action) => _asyncShutdownActions.Add(action);
 
-    public override async Task OnAppConfiguringAsync(ConfigureContext context)
+    public override async Task OnConfiguringAsync(ConfigureContext context)
     {
         foreach (var action in _asyncConfigureActions)
         {
@@ -94,7 +94,7 @@ public sealed class DefaultStartupModule : RamshaModule
         }
     }
 
-    public override async Task OnAppInitAsync(InitContext context)
+    public override async Task OnInitAsync(InitContext context)
     {
         foreach (var action in _asyncInitActions)
         {
@@ -102,7 +102,7 @@ public sealed class DefaultStartupModule : RamshaModule
         }
     }
 
-    public override async Task OnAppShutdownAsync(ShutdownContext context)
+    public override async Task OnShutdownAsync(ShutdownContext context)
     {
         foreach (var action in _asyncShutdownActions)
         {
@@ -114,7 +114,7 @@ public sealed class DefaultStartupModule : RamshaModule
 
 
 
-    public override void OnModuleCreating(ModuleBuilder moduleBuilder)
+    public override void OnCreating(ModuleBuilder moduleBuilder)
     {
         foreach (var action in _moduleBuilderActions)
         {
@@ -122,19 +122,19 @@ public sealed class DefaultStartupModule : RamshaModule
         }
     }
 
-    public override void OnAppConfiguring(ConfigureContext context)
+    public override void OnConfiguring(ConfigureContext context)
     {
         foreach (var action in _configureActions)
             action(context);
     }
 
-    public override void OnAppInit(InitContext context)
+    public override void OnInit(InitContext context)
     {
         foreach (var action in _initActions)
             action(context);
     }
 
-    public override void OnAppShutdown(ShutdownContext context)
+    public override void OnShutdown(ShutdownContext context)
     {
         foreach (var action in _shutdownActions)
             action(context);

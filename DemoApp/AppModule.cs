@@ -14,9 +14,9 @@ namespace DemoApp;
 
 public class AppModule : RamshaModule
 {
-    public override void OnModuleCreating(ModuleBuilder moduleBuilder)
+    public override void OnCreating(ModuleBuilder moduleBuilder)
     {
-        base.OnModuleCreating(moduleBuilder);
+        base.OnCreating(moduleBuilder);
 
         moduleBuilder
         .DependsOn<DemoModuleModule>()
@@ -24,59 +24,26 @@ public class AppModule : RamshaModule
         .DependsOn<LocalMessagingModule>();
     }
 
-    public override void OnAppConfiguring(ConfigureContext context)
+    public override void OnConfiguring(ConfigureContext context)
     {
-        base.OnAppConfiguring(context);
+        base.OnConfiguring(context);
         context.Services.AddScoped<IRamshaService, RamshaService>();
         context.Services.AddScoped<ITestService, TestService>();
-        context.Services.AddOpenApi();
         context.Services.AddLiteBus(options =>
       {
 
           options.AddQueryModule(builder =>
           {
-
               builder.RegisterFromAssembly(typeof(TestQuery).Assembly);
           });
-
       });
 
-
     }
 
-    public override void OnAppInit(InitContext context)
+    public override void OnInit(InitContext context)
     {
-        base.OnAppInit(context);
+        base.OnInit(context);
 
-        var logger = context.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        context.GetAppPipelineBuilder()
-        .Use("first", app =>
-        {
-            logger.LogInformation("************ First pipeline...");
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-        }, 1)
-        .Use(app =>
-        {
-            logger.LogInformation("************ Second pipeline...");
-            app.UseEndpoints(end =>
-             {
-                 end.MapGet("/get", () => "pong");
-             });
-        }, 2)
-        .UseAfter("first", app =>
-        {
-            logger.LogInformation("************ middle pipeline...");
-        });
     }
 
-    public override void OnAppShutdown(ShutdownContext context)
-    {
-        context.ServiceProvider.GetRequiredService<ILogger<AppModule>>().LogError("application shutdown");
-        base.OnAppShutdown(context);
-    }
 }

@@ -121,7 +121,7 @@ public class ModuleLoader : IModuleLoader
     private void BuildModule(IRamshaModule module, IServiceCollection services, AppModulesContext context)
     {
         var builder = new ModuleBuilder(module.GetType(), services, context);
-        module.OnModuleCreating(builder);
+        module.OnCreating(builder);
     }
     private void AddModulesRecursively(
          IServiceCollection services,

@@ -169,11 +169,11 @@ public abstract class RamshaAppBase : IRamshaApp
         {
             try
             {
-                await module.Instance.OnAppConfiguringAsync(context);
+                await module.Instance.OnConfiguringAsync(context);
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred during {nameof(IRamshaModule.OnAppConfiguringAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                throw new Exception($"An error occurred during {nameof(IRamshaModule.OnConfiguringAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
             }
         }
 
@@ -209,11 +209,11 @@ public abstract class RamshaAppBase : IRamshaApp
         {
             try
             {
-                module.Instance.OnAppConfiguring(context);
+                module.Instance.OnConfiguring(context);
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred during {nameof(IRamshaModule.OnAppConfiguring)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                throw new Exception($"An error occurred during {nameof(IRamshaModule.OnConfiguring)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
             }
         }
 

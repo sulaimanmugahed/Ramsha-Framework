@@ -5,15 +5,15 @@ namespace Ramsha.LocalMessaging;
 
 public class LocalMessagingModule : RamshaModule
 {
-    public override void OnModuleCreating(ModuleBuilder moduleBuilder)
+    public override void OnCreating(ModuleBuilder moduleBuilder)
     {
-        base.OnModuleCreating(moduleBuilder);
+        base.OnCreating(moduleBuilder);
         moduleBuilder.DependsOn<LocalMessagingAbstractionsModule>();
     }
 
-    public override void OnAppConfiguring(ConfigureContext context)
+    public override void OnConfiguring(ConfigureContext context)
     {
-        base.OnAppConfiguring(context);
+        base.OnConfiguring(context);
 
 
     }

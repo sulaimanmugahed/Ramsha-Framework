@@ -19,16 +19,16 @@ public class ModuleLifecycleOptions
 
 public interface IOnAppShutdown
 {
-    Task OnAppShutdownAsync(ShutdownContext context);
+    Task OnShutdownAsync(ShutdownContext context);
 
-    void OnAppShutdown(ShutdownContext context);
+    void OnShutdown(ShutdownContext context);
 }
 
 public interface IOnAppInit
 {
-    Task OnAppInitAsync(InitContext context);
+    Task OnInitAsync(InitContext context);
 
-    void OnAppInit(InitContext context);
+    void OnInit(InitContext context);
 }
 
 public class OnAppInitModuleLifecycleContributor : ModuleLifecycleContributorBase
@@ -37,13 +37,13 @@ public class OnAppInitModuleLifecycleContributor : ModuleLifecycleContributorBas
     {
         if (module is IOnAppInit onApplicationInitialization)
         {
-            await onApplicationInitialization.OnAppInitAsync(context);
+            await onApplicationInitialization.OnInitAsync(context);
         }
     }
 
     public override void Init(InitContext context, IRamshaModule module)
     {
-        (module as IOnAppInit)?.OnAppInit(context);
+        (module as IOnAppInit)?.OnInit(context);
     }
 }
 
@@ -53,13 +53,13 @@ public class OnAppShutdownModuleLifecycleContributor : ModuleLifecycleContributo
     {
         if (module is IOnAppShutdown onApplicationShutdown)
         {
-            await onApplicationShutdown.OnAppShutdownAsync(context);
+            await onApplicationShutdown.OnShutdownAsync(context);
         }
     }
 
     public override void Shutdown(ShutdownContext context, IRamshaModule module)
     {
-        (module as IOnAppShutdown)?.OnAppShutdown(context);
+        (module as IOnAppShutdown)?.OnShutdown(context);
     }
 }
 

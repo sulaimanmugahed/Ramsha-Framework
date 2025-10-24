@@ -8,16 +8,16 @@ namespace Ramsha.Autofac;
 public class AutofacModule : RamshaModule
 {
 
-    public override void OnAppConfiguring(ConfigureContext context)
+    public override void OnConfiguring(ConfigureContext context)
     {
-        base.OnAppConfiguring(context);
+        base.OnConfiguring(context);
         //         context.Services.AddAutofac(builder =>
         // {
         //     builder.ConfigureAutofacContainer();
         // });
     }
 
-    public override void OnAppInit(InitContext context)
+    public override void OnInit(InitContext context)
     {
         var env = context.ServiceProvider.GetRequiredService<IRamshaHostEnvironment>();
         var logger = context.ServiceProvider.GetService<ILogger<AutofacModule>>();

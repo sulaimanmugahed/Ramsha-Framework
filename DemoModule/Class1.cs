@@ -6,14 +6,14 @@ namespace DemoModule;
 
 public class DemoModuleModule : RamshaModule
 {
-    public override void OnModuleCreating(ModuleBuilder context)
+    public override void OnCreating(ModuleBuilder context)
     {
-        base.OnModuleCreating(context);
+        base.OnCreating(context);
         context.DependsOn<AspNetCoreModule>();
     }
-    public override void OnAppConfiguring(ConfigureContext context)
+    public override void OnConfiguring(ConfigureContext context)
     {
-        base.OnAppConfiguring(context);
+        base.OnConfiguring(context);
         // context.Services.AddSingleton<ITestService, TestService>();
 
     }

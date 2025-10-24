@@ -2,9 +2,9 @@ namespace Ramsha;
 
 public interface IRamshaModule
 {
-    void OnModuleCreating(ModuleBuilder moduleBuilder);
-    Task OnAppConfiguringAsync(ConfigureContext context);
-    void OnAppConfiguring(ConfigureContext context);
+    void OnCreating(ModuleBuilder moduleBuilder);
+    Task OnConfiguringAsync(ConfigureContext context);
+    void OnConfiguring(ConfigureContext context);
 
 }
 
@@ -25,40 +25,40 @@ public abstract class RamshaModule : IRamshaModule, IOnAppInit, IOnAppShutdown
     }
 
     private ConfigureContext? _serviceConfigurationContext;
-    public virtual void OnAppConfiguring(ConfigureContext context)
+    public virtual void OnConfiguring(ConfigureContext context)
     {
 
     }
 
-    public virtual Task OnAppConfiguringAsync(ConfigureContext context)
+    public virtual Task OnConfiguringAsync(ConfigureContext context)
     {
-        OnAppConfiguring(context);
+        OnConfiguring(context);
         return Task.CompletedTask;
     }
 
-    public virtual void OnAppInit(InitContext context)
+    public virtual void OnInit(InitContext context)
     {
 
     }
 
-    public virtual Task OnAppInitAsync(InitContext context)
+    public virtual Task OnInitAsync(InitContext context)
     {
-        OnAppInit(context);
+        OnInit(context);
         return Task.CompletedTask;
     }
 
-    public virtual void OnAppShutdown(ShutdownContext context)
+    public virtual void OnShutdown(ShutdownContext context)
     {
 
     }
 
-    public virtual Task OnAppShutdownAsync(ShutdownContext context)
+    public virtual Task OnShutdownAsync(ShutdownContext context)
     {
-        OnAppShutdown(context);
+        OnShutdown(context);
         return Task.CompletedTask;
     }
 
-    public virtual void OnModuleCreating(ModuleBuilder moduleBuilder)
+    public virtual void OnCreating(ModuleBuilder moduleBuilder)
     {
 
     }

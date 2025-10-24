@@ -13,8 +13,8 @@ namespace DemoApp.Controllers;
 public class TestController(IQueryMediator queryMediator) : RamshaApiController
 {
     [HttpGet]
-    public async Task<string> Get()
+    public async Task<IActionResult> Get()
     {
-        return await queryMediator.QueryAsync(new TestQuery());
+        return Ok(await queryMediator.QueryAsync(new TestQuery()));
     }
 }
