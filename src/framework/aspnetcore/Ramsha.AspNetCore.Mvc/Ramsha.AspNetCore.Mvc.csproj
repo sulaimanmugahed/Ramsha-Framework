@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\messaging\Ramsha.LocalMessaging.Abstractions\Ramsha.LocalMessaging.Abstractions.csproj" />
     <ProjectReference Include="..\Ramsha.AspNetCore\Ramsha.AspNetCore.csproj" />
   </ItemGroup>
 

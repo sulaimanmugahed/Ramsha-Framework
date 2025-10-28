@@ -14,7 +14,5 @@ public class DemoModuleModule : RamshaModule
     public override void OnConfiguring(ConfigureContext context)
     {
         base.OnConfiguring(context);
-        // context.Services.AddSingleton<ITestService, TestService>();
-
     }
 }

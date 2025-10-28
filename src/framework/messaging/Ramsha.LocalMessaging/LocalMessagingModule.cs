@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.DependencyInjection;
 using Ramsha.LocalMessaging.Abstractions;
 
 namespace Ramsha.LocalMessaging;
@@ -14,7 +15,6 @@ public class LocalMessagingModule : RamshaModule
     public override void OnConfiguring(ConfigureContext context)
     {
         base.OnConfiguring(context);
-
-
+        context.Services.AddScoped<IRamshaMediator, RamshaMediator>();
     }
 }

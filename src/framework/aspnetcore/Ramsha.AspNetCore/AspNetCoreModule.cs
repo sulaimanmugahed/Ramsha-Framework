@@ -44,6 +44,11 @@ public class AspNetCoreModule : RamshaModule
             app.UseStaticFiles();
         }, entryOptions);
 
+        appPipeline.Use(AspNetCorePipelineEntries.UnitOfWork, app =>
+        {
+            app.UseUnitOfWork();
+        }, entryOptions);
+
         appPipeline.Use(AspNetCorePipelineEntries.Routing, app =>
         {
             app.UseRouting();

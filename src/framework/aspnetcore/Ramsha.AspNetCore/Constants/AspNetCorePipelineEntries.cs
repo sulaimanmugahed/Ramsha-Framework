@@ -14,6 +14,8 @@ public static class AspNetCorePipelineEntries
     public const string Endpoints = Prefix + "endpoints";
     public const string StaticFiles = Prefix + "static-files";
     public const string HttpsRedirection = Prefix + "https-redirection";
+    public const string UnitOfWork = Prefix + "uow";
+
 
 
 

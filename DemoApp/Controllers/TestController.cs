@@ -10,11 +10,11 @@ using Ramsha.AspNetCore.Mvc;
 
 namespace DemoApp.Controllers;
 
-public class TestController(IQueryMediator queryMediator) : RamshaApiController
+public class TestController : RamshaApiController
 {
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok(await queryMediator.QueryAsync(new TestQuery()));
+        return Ok(await Mediator.Send(new TestQuery()));
     }
 }

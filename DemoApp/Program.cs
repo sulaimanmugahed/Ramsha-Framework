@@ -1,4 +1,3 @@
-using Autofac.Extensions.DependencyInjection;
 using DemoApp;
 
 var builder = WebApplication.CreateBuilder(args);

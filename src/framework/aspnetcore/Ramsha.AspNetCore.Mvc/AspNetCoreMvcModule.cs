@@ -60,15 +60,6 @@ public class AspNetCoreMvcModule : RamshaModule
     public override void OnInit(InitContext context)
     {
         base.OnInit(context);
-
-        var env = context.GetEnvironment();
-
-        context.GetAppPipelineBuilder()
-        .Use(AspNetCoreMvcPipelineEntries.Endpoints, app =>
-        {
-            app.UseRouting();
-            app.UseRamshaEndpoints();
-        });
     }
 
 }

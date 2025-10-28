@@ -29,6 +29,8 @@ internal static class InternalServiceCollectionExtensions
             );
         }
 
+       
+
         services.AddServiceProviderHook<PropertyInitializerServiceProviderHook>(ServiceLifetime.Scoped);
         services.TryAddSingleton<IBootstrapLoggerFactory>(new DefaultBootstrapLoggerFactory());
         services.AddTransient<OnAppInitModuleLifecycleContributor>();

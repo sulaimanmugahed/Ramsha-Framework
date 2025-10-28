@@ -8,13 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DemoModule\DemoModule.csproj" />
     <ProjectReference Include="..\src\framework\aspnetcore\Ramsha.AspNetCore.Mvc\Ramsha.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\src\framework\aspnetcore\Ramsha.AspNetCore\Ramsha.AspNetCore.csproj" />
-    <ProjectReference Include="..\src\framework\dependency-injection\Ramsha.Autofac\Ramsha.Autofac.csproj" />
+    <ProjectReference Include="..\src\framework\entity-framework-core\Ramsha.EntityFrameworkCore\Ramsha.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\src\framework\messaging\Ramsha.LocalMessaging\Ramsha.LocalMessaging.csproj" />
     <ProjectReference Include="..\src\framework\Ramsha.Core\Ramsha.Core.csproj" />
   </ItemGroup>

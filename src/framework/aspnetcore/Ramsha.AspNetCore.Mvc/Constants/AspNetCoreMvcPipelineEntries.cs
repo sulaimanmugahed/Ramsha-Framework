@@ -8,5 +8,4 @@ namespace Ramsha.AspNetCore.Mvc;
 public static class AspNetCoreMvcPipelineEntries
 {
     public const string Prefix = "mvc_";
-    public const string Endpoints = Prefix + "endpoints";
 }
