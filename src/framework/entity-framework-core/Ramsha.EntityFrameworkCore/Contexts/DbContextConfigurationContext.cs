@@ -60,9 +60,5 @@ public class RamshaDbContextConfigurationContext<TDbContext> : RamshaDbContextCo
     }
 }
 
-public interface IRamshaDbContextConfigurator<TDbContext>
-    where TDbContext : RamshaDbContext<TDbContext>
-{
-    void Configure(RamshaDbContextConfigurationContext<TDbContext> context);
-}
+
 

@@ -84,7 +84,7 @@ public static class RamshaDbContextOptionsFactory
             return context;
         }
 
-        var connectionStringName = "MainDb";
+        var connectionStringName = ConnectionStringAttribute.GetNameOrNull<TDbContext>();
         var connectionString = ResolveConnectionString<TDbContext>(serviceProvider, connectionStringName).Result;
 
         return new DbContextCreationContext(

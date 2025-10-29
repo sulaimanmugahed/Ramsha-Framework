@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ramsha.EntityFrameworkCore.Contexts;
 
-public abstract class RamshaDesignTimeDbContextBase<TModule, TContext> : IDesignTimeDbContextFactory<TContext>
+public abstract class RamshaDesignTimeDbContext<TModule, TContext> : IDesignTimeDbContextFactory<TContext>
     where TModule : RamshaModule
     where TContext : DbContext
 {
