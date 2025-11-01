@@ -19,9 +19,16 @@ public class DomainModule : RamshaModule
             config.GetSection("ConnectionStrings").Bind(options.ConnectionStrings);
             options.Initialize();
         });
+        context.Services.Configure<GlobalQueryFilterOptions>(config);
+        context.Services.AddSingleton<IGlobalQueryFilterManager, GlobalQueryFilterManager>();
 
-       
+        context.Services.AddSingleton(typeof(IGlobalQueryFilterManager<>), typeof(GlobalQueryFilterManager<>));
+
 
 
     }
+}
+public interface IPrice
+{
+    decimal Price { get; }
 }

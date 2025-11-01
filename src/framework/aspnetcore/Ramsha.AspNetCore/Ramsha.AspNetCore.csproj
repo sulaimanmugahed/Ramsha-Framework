@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Ramsha.Core\Ramsha.Core.csproj" />
+    <ProjectReference Include="..\..\common\Ramsha.Domain\Ramsha.Domain.csproj" />
     <ProjectReference Include="..\..\infrastructure\Ramsha.UnitOfWork\Ramsha.UnitOfWork.csproj" />
 
       <PackageReference Include="Microsoft.AspNetCore.App" Version="2.3.0" />

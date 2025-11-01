@@ -21,14 +21,15 @@ public class EntityFrameworkCoreModule : RamshaModule
 
         context.Services.Configure<RamshaDbContextOptions>(options =>
        {
-           options.PreConfigure(abpDbContextConfigurationContext =>
+           options.PreConfigure(dbContextConfigurationContext =>
            {
-
            });
        });
 
+        context.Services.AddSingleton(typeof(EFGlobalQueryFilterApplier<>));
+
         context.Services.AddTransient<IEfDbContextTypeProvider, EfDbContextTypeProvider>();
-      
+
 
         context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UoWDbContextProvider<>));
     }

@@ -13,7 +13,7 @@ using Ramsha.UnitOfWork;
 namespace Ramsha.EntityFrameworkCore;
 
 public class UoWDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
-    where TDbContext : DbContext
+    where TDbContext : IEFDbContext
 {
     [Injectable]
     public ILogger<UoWDbContextProvider<TDbContext>> Logger { get; set; }

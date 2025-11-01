@@ -11,7 +11,8 @@ public interface IDbContextRegistrationOptionsBaseBuilder
     IDbContextRegistrationOptionsBaseBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false);
 
     IDbContextRegistrationOptionsBaseBuilder AddDefaultRepository<TEntity>();
-
+    IDbContextRegistrationOptionsBaseBuilder AddGlobalQueryFilterProvider<TProvider>()
+    where TProvider : IGlobalQueryFilterProvider;
     IDbContextRegistrationOptionsBaseBuilder AddDefaultRepository(Type entityType);
 
     IDbContextRegistrationOptionsBaseBuilder AddRepository<TEntity, TRepository>();

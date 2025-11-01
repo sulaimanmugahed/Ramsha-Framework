@@ -6,7 +6,7 @@ public interface IRamshaDbContextConfigurator
 }
 
 public interface IRamshaDbContextConfigurator<TDbContext>
-    where TDbContext : RamshaDbContext<TDbContext>
+    where TDbContext : RamshaEFDbContext<TDbContext>
 {
     void Configure(RamshaDbContextConfigurationContext<TDbContext> context);
 }

@@ -29,6 +29,8 @@ public abstract class DbContextRegistrationOptionsBase : IDbContextRegistrationO
     public Dictionary<Type, Type> CustomRepositories { get; }
 
     public List<Type> SpecifiedDefaultRepositories { get; }
+    public List<Type> GlobalQueryFilterProviders { get; }
+
 
     public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithoutKey != null;
 
@@ -37,9 +39,10 @@ public abstract class DbContextRegistrationOptionsBase : IDbContextRegistrationO
         OriginalDbContextType = originalDbContextType;
         Services = services;
         DefaultRepositoryDbContextType = originalDbContextType;
-        CustomRepositories = new Dictionary<Type, Type>();
-        ReplacedDbContextTypes = new Dictionary<Type, Type?>();
-        SpecifiedDefaultRepositories = new List<Type>();
+        CustomRepositories = [];
+        ReplacedDbContextTypes = [];
+        SpecifiedDefaultRepositories = [];
+        GlobalQueryFilterProviders = [];
     }
 
     public IDbContextRegistrationOptionsBaseBuilder ReplaceDbContext<TOtherDbContext>()
@@ -101,6 +104,23 @@ public abstract class DbContextRegistrationOptionsBase : IDbContextRegistrationO
             SpecifiedDefaultRepositories.Add(entityType);
         }
 
+        return this;
+    }
+
+    public IDbContextRegistrationOptionsBaseBuilder AddGlobalQueryFilterProvider(Type filterProviderType)
+    {
+        if (!GlobalQueryFilterProviders.Any(x => x == filterProviderType))
+        {
+            GlobalQueryFilterProviders.Add(filterProviderType);
+        }
+
+        return this;
+    }
+
+    public IDbContextRegistrationOptionsBaseBuilder AddGlobalQueryFilterProvider<TProvider>()
+    where TProvider : IGlobalQueryFilterProvider
+    {
+        AddGlobalQueryFilterProvider(typeof(TProvider));
         return this;
     }
 

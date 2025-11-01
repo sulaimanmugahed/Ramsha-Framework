@@ -8,7 +8,7 @@ namespace Ramsha.EntityFrameworkCore;
 public static class RamshaDbContextOptionsFactory
 {
     public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         var creationContext = GetCreationContext<TDbContext>(serviceProvider);
 
@@ -24,6 +24,7 @@ public static class RamshaDbContextOptionsFactory
         PreConfigure(options, context);
         Configure(options, context);
 
+        context.DbContextOptions.AddAbpDbContextOptionsExtension<TDbContext>();
 
         return context.DbContextOptions.Options;
     }
@@ -31,7 +32,7 @@ public static class RamshaDbContextOptionsFactory
     private static void PreConfigure<TDbContext>(
         RamshaDbContextOptions options,
         RamshaDbContextConfigurationContext<TDbContext> context)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         foreach (var defaultPreConfigureAction in options.DefaultPreConfigureActions)
         {
@@ -51,7 +52,7 @@ public static class RamshaDbContextOptionsFactory
     private static void Configure<TDbContext>(
         RamshaDbContextOptions options,
         RamshaDbContextConfigurationContext<TDbContext> context)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         var configureAction = options.ConfigureActions.FirstOrDefault(x => x.Key == typeof(TDbContext)).Value;
         if (configureAction != null)
@@ -70,13 +71,13 @@ public static class RamshaDbContextOptionsFactory
     }
 
     private static RamshaDbContextOptions GetDbContextOptions<TDbContext>(IServiceProvider serviceProvider)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         return serviceProvider.GetRequiredService<IOptions<RamshaDbContextOptions>>().Value;
     }
 
     private static DbContextCreationContext GetCreationContext<TDbContext>(IServiceProvider serviceProvider)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         var context = DbContextCreationContext.Current;
         if (context != null)

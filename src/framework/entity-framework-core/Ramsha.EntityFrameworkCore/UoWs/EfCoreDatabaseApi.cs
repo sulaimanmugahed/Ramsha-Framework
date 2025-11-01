@@ -5,9 +5,9 @@ namespace Ramsha.EntityFrameworkCore;
 
 public class EfCoreDatabaseApi : IDatabaseApi, ISupportsSavingChanges
 {
-    public DbContext DbContext { get; }
+    public IEFDbContext DbContext { get; }
 
-    public EfCoreDatabaseApi(DbContext dbContext)
+    public EfCoreDatabaseApi(IEFDbContext dbContext)
     {
         DbContext = dbContext;
     }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Ramsha;
+using Ramsha.Domain;
 
 namespace Ramsha.AspNetCore;
 
@@ -14,6 +15,7 @@ public class AspNetCoreModule : RamshaModule
     public override void OnCreating(ModuleBuilder moduleBuilder)
     {
         base.OnCreating(moduleBuilder);
+        moduleBuilder.DependsOn<DomainModule>();
     }
     public override void OnConfiguring(ConfigureContext context)
     {

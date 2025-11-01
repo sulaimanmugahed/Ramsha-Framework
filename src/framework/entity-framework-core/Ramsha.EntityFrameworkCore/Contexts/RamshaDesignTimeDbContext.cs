@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Ramsha.EntityFrameworkCore.Contexts;
+namespace Ramsha.EntityFrameworkCore;
 
 public abstract class RamshaDesignTimeDbContext<TModule, TContext> : IDesignTimeDbContextFactory<TContext>
     where TModule : RamshaModule

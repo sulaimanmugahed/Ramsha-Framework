@@ -4,6 +4,7 @@ namespace Ramsha.EntityFrameworkCore;
 
 public class RamshaDbContextOptions
 {
+    internal Dictionary<Type, List<object>> OnConfiguringActions { get; }
     internal List<Action<RamshaDbContextConfigurationContext>> DefaultPreConfigureActions { get; }
 
     internal Action<RamshaDbContextConfigurationContext>? DefaultConfigureAction { get; set; }
@@ -13,6 +14,7 @@ public class RamshaDbContextOptions
     internal Dictionary<Type, object> ConfigureActions { get; }
 
     internal Dictionary<Type, Type> DbContextReplacements { get; }
+    internal Action<DbContext, DbContextOptionsBuilder>? DefaultOnConfiguringAction { get; set; }
 
     internal Action<DbContext, ModelConfigurationBuilder>? DefaultConventionAction { get; set; }
 
@@ -24,6 +26,7 @@ public class RamshaDbContextOptions
 
     public RamshaDbContextOptions()
     {
+        OnConfiguringActions = [];
         DefaultPreConfigureActions = [];
         PreConfigureActions = [];
         ConfigureActions = [];
@@ -50,7 +53,7 @@ public class RamshaDbContextOptions
     }
 
     public void ConfigureConventions<TDbContext>(Action<TDbContext, ModelConfigurationBuilder> action)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
 
         var actions = ConventionActions.FirstOrDefault(x => x.Key == typeof(TDbContext)).Value;
@@ -66,14 +69,35 @@ public class RamshaDbContextOptions
         actions.Add(action);
     }
 
+    public void ConfigureOnConfiguring<TDbContext>(Action<TDbContext, DbContextOptionsBuilder> action)
+       where TDbContext : RamshaEFDbContext<TDbContext>
+    {
+        var actions = OnConfiguringActions.FirstOrDefault(x => x.Key == typeof(TDbContext)).Value;
+        if (actions == null)
+        {
+            OnConfiguringActions[typeof(TDbContext)] = new List<object>
+            {
+                new Action<DbContext, DbContextOptionsBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
+            };
+            return;
+        }
+
+        actions.Add(action);
+    }
+
     public void ConfigureDefaultOnModelCreating(Action<DbContext, ModelBuilder> action)
     {
 
         DefaultOnModelCreatingAction = action;
     }
+    public void ConfigureDefaultOnConfiguring(Action<DbContext, DbContextOptionsBuilder> action)
+    {
+
+        DefaultOnConfiguringAction = action;
+    }
 
     public void ConfigureOnModelCreating<TDbContext>(Action<TDbContext, ModelBuilder> action)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         var actions = OnModelCreatingActions.FirstOrDefault(x => x.Key == typeof(TDbContext)).Value;
         if (actions == null)
@@ -94,7 +118,7 @@ public class RamshaDbContextOptions
     }
 
     public void PreConfigure<TDbContext>(Action<RamshaDbContextConfigurationContext<TDbContext>> action)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
 
         var actions = PreConfigureActions.FirstOrDefault(x => x.Key == typeof(TDbContext)).Value;
@@ -107,7 +131,7 @@ public class RamshaDbContextOptions
     }
 
     public void Configure<TDbContext>(Action<RamshaDbContextConfigurationContext<TDbContext>> action)
-        where TDbContext : RamshaDbContext<TDbContext>
+        where TDbContext : RamshaEFDbContext<TDbContext>
     {
         ConfigureActions[typeof(TDbContext)] = action;
     }

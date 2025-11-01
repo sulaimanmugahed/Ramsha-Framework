@@ -16,7 +16,7 @@ public class RamshaDbContextConfiguratorAction : IRamshaDbContextConfigurator
 }
 
 public class RamshaDbContextConfiguratorAction<TDbContext> : RamshaDbContextConfiguratorAction
-    where TDbContext : RamshaDbContext<TDbContext>
+    where TDbContext : RamshaEFDbContext<TDbContext>
 {
     public RamshaDbContextConfiguratorAction(Action<RamshaDbContextConfigurationContext> action)
         : base(action)

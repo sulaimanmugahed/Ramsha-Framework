@@ -10,7 +10,7 @@ namespace Ramsha.EntityFrameworkCore;
 
 internal static class DbContextExtensions
 {
-    public static bool HasRelationalTransactionManager(this DbContext dbContext)
+    public static bool HasRelationalTransactionManager(this IEFDbContext dbContext)
     {
         return dbContext.Database.GetService<IDbContextTransactionManager>() is IRelationalTransactionManager;
     }

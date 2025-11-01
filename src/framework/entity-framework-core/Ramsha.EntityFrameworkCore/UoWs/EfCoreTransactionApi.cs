@@ -6,7 +6,7 @@ namespace Ramsha.EntityFrameworkCore;
 
 public class EfCoreTransactionApi : ITransactionApi, ISupportsRollback
 {
-    public List<DbContext> AttendedDbContexts { get; }
+    public List<IEFDbContext> AttendedDbContexts { get; }
     public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction)
     {
         DbContextTransaction = dbContextTransaction;

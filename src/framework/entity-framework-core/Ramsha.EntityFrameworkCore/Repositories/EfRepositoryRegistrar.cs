@@ -6,6 +6,8 @@ using Ramsha.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 
+
+
 public class EfRepositoryRegistrar : RepositoryRegistrar<EfDbContextRegistrationOptions>
 {
     public EfRepositoryRegistrar(EfDbContextRegistrationOptions options)

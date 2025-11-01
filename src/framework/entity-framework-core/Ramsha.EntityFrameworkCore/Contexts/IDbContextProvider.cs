@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Ramsha.EntityFrameworkCore;
 
 public interface IDbContextProvider<TDbContext>
-where TDbContext : DbContext
+where TDbContext : IEFDbContext
 {
     Task<TDbContext> GetDbContextAsync();
 

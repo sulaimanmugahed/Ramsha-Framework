@@ -39,7 +39,7 @@ public class RamshaDbContextConfigurationContext : IServiceProviderAccessor
 }
 
 public class RamshaDbContextConfigurationContext<TDbContext> : RamshaDbContextConfigurationContext
-    where TDbContext : RamshaDbContext<TDbContext>
+    where TDbContext : RamshaEFDbContext<TDbContext>
 {
     public new DbContextOptionsBuilder<TDbContext> DbContextOptions => (DbContextOptionsBuilder<TDbContext>)base.DbContextOptions;
 
@@ -56,8 +56,9 @@ public class RamshaDbContextConfigurationContext<TDbContext> : RamshaDbContextCo
     {
         base.DbContextOptions = new DbContextOptionsBuilder<TDbContext>()
             .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
-            .UseApplicationServiceProvider(serviceProvider); ;
+            .UseApplicationServiceProvider(serviceProvider);
     }
+
 }
 
 

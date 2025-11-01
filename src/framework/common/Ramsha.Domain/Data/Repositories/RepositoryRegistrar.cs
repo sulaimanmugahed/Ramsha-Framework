@@ -2,6 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ramsha.Domain;
 
+
+
+
 public abstract class RepositoryRegistrar<TOptions>
     where TOptions : DbContextRegistrationOptionsBase
 {

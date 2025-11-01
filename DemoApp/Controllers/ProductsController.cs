@@ -1,23 +1,63 @@
 
 using DemoApp.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.UnitOfWork;
 
 namespace DemoApp.Controllers;
 
-public class ProductsController(IRepository<Product, Guid> repository, IUnitOfWorkManager uowManager, IServiceScopeFactory serviceScopeFactory) : RamshaApiController
+public interface IFilter
 {
+
+}
+
+
+public class ProductsController(IGlobalQueryFilterManager dataFilter, IRepository<Product, Guid> repository, IUnitOfWorkManager uowManager, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
+{
+    [HttpGet(nameof(GetWithGlobalDataFilter))]
+    public async Task<IActionResult> GetWithGlobalDataFilter()
+    {
+        var firstValue = dataFilter.IsEnabled<IFilter>();
+        using (options.CurrentValue.Value ? dataFilter.Enable<IFilter>() : dataFilter.Disable<IFilter>())
+        {
+            var secondValue = dataFilter.IsEnabled<IFilter>();
+        }
+        var lastValue = dataFilter.IsEnabled<IFilter>();
+        ;
+
+
+
+        return Ok();
+    }
+
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        // using var scope = serviceScopeFactory.CreateScope();
-        // var manager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
         List<Product> products = null;
+
         if (uowManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
-            products = await repository.GetListAsync();
+            if (options.CurrentValue.Value)
+            {
+                products = await repository.GetListAsync();
+
+            }
+            else
+            {
+                var tes1 = dataFilter.IsEnabled<IPrice>();
+                using (dataFilter.Disable<IPrice>())
+                {
+                    var tes2 = dataFilter.IsEnabled<IPrice>();
+
+                    products = await repository.GetListAsync();
+                }
+                var test3 = dataFilter.IsEnabled<IPrice>();
+
+            }
+
         }
         return Ok(products);
     }

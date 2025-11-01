@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DemoApp.Controllers;
 using DemoApp.Entities;
 using DemoModule;
 using LiteBus.Commands;
@@ -63,12 +64,12 @@ public class AppModule : RamshaModule
 
         context.Services.AddRamshaDbContext<AppDbContext>(option =>
         {
-            option.AddDefaultRepositories(true);
+            option.AddDefaultRepositories(true)
+            .AddGlobalQueryFilterProvider<PriceFilterProvider>();
         });
 
         context.Services.Configure<ConnectionStringsOptions>(options =>
         {
-
             options.ConfigureAliases(builder =>
             {
                 builder.Map("Default", ["MainDb", "Primary"]);
@@ -76,6 +77,12 @@ public class AppModule : RamshaModule
         });
 
 
+        context.Services.Configure<GlobalQueryFilterOptions>(options =>
+       {
+           options.DefaultStates[typeof(IFilter)] = new GlobalQueryFilterState(true);
+       });
+
+        context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
     }
 

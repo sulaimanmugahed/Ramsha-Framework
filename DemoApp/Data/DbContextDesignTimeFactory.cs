@@ -5,19 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Ramsha;
+using Ramsha.EntityFrameworkCore;
 
 namespace DemoApp.Data;
 
-public class DbContextDesignTimeFactory : IDesignTimeDbContextFactory<AppDbContext>
+public class DbContextDesignTimeFactory : RamshaDesignTimeDbContext<AppModule, AppDbContext>
 {
-    public AppDbContext CreateDbContext(string[] args)
+
+    protected override IConfigurationRoot BuildConfiguration()
     {
-        var builder = new DbContextOptionsBuilder<AppDbContext>();
-
-        var configuration = ConfigurationHelper.BuildConfiguration();
-
-        builder.UseSqlServer(configuration.GetConnectionString("Default"));
-
-        return new AppDbContext(builder.Options);
+        return ConfigurationHelper.BuildConfiguration();
     }
 }
