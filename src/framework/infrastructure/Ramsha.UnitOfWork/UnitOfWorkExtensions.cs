@@ -1,3 +1,5 @@
+using Ramsha.UnitOfWork.Abstractions;
+
 namespace Ramsha.UnitOfWork;
 
 public static class UnitOfWorkExtensions

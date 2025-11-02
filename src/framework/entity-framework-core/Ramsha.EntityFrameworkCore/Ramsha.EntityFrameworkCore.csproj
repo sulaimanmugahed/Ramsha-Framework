@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\common\Ramsha.Domain\Ramsha.Domain.csproj" />
     <ProjectReference Include="..\..\infrastructure\Ramsha.UnitOfWork\Ramsha.UnitOfWork.csproj" />
+    <ProjectReference Include="..\..\messaging\Ramsha.LocalMessaging.Abstractions\Ramsha.LocalMessaging.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

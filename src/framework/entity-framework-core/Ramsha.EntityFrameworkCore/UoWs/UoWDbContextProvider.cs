@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Ramsha.Domain;
-using Ramsha.UnitOfWork;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.EntityFrameworkCore;
 

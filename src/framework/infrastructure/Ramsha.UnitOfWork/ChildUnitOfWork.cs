@@ -1,3 +1,5 @@
+using Ramsha.UnitOfWork.Abstractions;
+
 namespace Ramsha.UnitOfWork;
 
 internal class ChildUnitOfWork : IUnitOfWork
@@ -99,5 +101,10 @@ internal class ChildUnitOfWork : IUnitOfWork
     public override string ToString()
     {
         return $"[UnitOfWork {Id}]";
+    }
+
+    public void EnqueueLocalEvent(UoWLocalEvent @event)
+    {
+        _parent.EnqueueLocalEvent(@event);
     }
 }

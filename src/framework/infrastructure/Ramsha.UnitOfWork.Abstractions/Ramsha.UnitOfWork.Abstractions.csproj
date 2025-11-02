@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ramsha.UnitOfWork.Abstractions\Ramsha.UnitOfWork.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Ramsha.Core\Ramsha.Core.csproj" />
   </ItemGroup>
+
+  
 
 </Project>

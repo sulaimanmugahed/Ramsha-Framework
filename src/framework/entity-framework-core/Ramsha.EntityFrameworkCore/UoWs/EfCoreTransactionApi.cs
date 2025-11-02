@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Ramsha.UnitOfWork;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.EntityFrameworkCore;
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.UnitOfWork;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace DemoApp.Controllers;
 
@@ -14,7 +15,7 @@ public interface IFilter
 }
 
 
-public class ProductsController(IGlobalQueryFilterManager dataFilter, IRepository<Product, Guid> repository, IUnitOfWorkManager uowManager, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
+public class ProductsController(IGlobalQueryFilterManager dataFilter, IRepository<Product, Guid> repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
 {
     [HttpGet(nameof(GetWithGlobalDataFilter))]
     public async Task<IActionResult> GetWithGlobalDataFilter()
@@ -38,7 +39,7 @@ public class ProductsController(IGlobalQueryFilterManager dataFilter, IRepositor
     {
         List<Product> products = null;
 
-        if (uowManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             if (options.CurrentValue.Value)
             {
@@ -65,12 +66,12 @@ public class ProductsController(IGlobalQueryFilterManager dataFilter, IRepositor
     [HttpPost]
     public async Task<IActionResult> Create(string name, decimal price)
     {
-        if (uowManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions { IsTransactional = true }))
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions { IsTransactional = true }))
         {
-            await repository.CreateAsync(new Product(Guid.NewGuid(), name, price));
-            if (uowManager.Current is not null)
+            await repository.CreateAsync(Product.Create(Guid.NewGuid(), name, price));
+            if (UnitOfWorkManager.Current is not null)
             {
-                await uowManager.Current.SaveChangesAsync();
+                await UnitOfWorkManager.Current.SaveChangesAsync();
                 //throw new Exception("test");
             }
         }

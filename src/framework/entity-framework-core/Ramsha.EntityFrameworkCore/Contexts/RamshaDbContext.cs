@@ -18,6 +18,13 @@ where TDbContext : RamshaEFDbContext<TDbContext>
     where TFilter : class
     => GlobalDataFilterManager.IsEnabled<TFilter>();
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+
+
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -28,6 +35,7 @@ where TDbContext : RamshaEFDbContext<TDbContext>
             ((Action<DbContext, DbContextOptionsBuilder>)onConfiguringAction).Invoke(this, optionsBuilder);
         }
     }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

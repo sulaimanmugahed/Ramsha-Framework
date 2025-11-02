@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.UnitOfWork;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace DemoApp.Controllers;
 
@@ -16,7 +17,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     public async Task<IActionResult> GetAll()
     {
         List<Category> categories = [];
-        if (UowManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             using var _ = GlobalQueryFilterManager.Disable<IPrice>();
             categories = await categoryRepo.GetListAsync(includes: x => x.Products);
@@ -26,7 +27,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     [HttpPost]
     public async Task<IActionResult> Create(string name)
     {
-        if (UowManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             await categoryRepo.CreateAsync(new Category(Guid.NewGuid(), name));
         }
@@ -35,7 +36,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     [HttpPost(nameof(SeedAllProductsToCategory))]
     public async Task<IActionResult> SeedAllProductsToCategory(Guid categoryId)
     {
-        if (UowManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             using var _ = GlobalQueryFilterManager.Disable<IPrice>();
             var products = await productRepo.GetListAsync();
@@ -51,9 +52,9 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
                 category.AddProduct(product);
             }
 
-            if (UowManager.Current is not null)
+            if (UnitOfWorkManager.Current is not null)
             {
-                await UowManager.Current.SaveChangesAsync();
+                await UnitOfWorkManager.Current.SaveChangesAsync();
             }
         }
         return Ok();

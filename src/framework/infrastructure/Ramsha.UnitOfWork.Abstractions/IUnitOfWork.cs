@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ramsha.UnitOfWork;
+namespace Ramsha.UnitOfWork.Abstractions;
 
 public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, IDisposable
 {
@@ -27,4 +27,5 @@ public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, 
     Task CompleteAsync(CancellationToken cancellationToken = default);
 
     Task RollbackAsync(CancellationToken cancellationToken = default);
+    void EnqueueLocalEvent(UoWLocalEvent @event);
 }

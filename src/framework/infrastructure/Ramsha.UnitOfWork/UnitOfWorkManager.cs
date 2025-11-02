@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.UnitOfWork;
 

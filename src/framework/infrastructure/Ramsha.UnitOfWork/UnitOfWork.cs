@@ -1,10 +1,23 @@
 using System.Collections.Immutable;
+using Microsoft.Extensions.DependencyInjection;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly List<UoWLocalEvent> _localEvents = new();
+    private bool _isDispatching;
+
+    public void EnqueueLocalEvent(UoWLocalEvent @event)
+    {
+        if (@event == null) throw new ArgumentNullException(nameof(@event));
+        _localEvents.Add(@event);
+    }
+
+    public IReadOnlyList<object> GetLocalEvents() => _localEvents.AsReadOnly();
+    public void ClearLocalEvents() => _localEvents.Clear();
     public UnitOfWork(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -168,8 +181,23 @@ public class UnitOfWork : IUnitOfWork
 
         try
         {
+            //
             _isCompleting = true;
             await SaveChangesAsync(cancellationToken);
+
+            if (_localEvents.Any())
+            {
+                var publisher = _serviceProvider.GetRequiredService<IUnitOfWorkLocalEventBus>();
+                _isDispatching = true;
+                await publisher.PublishMany(_localEvents, cancellationToken).ConfigureAwait(false);
+                _isDispatching = false;
+
+                // if handlers added entities
+                await SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            }
+            //
+
+
 
             await CommitTransactionsAsync(cancellationToken);
             IsCompleted = true;

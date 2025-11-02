@@ -19,10 +19,25 @@ public class EntityFrameworkCoreModule : RamshaModule
     {
         base.OnConfiguring(context);
 
+        context.Services.AddTransient<DomainEventToUnitOfWorkInterceptor>();
+        context.Services.AddTransient<EntityCreationInterceptor>();
+        context.Services.AddTransient<EntityModificationInterceptor>();
+
+
+
+
         context.Services.Configure<RamshaDbContextOptions>(options =>
        {
-           options.PreConfigure(dbContextConfigurationContext =>
+           options.PreConfigure(configurationContext =>
            {
+               configurationContext
+               .DbContextOptions
+               .AddInterceptors(
+                configurationContext.ServiceProvider.GetRequiredService<EntityCreationInterceptor>(),
+                configurationContext.ServiceProvider.GetRequiredService<EntityModificationInterceptor>(),
+                configurationContext.ServiceProvider.GetRequiredService<DomainEventToUnitOfWorkInterceptor>()
+
+                );
            });
        });
 

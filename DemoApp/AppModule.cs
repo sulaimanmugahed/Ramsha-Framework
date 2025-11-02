@@ -16,6 +16,7 @@ using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.LocalMessaging;
+using Ramsha.LocalMessaging.Abstractions;
 
 namespace DemoApp;
 
@@ -31,6 +32,11 @@ public class AppModule : RamshaModule
         .DependsOn<LocalMessagingModule>()
         .DependsOn<EntityFrameworkCoreModule>();
 
+        moduleBuilder.PreConfigure<LocalMessagingOptions>(options =>
+        {
+            options.AddMessagesFromAssembly<AppModule>();
+        });
+
     }
 
     public override void OnConfiguring(ConfigureContext context)
@@ -39,19 +45,7 @@ public class AppModule : RamshaModule
         base.OnConfiguring(context);
         context.Services.AddScoped<IRamshaService, RamshaService>();
         context.Services.AddScoped<ITestService, TestService>();
-        context.Services.AddLiteBus(options =>
-      {
-
-          options.AddQueryModule(builder =>
-          {
-              builder.RegisterFromAssembly(typeof(TestQuery).Assembly);
-          });
-
-          options.AddCommandModule(builder =>
-       {
-           builder.RegisterFromAssembly(typeof(TestQuery).Assembly);
-       });
-      });
+       
 
 
         context.Services.Configure<RamshaDbContextOptions>(options =>

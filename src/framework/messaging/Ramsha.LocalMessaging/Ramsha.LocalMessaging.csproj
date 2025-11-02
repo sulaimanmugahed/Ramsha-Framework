@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\infrastructure\Ramsha.UnitOfWork.Abstractions\Ramsha.UnitOfWork.Abstractions.csproj" />
     <ProjectReference Include="..\Ramsha.LocalMessaging.Abstractions\Ramsha.LocalMessaging.Abstractions.csproj" />
   </ItemGroup>
 

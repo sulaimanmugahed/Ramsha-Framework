@@ -95,7 +95,7 @@ public abstract class RepositoryRegistrar<TOptions>
             return false;
         }
 
-        if (!Options.IncludeAllEntitiesForDefaultRepositories && !typeof(IAggregateRoot).IsAssignableFrom(entityType))
+        if (!Options.IncludeAllEntitiesForDefaultRepositories && !typeof(IAggregateRoot<>).IsAssignableFrom(entityType))
         {
             return false;
         }

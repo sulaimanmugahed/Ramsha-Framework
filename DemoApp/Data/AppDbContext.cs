@@ -23,6 +23,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 
     public string Name => "";
 
+  
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

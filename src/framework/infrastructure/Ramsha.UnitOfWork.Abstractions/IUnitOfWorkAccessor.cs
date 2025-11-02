@@ -1,4 +1,4 @@
-namespace Ramsha.UnitOfWork;
+namespace Ramsha.UnitOfWork.Abstractions;
 
 public interface IUnitOfWorkAccessor
 {

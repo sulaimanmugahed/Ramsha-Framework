@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.UnitOfWork", "src\framework\infrastructure\Ramsha.UnitOfWork\Ramsha.UnitOfWork.csproj", "{7B556151-40D8-423E-B7F6-5407487CD656}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.UnitOfWork.Abstractions", "src\framework\infrastructure\Ramsha.UnitOfWork.Abstractions\Ramsha.UnitOfWork.Abstractions.csproj", "{93B5027A-3B62-4F35-8584-F435206E86BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,18 @@ Global
 		{7B556151-40D8-423E-B7F6-5407487CD656}.Release|x64.Build.0 = Release|Any CPU
 		{7B556151-40D8-423E-B7F6-5407487CD656}.Release|x86.ActiveCfg = Release|Any CPU
 		{7B556151-40D8-423E-B7F6-5407487CD656}.Release|x86.Build.0 = Release|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Debug|x64.Build.0 = Debug|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Debug|x86.Build.0 = Debug|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Release|x64.ActiveCfg = Release|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Release|x64.Build.0 = Release|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{93B5027A-3B62-4F35-8584-F435206E86BF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,5 +218,6 @@ Global
 		{C2A6A89C-39D7-454B-A8EE-F2A49E49F673} = {71B26CA9-AFE7-F2E3-1AB1-CD956805BB92}
 		{0147BB3C-E680-3343-50D1-D5217CEA7937} = {E0AD1809-C64F-3D39-45E0-E424261CE16D}
 		{7B556151-40D8-423E-B7F6-5407487CD656} = {0147BB3C-E680-3343-50D1-D5217CEA7937}
+		{93B5027A-3B62-4F35-8584-F435206E86BF} = {0147BB3C-E680-3343-50D1-D5217CEA7937}
 	EndGlobalSection
 EndGlobal
