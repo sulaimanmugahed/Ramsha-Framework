@@ -39,6 +39,8 @@ public class RamshaIdentityRole<TId, TUserRole, TRoleClaim> : AggregateRoot<TId>
     public virtual ICollection<TRoleClaim> Claims { get; } = new List<TRoleClaim>();
     public virtual TId Id { get; set; }
     public virtual string Name { get; set; }
+    public virtual string? NormalizedName { get; set; }
+
 
     public RamshaIdentityRole() { }
 

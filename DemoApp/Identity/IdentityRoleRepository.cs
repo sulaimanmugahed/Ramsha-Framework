@@ -6,20 +6,6 @@ using Ramsha.EntityFrameworkCore;
 
 namespace DemoApp.Identity;
 
-public class IdentityRoleRepository(IDbContextProvider<AppDbContext> dbContextProvider)
- : IdentityRoleRepository<Guid>(dbContextProvider),
- IIdentityRoleRepository
-{
-
-}
-
-public class IdentityRoleRepository<TId>(IDbContextProvider<AppDbContext> dbContextProvider)
-: IdentityRoleRepository<RamshaIdentityRole<TId>, TId, RamshaIdentityUserRole<TId>, RamshaIdentityRoleClaim<TId>>(dbContextProvider),
- IIdentityRoleRepository<TId>
-where TId : IEquatable<TId>
-{
-
-}
 
 public class IdentityRoleRepository<TRole, TId, TUserRole, TRoleClaim>
 (IDbContextProvider<AppDbContext> dbContextProvider)

@@ -10,22 +10,6 @@ using System.Reflection;
 using System.Security.Claims;
 
 
-public class RamshaUserStore(IIdentityUserRepository identityUserRepository, IIdentityRoleRepository identityRoleRepository)
-: RamshaUserStore<Guid>(identityUserRepository, identityRoleRepository)
-{
-
-}
-
-public class RamshaUserStore<TId>(
-    IIdentityUserRepository<TId> identityUserRepository,
-    IIdentityRoleRepository<TId> identityRoleRepository)
-: RamshaUserStore<RamshaIdentityUser<TId>, TId, RamshaIdentityUserRole<TId>, RamshaIdentityRoleClaim<TId>, RamshaIdentityUserClaim<TId>, RamshaIdentityUserLogin<TId>, RamshaIdentityUserToken<TId>, RamshaIdentityRole<TId>>(identityUserRepository, identityRoleRepository)
-where TId : IEquatable<TId>
-{
-
-}
-
-
 public class RamshaUserStore<TUser, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken, TRole>(
     IIdentityUserRepository<TUser, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken, TRole> userRepository,
     IIdentityRoleRepository<TRole, TId, TUserRole, TRoleClaim> roleRepository) :

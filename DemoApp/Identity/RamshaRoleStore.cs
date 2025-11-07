@@ -9,19 +9,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DemoApp.Identity;
 
-public class RamshaRoleStore(IIdentityRoleRepository roleRepository)
-: RamshaRoleStore<Guid>(roleRepository)
-{
-
-}
-
-public class RamshaRoleStore<TId>(IIdentityRoleRepository<TId> roleRepository)
-: RamshaRoleStore<RamshaIdentityRole<TId>, TId, RamshaIdentityUserRole<TId>, RamshaIdentityRoleClaim<TId>>
-(roleRepository)
-where TId : IEquatable<TId>
-{
-
-}
 
 public class RamshaRoleStore<TRole, TId, TUserRole, TRoleClaim>(
 IIdentityRoleRepository<TRole, TId, TUserRole, TRoleClaim> roleRepository
@@ -88,7 +75,7 @@ IRoleClaimStore<TRole>
         return (TId)TypeDescriptor.GetConverter(typeof(TId)).ConvertFromInvariantString(id);
     }
 
-    public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
+    public async Task<TRole?> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -116,7 +103,7 @@ IRoleClaimStore<TRole>
 
         try
         {
-            var result = await roleRepository.FindAsync(x => x.Name == normalizedRoleName);
+            var result = await roleRepository.FindAsync(x => x.NormalizedName == normalizedRoleName);
 
             return result;
         }
@@ -126,14 +113,14 @@ IRoleClaimStore<TRole>
         }
     }
 
-    public async Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
+    public async Task<string?> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         if (role == null)
             throw new ArgumentNullException(nameof(role));
 
-        return role.Name;
+        return role.NormalizedName;
     }
 
     public async Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
@@ -149,7 +136,7 @@ IRoleClaimStore<TRole>
         return role.Id.ToString();
     }
 
-    public async Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
+    public async Task<string?> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -158,17 +145,17 @@ IRoleClaimStore<TRole>
 
         return role.Name;
     }
-    public async Task SetNormalizedRoleNameAsync(TRole role, string normalizedName, CancellationToken cancellationToken)
+    public async Task SetNormalizedRoleNameAsync(TRole role, string? normalizedName, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         if (role == null)
             throw new ArgumentNullException(nameof(role));
 
-        role.Name = normalizedName;
+        role.NormalizedName = normalizedName;
     }
 
-    public async Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
+    public async Task SetRoleNameAsync(TRole role, string? roleName, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
