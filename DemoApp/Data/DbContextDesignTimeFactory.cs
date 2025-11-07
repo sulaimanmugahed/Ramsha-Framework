@@ -14,6 +14,8 @@ public class DbContextDesignTimeFactory : RamshaDesignTimeDbContext<AppModule, A
 
     protected override IConfigurationRoot BuildConfiguration()
     {
+        Console.WriteLine("*************************App*********");
+
         return ConfigurationHelper.BuildConfiguration();
     }
 }

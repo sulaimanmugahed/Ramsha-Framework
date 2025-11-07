@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DemoApp.Controllers;
 using DemoApp.Data;
 using DemoApp.Entities;
-using DemoApp.Identity;
 using DemoModule;
 using LiteBus.Commands;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
@@ -23,6 +22,8 @@ using Ramsha.AspNetCore;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.EntityFrameworkCore;
+using Ramsha.Identity.AspNetCore;
+using Ramsha.Identity.Persistence;
 using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
 using Ramsha.Security.Claims;
@@ -39,7 +40,10 @@ public class AppModule : RamshaModule
         .DependsOn<DemoModuleModule>()
         .DependsOn<AspNetCoreMvcModule>()
         .DependsOn<LocalMessagingModule>()
-        .DependsOn<EntityFrameworkCoreModule>();
+        .DependsOn<EntityFrameworkCoreModule>()
+        .DependsOn<IdentityPersistenceModule>()
+        .DependsOn<IdentityAspNetCoreModule>();
+
 
         moduleBuilder.PreConfigure<LocalMessagingOptions>(options =>
         {
@@ -69,7 +73,9 @@ public class AppModule : RamshaModule
         {
             option.AddDefaultRepositories(true)
             .AddGlobalQueryFilterProvider<PriceFilterProvider>()
-             .AddRepository<Product, IProductRepository, ProductRepository>();
+             .AddRepository<Product, IProductRepository, ProductRepository>()
+             //.ReplaceDbContext<IIdentityDbContext>()
+             ;
         });
 
         context.Services.Configure<ConnectionStringsOptions>(options =>
@@ -100,26 +106,7 @@ public class AppModule : RamshaModule
         // context.Services.TryAddScoped<RamshaRoleStore>();
         // context.Services.TryAddScoped(typeof(IRoleStore<RamshaIdentityRole>), provider => provider.GetService(typeof(RamshaRoleStore)));
 
-        context.Services.AddIdentityCore<RamshaIdentityUser>(options =>
-       {
-           options.Password.RequireDigit = false;
-           options.Password.RequireNonAlphanumeric = false;
-           options.Password.RequireUppercase = false;
-           options.Password.RequiredLength = 4;
-       })
-           .AddRoles<RamshaIdentityRole>()
-           .AddSignInManager()
-           .AddDefaultTokenProviders()
-          .AddClaimsPrincipalFactory<RamshaUserClaimsPrincipalFactory>()
-          .AddRamshaIdentity();
 
-        context.Services
-                .AddAuthentication(o =>
-                {
-                    o.DefaultScheme = IdentityConstants.ApplicationScheme;
-                    o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-                })
-                .AddIdentityCookies();
 
         context.Services.Configure<RamshaClaimsPrincipalFactoryOptions>(options =>
         {

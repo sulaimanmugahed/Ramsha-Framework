@@ -39,6 +39,10 @@ public class UoWDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         var dbContextType = DbContextTypeProvider.GetDbContextType(typeof(TDbContext));
         var connectionStringName = ConnectionStringAttribute.GetNameOrNull(dbContextType);
         var connectionString = await ResolveConnectionStringAsync(connectionStringName);
+        if (connectionString is null)
+        {
+            throw new Exception($"no connection string for name: {connectionStringName}");
+        }
 
         var apiKey = $"{dbContextType.FullName}_{connectionString}";
 
@@ -56,15 +60,10 @@ public class UoWDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
     }
 
-    protected virtual async Task<string> ResolveConnectionStringAsync(string? connectionStringName = null)
+    protected virtual async Task<string?> ResolveConnectionStringAsync(string? connectionStringName = null)
     {
-        var connectionString = await ConnectionStringResolver.ResolveAsync(connectionStringName);
-        if (connectionString is null)
-        {
-            throw new Exception($"couldn't resolve the connection string for name: {connectionStringName}");
-        }
+        return await ConnectionStringResolver.ResolveAsync(connectionStringName);
 
-        return connectionString;
     }
 
     protected virtual async Task<TDbContext> CreateDbContextAsync(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)

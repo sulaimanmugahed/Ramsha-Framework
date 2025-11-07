@@ -15,6 +15,50 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddRamshaDbContext<TDbContextInterface, TDbContext>(
+        this IServiceCollection services,
+           Action<IDbContextRegistrationOptionsBaseBuilder>? optionsBuilder = null)
+           where TDbContextInterface : class, IRamshaEFDbContext
+        where TDbContext : RamshaEFDbContext<TDbContext>, TDbContextInterface
+    {
+        services.AddMemoryCache();
+
+        services.TryAddTransient(sp =>
+{
+    var instance = ActivatorUtilities.CreateInstance<TDbContext>(sp);
+    instance.ServiceProvider = sp;
+    return instance;
+});
+
+        services.AddTransient<TDbContextInterface>(sp => sp.GetRequiredService<TDbContext>());
+
+        var options = new EfDbContextRegistrationOptions(typeof(TDbContext), services);
+
+        optionsBuilder?.Invoke(options);
+        services.TryAddTransient(RamshaDbContextOptionsFactory.Create<TDbContext>);
+
+        foreach (var entry in options.ReplacedDbContextTypes)
+        {
+            var originalDbContextType = entry.Key;
+            var targetDbContextType = entry.Value ?? typeof(TDbContext);
+
+            services.Replace(ServiceDescriptor.Transient(originalDbContextType, sp =>
+            {
+                var dbContextType = sp.GetRequiredService<IEfDbContextTypeProvider>().GetDbContextType(originalDbContextType);
+                return sp.GetRequiredService(dbContextType);
+            }));
+
+            services.Configure<RamshaDbContextOptions>(opts =>
+            {
+                opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
+            });
+        }
+
+        new EfRepositoryRegistrar(options).AddRepositories();
+        new EFGlobalQueryFilterRegistrar(options).RegisterFilters();
+
+        return services;
+    }
     public static IServiceCollection AddRamshaDbContext<TDbContext>(
         this IServiceCollection services,
            Action<IDbContextRegistrationOptionsBaseBuilder>? optionsBuilder = null)
@@ -29,8 +73,8 @@ public static class ServiceCollectionExtensions
     return instance;
 });
 
-        services.TryAddTransient<IRamshaEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
-        services.TryAddTransient<IEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
+        // services.TryAddTransient<IRamshaEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
+        // services.TryAddTransient<IEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
 
         var options = new EfDbContextRegistrationOptions(typeof(TDbContext), services);
 

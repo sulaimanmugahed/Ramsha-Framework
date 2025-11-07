@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\aspnetcore\Ramsha.AspNetCore.Mvc\Ramsha.AspNetCore.Mvc.csproj" />
+    <ProjectReference Include="..\Ramsha.Identity.Contracts\Ramsha.Identity.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -11,7 +11,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +20,8 @@
     <ProjectReference Include="..\src\framework\entity-framework-core\Ramsha.EntityFrameworkCore\Ramsha.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\src\framework\messaging\Ramsha.LocalMessaging\Ramsha.LocalMessaging.csproj" />
     <ProjectReference Include="..\src\framework\Ramsha.Core\Ramsha.Core.csproj" />
+    <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.AspNetCore\Ramsha.Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Persistence\Ramsha.Identity.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

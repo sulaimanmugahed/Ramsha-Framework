@@ -7,6 +7,7 @@ public class DefaultConnectionStringResolver(IOptions<ConnectionStringsOptions> 
 {
     public Task<string?> ResolveAsync(string? connectionStringName = null)
     {
-        return Task.FromResult(options.Value.Get(connectionStringName));
+        var con = options.Value.Get(connectionStringName ?? "Default");
+        return Task.FromResult<string?>(con);
     }
 }
