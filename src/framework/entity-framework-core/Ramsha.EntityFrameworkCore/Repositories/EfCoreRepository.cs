@@ -5,7 +5,7 @@ using Ramsha.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 
-public class EfCoreRepository<TDbContext, TEntity>(IDbContextProvider<TDbContext> dbContextProvider) : IRepository<TEntity>
+public class EFCoreRepository<TDbContext, TEntity>(IDbContextProvider<TDbContext> dbContextProvider) : IRepository<TEntity>
 where TDbContext : IEFDbContext
 where TEntity : class, IEntity
 {
@@ -79,7 +79,7 @@ where TEntity : class, IEntity
 }
 
 
-public class EfCoreRepository<TDbContext, TEntity, TId>(IDbContextProvider<TDbContext> dbContextProvider) : EfCoreRepository<TDbContext, TEntity>(dbContextProvider), IRepository<TEntity, TId>
+public class EFCoreRepository<TDbContext, TEntity, TId>(IDbContextProvider<TDbContext> dbContextProvider) : EFCoreRepository<TDbContext, TEntity>(dbContextProvider), IRepository<TEntity, TId>
 where TDbContext : IEFDbContext
 where TEntity : class, IEntity<TId>
 

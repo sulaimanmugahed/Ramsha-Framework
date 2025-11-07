@@ -1,11 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ramsha.Security;
 
 namespace Ramsha.Domain;
 
 public class DomainModule : RamshaModule
 {
 
+    public override void OnCreating(ModuleBuilder moduleBuilder)
+    {
+        base.OnCreating(moduleBuilder);
+        moduleBuilder.DependsOn<SecurityModule>();
+    }
 
     public override void OnConfiguring(ConfigureContext context)
     {

@@ -1,4 +1,5 @@
 
+using DemoApp.Data;
 using DemoApp.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -15,23 +16,8 @@ public interface IFilter
 }
 
 
-public class ProductsController(IGlobalQueryFilterManager dataFilter, IRepository<Product, Guid> repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
+public class ProductsController(IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
 {
-    [HttpGet(nameof(GetWithGlobalDataFilter))]
-    public async Task<IActionResult> GetWithGlobalDataFilter()
-    {
-        var firstValue = dataFilter.IsEnabled<IFilter>();
-        using (options.CurrentValue.Value ? dataFilter.Enable<IFilter>() : dataFilter.Disable<IFilter>())
-        {
-            var secondValue = dataFilter.IsEnabled<IFilter>();
-        }
-        var lastValue = dataFilter.IsEnabled<IFilter>();
-        ;
-
-
-
-        return Ok();
-    }
 
 
     [HttpGet]

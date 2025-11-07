@@ -26,7 +26,20 @@ public abstract class RepositoryRegistrar<TOptions>
     {
         foreach (var customRepository in Options.CustomRepositories)
         {
-            Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value, replaceExisting: true);
+            if (customRepository.Value.SelfRegister)
+            {
+                //register the repository itself
+                Options.Services.RegisterCustomRepository(customRepository.Value.RepositoryType);
+            }
+
+            //register the repository  interfaces
+            foreach (var interfaceType in customRepository.Value.RepositoryInterfacesTypes)
+            {
+                Options.Services.RegisterCustomRepository(interfaceType, customRepository.Value.RepositoryType);
+            }
+
+            // replace the Generic Repositories 
+            Options.Services.RegisterDefaultRepository(customRepository.Key, customRepository.Value.RepositoryType, replaceExisting: true);
         }
     }
 
@@ -61,7 +74,7 @@ public abstract class RepositoryRegistrar<TOptions>
 
     protected virtual void RegisterDefaultRepository(Type entityType)
     {
-        Options.Services.AddDefaultRepository(
+        Options.Services.RegisterDefaultRepository(
             entityType,
             GetDefaultRepositoryImplementationType(entityType)
         );

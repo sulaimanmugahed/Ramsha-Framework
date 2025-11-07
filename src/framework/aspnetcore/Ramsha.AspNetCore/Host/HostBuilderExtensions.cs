@@ -15,14 +15,7 @@ public static class HostBuilderExtensions
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
         var serviceProviderFactory = new RamshaServiceProviderFactory(options ?? RamshaServiceProviderFactory.DefaultServiceProviderOptions, resolver);
         return builder
-            .UseServiceProviderFactory(serviceProviderFactory)
-            .ConfigureServices((ctx, services) =>
-            {
-                services.AddSingleton<IStartupFilter>(sp =>
-                {
-                    var serviceProvider = serviceProviderFactory.CreateServiceProvider(services);
-                    return new RamshaServiceProvidersFeatureFilter(serviceProvider);
-                });
-            });
+            .UseServiceProviderFactory(serviceProviderFactory);
+
     }
 }

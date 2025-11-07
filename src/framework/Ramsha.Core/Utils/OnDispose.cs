@@ -15,3 +15,25 @@ public sealed class OnDispose : IDisposable
         _onDispose = null;
     }
 }
+
+public class OnDispose<T> : IDisposable
+{
+    private readonly Action<T> _action;
+
+    private readonly T? _parameter;
+
+    public OnDispose(Action<T> action, T parameter)
+    {
+        _action = action;
+        _parameter = parameter;
+    }
+
+    public void Dispose()
+    {
+        if (_parameter != null)
+        {
+            _action(_parameter);
+        }
+    }
+}
+

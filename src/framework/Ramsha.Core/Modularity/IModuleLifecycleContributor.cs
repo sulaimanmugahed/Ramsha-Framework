@@ -104,58 +104,33 @@ public interface ITypeList : ITypeList<object>
 
 public interface ITypeList<in TBaseType> : IList<Type>
 {
-    /// <summary>
-    /// Adds a type to list.
-    /// </summary>
-    /// <typeparam name="T">Type</typeparam>
+
     void Add<T>() where T : TBaseType;
 
-    /// <summary>
-    /// Adds a type to list if it's not already in the list.
-    /// </summary>
-    /// <typeparam name="T">Type</typeparam>
     bool TryAdd<T>() where T : TBaseType;
-
-    /// <summary>
-    /// Checks if a type exists in the list.
-    /// </summary>
-    /// <typeparam name="T">Type</typeparam>
-    /// <returns></returns>
     bool Contains<T>() where T : TBaseType;
 
-    /// <summary>
-    /// Removes a type from list
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     void Remove<T>() where T : TBaseType;
+    void AddAfter<TExisting, TNew>()
+      where TExisting : TBaseType
+    where TNew : TBaseType;
+
+    public void AddBefore<TExisting, TNew>()
+      where TExisting : TBaseType
+      where TNew : TBaseType;
 }
 
 public class TypeList : TypeList<object>, ITypeList
 {
 }
 
-/// <summary>
-/// Extends <see cref="List{Type}"/> to add restriction a specific base type.
-/// </summary>
-/// <typeparam name="TBaseType">Base Type of <see cref="Type"/>s in this list</typeparam>
 public class TypeList<TBaseType> : ITypeList<TBaseType>
 {
-    /// <summary>
-    /// Gets the count.
-    /// </summary>
-    /// <value>The count.</value>
+
     public int Count => _typeList.Count;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is read only.
-    /// </summary>
-    /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
     public bool IsReadOnly => false;
 
-    /// <summary>
-    /// Gets or sets the <see cref="Type"/> at the specified index.
-    /// </summary>
-    /// <param name="index">Index.</param>
     public Type this[int index]
     {
         get { return _typeList[index]; }
@@ -168,15 +143,12 @@ public class TypeList<TBaseType> : ITypeList<TBaseType>
 
     private readonly List<Type> _typeList;
 
-    /// <summary>
-    /// Creates a new <see cref="TypeList{T}"/> object.
-    /// </summary>
+
     public TypeList()
     {
         _typeList = new List<Type>();
     }
 
-    /// <inheritdoc/>
     public void Add<T>() where T : TBaseType
     {
         _typeList.Add(typeof(T));
@@ -193,69 +165,58 @@ public class TypeList<TBaseType> : ITypeList<TBaseType>
         return true;
     }
 
-    /// <inheritdoc/>
     public void Add(Type item)
     {
         CheckType(item);
         _typeList.Add(item);
     }
 
-    /// <inheritdoc/>
     public void Insert(int index, Type item)
     {
         CheckType(item);
         _typeList.Insert(index, item);
     }
 
-    /// <inheritdoc/>
     public int IndexOf(Type item)
     {
         return _typeList.IndexOf(item);
     }
 
-    /// <inheritdoc/>
     public bool Contains<T>() where T : TBaseType
     {
         return Contains(typeof(T));
     }
 
-    /// <inheritdoc/>
     public bool Contains(Type item)
     {
         return _typeList.Contains(item);
     }
 
-    /// <inheritdoc/>
     public void Remove<T>() where T : TBaseType
     {
         _typeList.Remove(typeof(T));
     }
 
-    /// <inheritdoc/>
     public bool Remove(Type item)
     {
         return _typeList.Remove(item);
     }
 
-    /// <inheritdoc/>
     public void RemoveAt(int index)
     {
         _typeList.RemoveAt(index);
     }
 
-    /// <inheritdoc/>
     public void Clear()
     {
         _typeList.Clear();
     }
 
-    /// <inheritdoc/>
     public void CopyTo(Type[] array, int arrayIndex)
     {
         _typeList.CopyTo(array, arrayIndex);
     }
 
-    /// <inheritdoc/>
     public IEnumerator<Type> GetEnumerator()
     {
         return _typeList.GetEnumerator();
@@ -273,4 +234,45 @@ public class TypeList<TBaseType> : ITypeList<TBaseType>
             throw new ArgumentException($"Given type ({item.AssemblyQualifiedName}) should be instance of {typeof(TBaseType).AssemblyQualifiedName} ", nameof(item));
         }
     }
+
+    public void AddAfter<TExisting, TNew>()
+    where TExisting : TBaseType
+    where TNew : TBaseType
+    {
+        AddAfter(typeof(TExisting), typeof(TNew));
+    }
+
+    public void AddAfter(Type existingType, Type newType)
+    {
+        CheckType(newType);
+
+        var index = _typeList.IndexOf(existingType);
+        if (index < 0)
+        {
+            throw new ArgumentException($"Existing type {existingType.FullName} not found in the list.", nameof(existingType));
+        }
+
+        _typeList.Insert(index + 1, newType);
+    }
+
+    public void AddBefore<TExisting, TNew>()
+        where TExisting : TBaseType
+        where TNew : TBaseType
+    {
+        AddBefore(typeof(TExisting), typeof(TNew));
+    }
+
+    public void AddBefore(Type existingType, Type newType)
+    {
+        CheckType(newType);
+
+        var index = _typeList.IndexOf(existingType);
+        if (index < 0)
+        {
+            throw new ArgumentException($"Existing type {existingType.FullName} not found in the list.", nameof(existingType));
+        }
+
+        _typeList.Insert(index, newType);
+    }
+
 }

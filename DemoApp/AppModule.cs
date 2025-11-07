@@ -1,15 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using DemoApp.Controllers;
+using DemoApp.Data;
 using DemoApp.Entities;
+using DemoApp.Identity;
 using DemoModule;
 using LiteBus.Commands;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
 using LiteBus.Queries;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Ramsha;
 using Ramsha.AspNetCore;
 using Ramsha.AspNetCore.Mvc;
@@ -17,6 +25,7 @@ using Ramsha.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
+using Ramsha.Security.Claims;
 
 namespace DemoApp;
 
@@ -45,7 +54,7 @@ public class AppModule : RamshaModule
         base.OnConfiguring(context);
         context.Services.AddScoped<IRamshaService, RamshaService>();
         context.Services.AddScoped<ITestService, TestService>();
-       
+
 
 
         context.Services.Configure<RamshaDbContextOptions>(options =>
@@ -59,7 +68,9 @@ public class AppModule : RamshaModule
         context.Services.AddRamshaDbContext<AppDbContext>(option =>
         {
             option.AddDefaultRepositories(true)
-            .AddGlobalQueryFilterProvider<PriceFilterProvider>();
+            .AddGlobalQueryFilterProvider<PriceFilterProvider>()
+             .AddRepository<Product, IProductRepository, ProductRepository>()
+            ;
         });
 
         context.Services.Configure<ConnectionStringsOptions>(options =>
@@ -78,6 +89,41 @@ public class AppModule : RamshaModule
 
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
+        context.Services.AddSingleton<IdentityUserRepository>();
+
+        context.Services.TryAddScoped<IdentityUserStore>();
+        context.Services.TryAddScoped(typeof(IUserStore<IdentityUser>), provider => provider.GetService(typeof(IdentityUserStore)));
+
+        context.Services.AddIdentityCore<IdentityUser>(options =>
+       {
+           options.Password.RequireDigit = false;
+           options.Password.RequireNonAlphanumeric = false;
+           options.Password.RequireUppercase = false;
+           options.Password.RequiredLength = 4;
+       })
+           .AddSignInManager()
+           .AddDefaultTokenProviders()
+          .AddClaimsPrincipalFactory<RamshaUserClaimsPrincipalFactory>();
+
+        context.Services
+                .AddAuthentication(o =>
+                {
+                    o.DefaultScheme = IdentityConstants.ApplicationScheme;
+                    o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+                })
+                .AddIdentityCookies();
+
+        context.Services.Configure<RamshaClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.Transformers.Add<DemoClaimsTransformer>();
+            options.Transformers.AddBefore<DemoClaimsTransformer, DemoClaimsTransformerBefore>();
+            options.Transformers.AddAfter<DemoClaimsTransformer, DemoClaimsTransformerAfter>();
+
+        });
+
+
+
+
     }
 
     public override void OnInit(InitContext context)
@@ -85,6 +131,41 @@ public class AppModule : RamshaModule
         base.OnInit(context);
     }
 }
+
+public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+{
+    public BasicAuthHandler(
+        IOptionsMonitor<AuthenticationSchemeOptions> options,
+        ILoggerFactory logger,
+        UrlEncoder encoder,
+        ISystemClock clock)
+        : base(options, logger, encoder, clock)
+    { }
+
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        if (!Request.Headers.ContainsKey("Authorization"))
+            return Task.FromResult(AuthenticateResult.Fail("Missing Authorization Header"));
+
+        var authHeader = Request.Headers["Authorization"].ToString();
+        if (authHeader != "Bearer testtoken")
+            return Task.FromResult(AuthenticateResult.Fail("Invalid Token"));
+
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "123"),
+            new Claim(ClaimTypes.Name, "demo-user")
+        };
+
+        var identity = new ClaimsIdentity(claims, Scheme.Name);
+        var principal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+        return Task.FromResult(AuthenticateResult.Success(ticket));
+    }
+}
+
+
 public static class RamshaDbContextConfigurationContextExtensions
 {
 

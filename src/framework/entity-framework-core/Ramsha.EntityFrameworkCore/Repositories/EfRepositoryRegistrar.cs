@@ -23,12 +23,12 @@ public class EfRepositoryRegistrar : RepositoryRegistrar<EfDbContextRegistration
 
     protected override Type GetRepositoryType(Type dbContextType, Type entityType)
     {
-        return typeof(EfCoreRepository<,>).MakeGenericType(dbContextType, entityType);
+        return typeof(EFCoreRepository<,>).MakeGenericType(dbContextType, entityType);
     }
 
     protected override Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType)
     {
-        return typeof(EfCoreRepository<,,>).MakeGenericType(dbContextType, entityType, primaryKeyType);
+        return typeof(EFCoreRepository<,,>).MakeGenericType(dbContextType, entityType, primaryKeyType);
     }
 }
 

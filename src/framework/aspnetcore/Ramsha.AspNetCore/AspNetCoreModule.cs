@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Ramsha;
+using Ramsha.AspNetCore.Security.Claims;
 using Ramsha.Domain;
+using Ramsha.Security.Claims;
 
 namespace Ramsha.AspNetCore;
 
@@ -20,6 +22,8 @@ public class AspNetCoreModule : RamshaModule
     public override void OnConfiguring(ConfigureContext context)
     {
         base.OnConfiguring(context);
+        context.Services.AddHttpContextAccessor();
+        context.Services.AddSingleton<IPrincipalAccessor, HttpPrincipalAccessor>();
         context.Services.TryAddSingleton<IAppPipeline<IApplicationBuilder>, AppPipeline<IApplicationBuilder>>();
     }
 

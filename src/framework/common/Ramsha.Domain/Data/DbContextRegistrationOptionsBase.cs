@@ -25,9 +25,8 @@ public abstract class DbContextRegistrationOptionsBase : IDbContextRegistrationO
     public bool RegisterDefaultRepositories { get; private set; }
 
     public bool IncludeAllEntitiesForDefaultRepositories { get; private set; }
-
-    public Dictionary<Type, Type> CustomRepositories { get; }
-
+    public Dictionary<Type, CustomRepositoryRegistration> CustomRepositories { get; }
+    // public Dictionary<Type, (Type RepositoryType, Type? RepositoryImplementationType)> CustomRepositories { get; }
     public List<Type> SpecifiedDefaultRepositories { get; }
     public List<Type> GlobalQueryFilterProviders { get; }
 
@@ -126,8 +125,34 @@ public abstract class DbContextRegistrationOptionsBase : IDbContextRegistrationO
 
     public IDbContextRegistrationOptionsBaseBuilder AddRepository<TEntity, TRepository>()
     {
-        AddCustomRepository(typeof(TEntity), typeof(TRepository));
+        var repositoryType = typeof(TRepository);
+        if (!CustomRepositories.ContainsKey(typeof(TEntity)))
+        {
+            CustomRepositories[typeof(TEntity)] = new CustomRepositoryRegistration(repositoryType, true);
+        }
+        else
+        {
+            CustomRepositories[typeof(TEntity)].SelfRegister = true;
+        }
 
+        return this;
+    }
+
+    public IDbContextRegistrationOptionsBaseBuilder AddRepository<TEntity, TRepositoryInterface, TRepositoryImplementation>()
+    {
+        var repositoryType = typeof(TRepositoryImplementation);
+        var repositoryInterface = typeof(TRepositoryInterface);
+        var entityType = typeof(TEntity);
+
+        if (!CustomRepositories.ContainsKey(entityType))
+        {
+            CustomRepositories[entityType] = new CustomRepositoryRegistration(repositoryType, false)
+            .AddInterface(repositoryInterface);
+        }
+        else
+        {
+            CustomRepositories[typeof(TEntity)].AddInterface(repositoryInterface);
+        }
         return this;
     }
 
@@ -144,19 +169,31 @@ public abstract class DbContextRegistrationOptionsBase : IDbContextRegistrationO
         return this;
     }
 
-    private void AddCustomRepository(Type entityType, Type repositoryType)
-    {
-        if (!typeof(IEntity).IsAssignableFrom(entityType))
-        {
-            throw new Exception($"Given entityType is not an entity: {entityType.AssemblyQualifiedName}. It must implement {typeof(IEntity<>).AssemblyQualifiedName}.");
-        }
+    // private void AddCustomRepository(Type entityType, Type repositoryType, Type? repositoryInterfaceType = null)
+    // {
+    //     if (!typeof(IEntity).IsAssignableFrom(entityType))
+    //     {
+    //         throw new Exception($"Given entityType is not an entity: {entityType.AssemblyQualifiedName}. It must implement {typeof(IEntity<>).AssemblyQualifiedName}.");
+    //     }
 
-        if (!typeof(IRepository).IsAssignableFrom(repositoryType))
-        {
-            throw new Exception($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<>).AssemblyQualifiedName}.");
-        }
+    //     if (repositoryImplementationType is null)
+    //     {
+    //         if (!typeof(IRepository).IsAssignableFrom(repositoryType))
+    //         {
+    //             throw new Exception($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<>).AssemblyQualifiedName}.");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (!typeof(IRepository).IsAssignableFrom(repositoryImplementationType))
+    //         {
+    //             throw new Exception($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<>).AssemblyQualifiedName}.");
+    //         }
+    //     }
 
-        CustomRepositories[entityType] = repositoryType;
-    }
+
+
+    //     CustomRepositories[entityType] = (repositoryType, repositoryImplementationType);
+    // }
 
 }

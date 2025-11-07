@@ -13,11 +13,7 @@ public class ProductCreatedEventHandler(IRepository<Category, Guid> repository, 
 {
     public async override Task HandleAsync(ProductCreatedEvent message, CancellationToken cancellationToken = default)
     {
-        var current = unitOfWorkManager.Current;
-        var category = new Category(Guid.NewGuid(), "hhh");
-
-        await repository.CreateAsync(category);
-        throw new Exception("for test");
+  
     }
 }
 
