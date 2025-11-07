@@ -7,8 +7,8 @@ namespace Ramsha.Domain;
 
 public interface ISoftDelete
 {
-    Guid? DeletedBy { get; }
-    DateTime? DeletionDate { get; }
+    Guid? DeletedBy { get; set; }
+    DateTime? DeletionDate { get; set; }
 }
 
 public interface IEntityModification

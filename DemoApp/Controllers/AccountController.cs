@@ -2,39 +2,49 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DemoApp.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Security.Claims;
 using Ramsha.Security.Users;
+using Ramsha.UnitOfWork;
 
 namespace DemoApp.Controllers;
 
 public class AccountController(
-    UserManager<IdentityUser> userManager,
-    SignInManager<IdentityUser> signInManager,
+    UserManager<RamshaIdentityUser> userManager,
+    SignInManager<RamshaIdentityUser> signInManager,
     ICurrentUser currentUser)
 : RamshaApiController
 {
     [HttpPost(nameof(Register))]
     public async Task<IActionResult> Register(string username, string email, string password)
     {
-        var user = new IdentityUser { UserName = username, Email = email };
-        var result = await userManager.CreateAsync(user, password);
-        if (!result.Succeeded)
+        var user = new RamshaIdentityUser(Guid.NewGuid(), username) { Email = email };
+
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = true }))
         {
-            return BadRequest(result.Errors);
+            var result = await userManager.CreateAsync(user, password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
         }
+
         return Ok();
     }
 
     [HttpPost(nameof(Login))]
     public async Task<IActionResult> Login(string username, string password)
     {
-        var result = await signInManager.PasswordSignInAsync(username, password, false, false);
-        if (!result.Succeeded)
+        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
         {
-            return BadRequest(result);
+            var result = await signInManager.PasswordSignInAsync(username, password, false, false);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
         }
         return Ok();
     }

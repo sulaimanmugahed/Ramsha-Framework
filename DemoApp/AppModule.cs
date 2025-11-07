@@ -69,8 +69,7 @@ public class AppModule : RamshaModule
         {
             option.AddDefaultRepositories(true)
             .AddGlobalQueryFilterProvider<PriceFilterProvider>()
-             .AddRepository<Product, IProductRepository, ProductRepository>()
-            ;
+             .AddRepository<Product, IProductRepository, ProductRepository>();
         });
 
         context.Services.Configure<ConnectionStringsOptions>(options =>
@@ -89,21 +88,30 @@ public class AppModule : RamshaModule
 
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
-        context.Services.AddSingleton<IdentityUserRepository>();
 
-        context.Services.TryAddScoped<IdentityUserStore>();
-        context.Services.TryAddScoped(typeof(IUserStore<IdentityUser>), provider => provider.GetService(typeof(IdentityUserStore)));
+        // context.Services.AddScoped<IUserStore<RamshaIdentityUser>, RamshaUserStore>();
+        // context.Services.AddScoped<IRoleStore<RamshaIdentityRole>, RamshaRoleStore>();
 
-        context.Services.AddIdentityCore<IdentityUser>(options =>
+        // context.Services.TryAddScoped<RamshaUserStore>();
+
+
+        // context.Services.TryAddScoped(typeof(IUserStore<RamshaIdentityUser>), provider => provider.GetService(typeof(RamshaUserStore)));
+
+        // context.Services.TryAddScoped<RamshaRoleStore>();
+        // context.Services.TryAddScoped(typeof(IRoleStore<RamshaIdentityRole>), provider => provider.GetService(typeof(RamshaRoleStore)));
+
+        context.Services.AddIdentityCore<RamshaIdentityUser>(options =>
        {
            options.Password.RequireDigit = false;
            options.Password.RequireNonAlphanumeric = false;
            options.Password.RequireUppercase = false;
            options.Password.RequiredLength = 4;
        })
+           .AddRoles<RamshaIdentityRole>()
            .AddSignInManager()
            .AddDefaultTokenProviders()
-          .AddClaimsPrincipalFactory<RamshaUserClaimsPrincipalFactory>();
+          .AddClaimsPrincipalFactory<RamshaUserClaimsPrincipalFactory>()
+          .AddRamshaIdentity();
 
         context.Services
                 .AddAuthentication(o =>

@@ -10,14 +10,14 @@ using Ramsha.Security.Claims;
 namespace DemoApp.Identity;
 
 public class RamshaUserClaimsPrincipalFactory(
-   UserManager<IdentityUser> userManager,
+   UserManager<RamshaIdentityUser> userManager,
         IOptions<IdentityOptions> options,
         IPrincipalAccessor principalAccessor,
         IRamshaClaimsPrincipalFactory ramshaClaimsPrincipalFactory
 )
-: UserClaimsPrincipalFactory<IdentityUser>(userManager, options)
+: UserClaimsPrincipalFactory<RamshaIdentityUser>(userManager, options)
 {
-    public async override Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
+    public async override Task<ClaimsPrincipal> CreateAsync(RamshaIdentityUser user)
     {
         var principal = await base.CreateAsync(user);
         var identity = principal.Identities.First();
