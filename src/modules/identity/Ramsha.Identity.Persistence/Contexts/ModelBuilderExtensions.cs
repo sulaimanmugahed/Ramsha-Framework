@@ -9,9 +9,33 @@ namespace Ramsha.Identity.Persistence;
 
 public static class ModelBuilderExtensions
 {
-    public static void ConfigureDefaultIdentity(this ModelBuilder modelBuilder)
+    public static void ConfigureIdentity(this ModelBuilder modelBuilder)
     {
         modelBuilder.ConfigureIdentity<RamshaIdentityUser, RamshaIdentityRole, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>();
+    }
+
+    public static void ConfigureIdentity<TUser>(this ModelBuilder modelBuilder)
+    where TUser : RamshaIdentityUser
+
+    {
+        modelBuilder.ConfigureIdentity<TUser, RamshaIdentityRole<Guid>, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>();
+    }
+
+    public static void ConfigureIdentity<TUser, TRole>(this ModelBuilder modelBuilder)
+    where TUser : RamshaIdentityUser
+    where TRole : RamshaIdentityRole
+
+    {
+        modelBuilder.ConfigureIdentity<TUser, TRole, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>();
+    }
+
+    public static void ConfigureIdentity<TUser, TRole, TId>(this ModelBuilder modelBuilder)
+     where TUser : RamshaIdentityUser<TId>
+  where TRole : RamshaIdentityRole<TId>
+
+     where TId : IEquatable<TId>
+    {
+        modelBuilder.ConfigureIdentity<TUser, TRole, TId, RamshaIdentityUserRole<TId>, RamshaIdentityRoleClaim<TId>, RamshaIdentityUserClaim<TId>, RamshaIdentityUserLogin<TId>, RamshaIdentityUserToken<TId>>();
     }
     public static void ConfigureIdentity<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(this ModelBuilder modelBuilder)
          where TId : IEquatable<TId>

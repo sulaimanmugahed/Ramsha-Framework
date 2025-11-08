@@ -81,6 +81,7 @@ where TEntity : class, IEntity
 
 public class EFCoreRepository<TDbContext, TEntity, TId>(IDbContextProvider<TDbContext> dbContextProvider) : EFCoreRepository<TDbContext, TEntity>(dbContextProvider), IRepository<TEntity, TId>
 where TDbContext : IEFDbContext
+where TId:IEquatable<TId>
 where TEntity : class, IEntity<TId>
 
 {

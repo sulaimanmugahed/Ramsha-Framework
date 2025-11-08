@@ -23,6 +23,7 @@ using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.AspNetCore;
+using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence;
 using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
@@ -50,6 +51,13 @@ public class AppModule : RamshaModule
             options.AddMessagesFromAssembly<AppModule>();
         });
 
+        moduleBuilder.PreConfigure<RamshaIdentityOptions>(options =>
+        {
+            options.IdentityTypes<AppIdentityUser>();
+        });
+
+
+
     }
 
     public override void OnConfiguring(ConfigureContext context)
@@ -74,7 +82,7 @@ public class AppModule : RamshaModule
             option.AddDefaultRepositories(true)
             .AddGlobalQueryFilterProvider<PriceFilterProvider>()
              .AddRepository<Product, IProductRepository, ProductRepository>()
-             //.ReplaceDbContext<IIdentityDbContext>()
+             //  .ReplaceDbContext<IIdentityDbContext>()
              ;
         });
 

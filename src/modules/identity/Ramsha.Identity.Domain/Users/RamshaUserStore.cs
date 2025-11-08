@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Identity;
 namespace Ramsha.Identity.Domain;
 
 public class RamshaUserStore<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
-    IIdentityUserRepository<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken> userRepository,
-    IIdentityRoleRepository<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken> roleRepository) :
+    IIdentityUserRepository<TUser, TId> userRepository,
+    IIdentityRoleRepository<TRole, TId> roleRepository) :
     IUserStore<TUser>,
     IUserLoginStore<TUser>,
     IUserRoleStore<TUser>,

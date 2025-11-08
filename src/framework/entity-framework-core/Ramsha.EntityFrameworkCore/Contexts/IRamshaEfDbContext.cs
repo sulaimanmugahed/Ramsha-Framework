@@ -12,7 +12,7 @@ namespace Ramsha.EntityFrameworkCore;
 
 public interface IRamshaEFDbContext : IRamshaDbContext, IEFDbContext
 {
-
+    IServiceProvider ServiceProvider { get; set; }
 }
 
 public interface IEFDbContext : IInfrastructure<IServiceProvider>, IDbContextDependencies, IDbSetCache, IDbContextPoolable, IDisposable

@@ -16,6 +16,20 @@ public interface IIdentityDbContext : IIdentityDbContext<RamshaIdentityUser, Ram
 
 }
 
+public interface IEFIdentityDbContext<TUser> : IIdentityDbContext<TUser, RamshaIdentityRole<Guid>, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>
+where TUser : RamshaIdentityUser
+{
+
+}
+
+
+public interface IEFIdentityDbContext<TUser, TRole> : IIdentityDbContext<TUser, TRole,  Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>
+where TUser : RamshaIdentityUser
+where TRole : RamshaIdentityRole
+{
+
+}
+
 public interface IEFIdentityDbContext<TUser, TRole, TId> : IIdentityDbContext<TUser, TRole, TId, RamshaIdentityUserRole<TId>, RamshaIdentityRoleClaim<TId>, RamshaIdentityUserClaim<TId>, RamshaIdentityUserLogin<TId>, RamshaIdentityUserToken<TId>>
 where TId : IEquatable<TId>
 where TUser : RamshaIdentityUser<TId>

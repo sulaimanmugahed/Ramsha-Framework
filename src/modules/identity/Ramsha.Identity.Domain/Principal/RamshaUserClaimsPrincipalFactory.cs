@@ -9,15 +9,21 @@ using Ramsha.Security.Claims;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaUserClaimsPrincipalFactory(
-   UserManager<RamshaIdentityUser> userManager,
+public class RamshaUserClaimsPrincipalFactory<TUser,TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
+   UserManager<TUser> userManager,
         IOptions<IdentityOptions> options,
         IPrincipalAccessor principalAccessor,
         IRamshaClaimsPrincipalFactory ramshaClaimsPrincipalFactory
 )
-: UserClaimsPrincipalFactory<RamshaIdentityUser>(userManager, options)
+: UserClaimsPrincipalFactory<TUser>(userManager, options)
+ where TId : IEquatable<TId>
+where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
+ where TUserClaim : RamshaIdentityUserClaim<TId>
+ where TUserRole : RamshaIdentityUserRole<TId>
+ where TUserLogin : RamshaIdentityUserLogin<TId>
+where TUserToken : RamshaIdentityUserToken<TId>
 {
-    public async override Task<ClaimsPrincipal> CreateAsync(RamshaIdentityUser user)
+    public async override Task<ClaimsPrincipal> CreateAsync(TUser user)
     {
         var principal = await base.CreateAsync(user);
         var identity = principal.Identities.First();

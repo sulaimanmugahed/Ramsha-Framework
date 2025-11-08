@@ -15,31 +15,19 @@ namespace DemoApp;
 
 [ConnectionString("MainDb")]
 public class AppDbContext(DbContextOptions<AppDbContext> options)
-: RamshaEFDbContext<AppDbContext>(options), IIdentityDbContext
+: RamshaEFDbContext<AppDbContext>(options)
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     public bool IsPriceFilterEnabled => GlobalDataFilterManager.IsEnabled<IPrice>();
     public string Name => "";
 
-    public DbSet<RamshaIdentityUser> Users { get; set; }
-
-    public DbSet<RamshaIdentityRole> Roles { get; set; }
-
-    public DbSet<RamshaIdentityUserClaim<Guid>> UserClaims { get; set; }
-
-    public DbSet<RamshaIdentityUserRole<Guid>> UserRoles { get; set; }
-
-    public DbSet<RamshaIdentityUserLogin<Guid>> UserLogins { get; set; }
-
-    public DbSet<RamshaIdentityUserToken<Guid>> UserTokens { get; set; }
-
-    public DbSet<RamshaIdentityRoleClaim<Guid>> RoleClaims { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ConfigureDefaultIdentity();
+
+        modelBuilder.ConfigureIdentity<AppIdentityUser>();
+
         modelBuilder.Entity<Category>(e =>
         {
             e.HasKey(c => c.Id);

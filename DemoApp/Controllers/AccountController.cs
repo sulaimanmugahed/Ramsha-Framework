@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DemoApp.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
@@ -13,15 +14,15 @@ using Ramsha.UnitOfWork;
 namespace DemoApp.Controllers;
 
 public class AccountController(
-    UserManager<RamshaIdentityUser> userManager,
-    SignInManager<RamshaIdentityUser> signInManager,
+    UserManager<AppIdentityUser> userManager,
+    SignInManager<AppIdentityUser> signInManager,
     ICurrentUser currentUser)
 : RamshaApiController
 {
     [HttpPost(nameof(Register))]
-    public async Task<IActionResult> Register(string username, string email, string password)
+    public async Task<IActionResult> Register(string username, string email, string password, string profile)
     {
-        var user = new RamshaIdentityUser(Guid.NewGuid(), username) { Email = email };
+        var user = new AppIdentityUser(Guid.NewGuid(), username, profile) { Email = email };
 
         if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = true }))
         {

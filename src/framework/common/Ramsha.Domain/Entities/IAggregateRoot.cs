@@ -23,12 +23,15 @@ public class DomainEventRecord
 }
 
 public interface IAggregateRoot<TId> : IEntity<TId>, IHasDomainEvent
+where TId : IEquatable<TId>
+
 {
 
 }
 
 
 public abstract class AggregateRoot<TId> : Entity<TId>, IAggregateRoot<TId>
+where TId : IEquatable<TId>
 {
     private readonly List<DomainEventRecord> _events = [];
 

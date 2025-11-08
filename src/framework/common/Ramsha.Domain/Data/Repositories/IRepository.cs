@@ -22,6 +22,7 @@ where TEntity : IEntity
 }
 
 public interface IRepository<TEntity, TId> : IRepository<TEntity>
+where TId : IEquatable<TId>
 where TEntity : IEntity<TId>
 {
     Task<bool> DeleteAsync(TId id);

@@ -10,7 +10,7 @@ namespace Ramsha.Identity.Domain;
 
 
 public class RamshaRoleStore<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
-IIdentityRoleRepository<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken> roleRepository
+IIdentityRoleRepository<TRole, TId> roleRepository
 ) :
 IRoleStore<TRole>,
 IRoleClaimStore<TRole>

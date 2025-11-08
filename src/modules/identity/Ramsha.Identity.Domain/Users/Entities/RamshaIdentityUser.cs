@@ -10,7 +10,7 @@ namespace Ramsha.Identity.Domain;
 
 public class RamshaIdentityUser : RamshaIdentityUser<Guid>
 {
-    private RamshaIdentityUser()
+    protected RamshaIdentityUser()
     {
 
     }

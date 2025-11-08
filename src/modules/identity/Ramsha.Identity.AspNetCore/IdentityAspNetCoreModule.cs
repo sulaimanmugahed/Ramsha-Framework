@@ -11,10 +11,14 @@ public class IdentityAspNetCoreModule : RamshaModule
         base.OnCreating(moduleBuilder);
         moduleBuilder.DependsOn<IdentityDomainModule>();
 
-        moduleBuilder.PreConfigure<IdentityBuilder>(builder =>
+        moduleBuilder.PreConfigure<RamshaIdentityOptions>(options =>
         {
-            builder.AddDefaultTokenProviders()
-                .AddSignInManager();
+            options.ConfigureIdentity(builder =>
+            {
+                builder.AddDefaultTokenProviders()
+              .AddSignInManager();
+            });
+
         });
 
     }

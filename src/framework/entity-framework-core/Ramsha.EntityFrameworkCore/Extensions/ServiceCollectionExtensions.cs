@@ -15,6 +15,78 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddRamshaDbContext(
+    this IServiceCollection services,
+    Type dbContextInterfaceType,
+    Type dbContextType,
+    Action<IDbContextRegistrationOptionsBaseBuilder>? optionsBuilder = null)
+    {
+        if (services == null)
+            throw new ArgumentNullException(nameof(services));
+
+        if (dbContextInterfaceType == null)
+            throw new ArgumentNullException(nameof(dbContextInterfaceType));
+
+        if (dbContextType == null)
+            throw new ArgumentNullException(nameof(dbContextType));
+
+        if (!typeof(IRamshaEFDbContext).IsAssignableFrom(dbContextInterfaceType))
+            throw new ArgumentException($"{dbContextInterfaceType.Name} must implement IRamshaEFDbContext.", nameof(dbContextInterfaceType));
+
+        services.AddMemoryCache();
+
+
+
+        services.TryAddTransient(dbContextType, sp =>
+        {
+            var instance = (IRamshaEFDbContext)ActivatorUtilities.CreateInstance(sp, dbContextType);
+            instance.ServiceProvider = sp;
+            return instance;
+        });
+
+        services.AddTransient(dbContextInterfaceType, sp => sp.GetRequiredService(dbContextType));
+
+        var options = new EfDbContextRegistrationOptions(dbContextType, services);
+        optionsBuilder?.Invoke(options);
+
+        var createMethod = typeof(RamshaDbContextOptionsFactory)
+          .GetMethod(nameof(RamshaDbContextOptionsFactory.Create))!
+          .MakeGenericMethod(dbContextType);
+
+        var dbContextOptionsType = typeof(DbContextOptions<>).MakeGenericType(dbContextType);
+
+        services.TryAddTransient(dbContextOptionsType, sp =>
+        {
+            return createMethod.Invoke(null, new object?[] { sp });
+        });
+
+        services.AddTransient(dbContextInterfaceType, sp => sp.GetRequiredService(dbContextType));
+
+        // Handle replaced contexts
+        foreach (var entry in options.ReplacedDbContextTypes)
+        {
+            var originalDbContextType = entry.Key;
+            var targetDbContextType = entry.Value ?? dbContextType;
+
+            services.Replace(ServiceDescriptor.Transient(originalDbContextType, sp =>
+            {
+                var provider = sp.GetRequiredService<IEfDbContextTypeProvider>();
+                var resolvedType = provider.GetDbContextType(originalDbContextType);
+                return sp.GetRequiredService(resolvedType);
+            }));
+
+            services.Configure<RamshaDbContextOptions>(opts =>
+            {
+                opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
+            });
+        }
+
+        new EfRepositoryRegistrar(options).AddRepositories();
+        new EFGlobalQueryFilterRegistrar(options).RegisterFilters();
+
+        return services;
+    }
+
     public static IServiceCollection AddRamshaDbContext<TDbContextInterface, TDbContext>(
         this IServiceCollection services,
            Action<IDbContextRegistrationOptionsBaseBuilder>? optionsBuilder = null)
