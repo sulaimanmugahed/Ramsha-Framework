@@ -14,14 +14,7 @@ public static class RamshaIdentityOptionsExtensions
         options.ConfigureIdentity(builder =>
            {
                builder
-               .AddRamshaIdentityEntityFrameworkCore(
-                   options.UserType,
-                    options.RoleType,
-                     options.UserRoleType,
-                      options.RoleClaimType,
-                       options.UserClaimType,
-                        options.UserLoginType,
-                         options.UserTokenType);
+               .AddRamshaIdentityEntityFrameworkCore();
            });
         return options;
     }

@@ -20,10 +20,16 @@ public static class ServiceCollectionExtensions
         {
             builder.AddCommandModule(module =>
             {
+                
+                foreach (var handler in options.CommandHandlers)
+                {
+                    module.Register(handler);
+                }
                 foreach (var assembly in assemblies)
                 {
                     module.RegisterFromAssembly(assembly);
                 }
+
             });
 
             builder.AddQueryModule(module =>

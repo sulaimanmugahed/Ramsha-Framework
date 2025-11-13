@@ -11,3 +11,4 @@ where TCommand : IRamshaCommand
 {
     public abstract Task HandleAsync(TCommand message, CancellationToken cancellationToken = default);
 }
+

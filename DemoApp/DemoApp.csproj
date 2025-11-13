@@ -20,6 +20,8 @@
     <ProjectReference Include="..\src\framework\entity-framework-core\Ramsha.EntityFrameworkCore\Ramsha.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\src\framework\messaging\Ramsha.LocalMessaging\Ramsha.LocalMessaging.csproj" />
     <ProjectReference Include="..\src\framework\Ramsha.Core\Ramsha.Core.csproj" />
+    <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Api\Ramsha.Identity.Api.csproj" />
+    <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Application\Ramsha.Identity.Application.csproj" />
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.AspNetCore\Ramsha.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Persistence\Ramsha.Identity.Persistence.csproj" />
   </ItemGroup>

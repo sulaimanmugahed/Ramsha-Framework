@@ -8,7 +8,7 @@ namespace DemoApp.Entities;
 
 public class AppIdentityUser : RamshaIdentityUser
 {
-    private AppIdentityUser()
+    public AppIdentityUser()
     {
 
     }

@@ -21,11 +21,17 @@ public class ModuleBuilder
         _context.InsureModuleExist(_moduleType);
     }
 
-    public ModuleBuilder PreConfigure<TOptions>(Action<TOptions> optionsAction)
+    public ModuleBuilder OnCreatingConfigure<TOptions>(Action<TOptions> optionsAction)
          where TOptions : class
     {
         _services.PreConfigure(optionsAction);
         return this;
+    }
+
+    public TOptions? GetOnCreatingOptions<TOptions>()
+      where TOptions : class, new()
+    {
+        return _services.ExecutePreConfigured<TOptions>();
     }
 
     public IConfiguration GetConfiguration()

@@ -24,7 +24,11 @@ public class AspNetCoreMvcModule : RamshaModule
     {
         base.OnConfiguring(context);
 
-        context.Services.AddMvc().AddControllersAsServices();
+        var mvcBuilder = context.Services.AddMvc();
+
+        context.Services.ExecutePreConfigured(mvcBuilder);
+
+        mvcBuilder.AddControllersAsServices();
         context.Services.AddOpenApi();
 
         context.Services.AddSingleton<IOptionsSnapshot<ScalarOptions>>(sp =>

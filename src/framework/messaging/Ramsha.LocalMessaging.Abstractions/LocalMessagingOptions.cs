@@ -13,6 +13,15 @@ public class LocalMessagingOptions
     private readonly List<Assembly> _assemblies = [];
     public IReadOnlyList<Assembly> Assemblies => _assemblies;
 
+    private readonly List<Type> _commandHandlers = [];
+    public IReadOnlyList<Type> CommandHandlers => _commandHandlers;
+
+    public void AddCommandHandler(Type type)
+    {
+        _commandHandlers.Add(type);
+    }
+
+
     public LocalMessagingOptions AddMessagesFromAssembly(Assembly assembly)
     {
         if (!_assemblies.Any(x => x.FullName == assembly.FullName))

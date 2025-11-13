@@ -12,7 +12,7 @@ public class IdentityPersistenceModule : RamshaModule
         base.OnCreating(moduleBuilder);
         moduleBuilder.DependsOn<IdentityDomainModule>();
 
-        moduleBuilder.PreConfigure<RamshaIdentityOptions>(options =>
+        moduleBuilder.OnCreatingConfigure<RamshaIdentityOptions>(options =>
         {
             options.AddEntityFrameworkCore();
         });

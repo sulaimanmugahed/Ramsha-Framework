@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Identity.Core;
+using Ramsha.Identity.Core.Options;
 
 namespace Ramsha.Identity.Domain;
 
@@ -12,7 +13,19 @@ public class IdentityDomainModule : RamshaModule
         base.OnCreating(moduleBuilder);
         moduleBuilder.DependsOn<IdentityCoreModule>();
 
-        moduleBuilder.PreConfigure<RamshaIdentityOptions>(options => { });
+        moduleBuilder.OnCreatingConfigure<RamshaIdentityTypesOptions>(options =>
+        {
+            options.KeyType ??= typeof(Guid);
+            options.UserType ??= typeof(RamshaIdentityUser);
+            options.RoleType ??= typeof(RamshaIdentityRole);
+            options.UserClaimType ??= typeof(RamshaIdentityUserClaim<Guid>);
+            options.UserLoginType ??= typeof(RamshaIdentityUserLogin<Guid>);
+            options.UserTokenType ??= typeof(RamshaIdentityUserToken<Guid>);
+            options.RoleClaimType ??= typeof(RamshaIdentityRoleClaim<Guid>);
+            options.UserRoleType ??= typeof(RamshaIdentityUserRole<Guid>);
+        });
+
+        moduleBuilder.OnCreatingConfigure<RamshaIdentityOptions>(options => { });
     }
 
     public override void OnConfiguring(ConfigureContext context)
@@ -20,6 +33,7 @@ public class IdentityDomainModule : RamshaModule
         base.OnConfiguring(context);
 
         var options = context.Services.ExecutePreConfigured<RamshaIdentityOptions>();
+        var typesOptions = context.Services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
 
 
         var addIdentityCoreMethod = typeof(IdentityServiceCollectionExtensions)
@@ -28,7 +42,7 @@ public class IdentityDomainModule : RamshaModule
                      && m.IsGenericMethodDefinition
                      && m.GetParameters().Length == 2);
 
-        var genericAddIdentityCore = addIdentityCoreMethod.MakeGenericMethod(options.UserType);
+        var genericAddIdentityCore = addIdentityCoreMethod.MakeGenericMethod(typesOptions.UserType);
 
         var builder = (IdentityBuilder)genericAddIdentityCore.Invoke(
             null,
@@ -46,12 +60,13 @@ public class IdentityDomainModule : RamshaModule
 
         var addRolesGeneric = typeof(IdentityBuilder)
       .GetMethod(nameof(IdentityBuilder.AddRoles))
-      ?.MakeGenericMethod(options.RoleType);
+      ?.MakeGenericMethod(typesOptions.RoleType);
 
         addRolesGeneric?.Invoke(builder, null);
 
 
-        var factoryType = typeof(RamshaUserClaimsPrincipalFactory<,,,,,,,>).MakeGenericType(options.UserType, options.RoleType, options.KeyType, options.UserRoleType, options.RoleClaimType, options.UserClaimType, options.UserLoginType, options.UserTokenType);
+        var factoryType = typeof(RamshaUserClaimsPrincipalFactory<,,,,,,,>)
+        .MakeGenericType(typesOptions.UserType, typesOptions.RoleType, typesOptions.KeyType, typesOptions.UserRoleType, typesOptions.RoleClaimType, typesOptions.UserClaimType, typesOptions.UserLoginType, typesOptions.UserTokenType);
         var addClaimsFactoryGeneric = typeof(IdentityBuilder)
             .GetMethods()
             .First(m => m.Name == nameof(IdentityBuilder.AddClaimsPrincipalFactory)

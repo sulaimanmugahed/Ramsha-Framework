@@ -9,14 +9,6 @@ namespace Ramsha.Identity.Domain;
 
 public class RamshaIdentityOptions
 {
-    public Type UserType { get; private set; } = typeof(RamshaIdentityUser);
-    public Type RoleType { get; private set; } = typeof(RamshaIdentityRole);
-    public Type KeyType { get; private set; }
-    public Type UserRoleType { get; private set; } = typeof(RamshaIdentityUserRole<Guid>);
-    public Type RoleClaimType { get; private set; } = typeof(RamshaIdentityRoleClaim<Guid>);
-    public Type UserClaimType { get; private set; } = typeof(RamshaIdentityUserClaim<Guid>);
-    public Type UserLoginType { get; private set; } = typeof(RamshaIdentityUserLogin<Guid>);
-    public Type UserTokenType { get; private set; } = typeof(RamshaIdentityUserToken<Guid>);
 
 
 
@@ -30,21 +22,10 @@ public class RamshaIdentityOptions
         return this;
     }
 
-    public RamshaIdentityOptions IdentityTypes<TUser>()
-    where TUser : RamshaIdentityUser
-    {
-        UserType = typeof(TUser);
-        KeyType = EntityHelper.FindPrimaryKeyType(UserType) ?? typeof(Guid);
-        return this;
-    }
+ 
 
-    public RamshaIdentityOptions IdentityTypes<TUser, TRole>()
-    where TUser : RamshaIdentityUser
-    where TRole : RamshaIdentityRole
-    {
-        UserType = typeof(TUser);
-        RoleType = typeof(TRole);
-        return this;
-    }
+  
+
+ 
 
 }

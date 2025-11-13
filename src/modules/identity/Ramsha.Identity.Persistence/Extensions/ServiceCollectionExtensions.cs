@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Ramsha.Domain;
 using Ramsha.EntityFrameworkCore;
+using Ramsha.Identity.Core.Options;
 using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence;
 
@@ -14,13 +15,7 @@ public static class ServiceCollectionExtensions
 {
     public static IdentityBuilder AddRamshaIdentityEntityFrameworkCore(this IdentityBuilder builder)
     {
-        RegisterServices(builder.Services, builder.UserType, builder.RoleType);
-        return builder;
-    }
-
-    public static IdentityBuilder AddRamshaIdentityEntityFrameworkCore(this IdentityBuilder builder, Type userType, Type? roleType, Type userRoleType = null, Type roleClaimType = null, Type userClaimType = null, Type userLoginType = null, Type userTokenType = null)
-    {
-        RegisterServices(builder.Services, userType, roleType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+        RegisterServices(builder.Services);
         return builder;
     }
 
@@ -43,24 +38,20 @@ public static class ServiceCollectionExtensions
         services.RegisterDefaultRepository(userType, userRepositoryType, replaceExisting: true);
 
     }
-    private static void RegisterServices(IServiceCollection services, Type userType, Type? roleType, Type userRoleType = null, Type roleClaimType = null, Type userClaimType = null, Type userLoginType = null, Type userTokenType = null)
+    private static void RegisterServices(IServiceCollection services)
     {
-        Validate(userType, roleType);
-        Type keyType = EntityHelper.FindPrimaryKeyType(userType) ?? throw new Exception("no id found for user");
-        userRoleType = userRoleType ?? typeof(RamshaIdentityUserRole<>).MakeGenericType(keyType);
-        roleClaimType = roleClaimType ?? typeof(RamshaIdentityRoleClaim<>).MakeGenericType(keyType);
-        userClaimType = userClaimType ?? typeof(RamshaIdentityUserClaim<>).MakeGenericType(keyType);
-        userLoginType = userLoginType ?? typeof(RamshaIdentityUserLogin<>).MakeGenericType(keyType);
-        userTokenType = userTokenType ?? typeof(RamshaIdentityUserToken<>).MakeGenericType(keyType);
+        var typesOptions = services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
+        Validate(typesOptions.UserType, typesOptions.RoleType);
+
 
         var dbContextInterfaceType = typeof(IIdentityDbContext<,,,,,,,>)
-        .MakeGenericType(userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+        .MakeGenericType(typesOptions.UserType, typesOptions.RoleType, typesOptions.KeyType, typesOptions.UserRoleType, typesOptions.RoleClaimType, typesOptions.UserClaimType, typesOptions.UserLoginType, typesOptions.UserTokenType);
         var dbContextType = typeof(IdentityDbContext<,,,,,,,>)
-       .MakeGenericType(userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+       .MakeGenericType(typesOptions.UserType, typesOptions.RoleType, typesOptions.KeyType, typesOptions.UserRoleType, typesOptions.RoleClaimType, typesOptions.UserClaimType, typesOptions.UserLoginType, typesOptions.UserTokenType);
 
-        RegisterDbContextAndRepositories(services, dbContextInterfaceType, dbContextType, userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+        RegisterDbContextAndRepositories(services, dbContextInterfaceType, dbContextType, typesOptions.UserType, typesOptions.RoleType, typesOptions.KeyType, typesOptions.UserRoleType, typesOptions.RoleClaimType, typesOptions.UserClaimType, typesOptions.UserLoginType, typesOptions.UserTokenType);
 
-        AddIdentityStores(services, userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+        AddIdentityStores(services, typesOptions.UserType, typesOptions.RoleType, typesOptions.KeyType, typesOptions.UserRoleType, typesOptions.RoleClaimType, typesOptions.UserClaimType, typesOptions.UserLoginType, typesOptions.UserTokenType);
 
     }
 

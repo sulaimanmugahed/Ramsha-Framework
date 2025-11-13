@@ -22,7 +22,11 @@ using Ramsha.AspNetCore;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.EntityFrameworkCore;
+using Ramsha.Identity.Api;
+using Ramsha.Identity.Application;
 using Ramsha.Identity.AspNetCore;
+using Ramsha.Identity.Contracts;
+using Ramsha.Identity.Core.Options;
 using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence;
 using Ramsha.LocalMessaging;
@@ -41,23 +45,30 @@ public class AppModule : RamshaModule
         .DependsOn<DemoModuleModule>()
         .DependsOn<AspNetCoreMvcModule>()
         .DependsOn<LocalMessagingModule>()
+        .DependsOn<IdentityApplicationModule>()
         .DependsOn<EntityFrameworkCoreModule>()
         .DependsOn<IdentityPersistenceModule>()
-        .DependsOn<IdentityAspNetCoreModule>();
+        .DependsOn<IdentityAspNetCoreModule>()
+        .DependsOn<IdentityApiModule>()
+        ;
 
 
-        moduleBuilder.PreConfigure<LocalMessagingOptions>(options =>
+        moduleBuilder.OnCreatingConfigure<LocalMessagingOptions>(options =>
         {
             options.AddMessagesFromAssembly<AppModule>();
         });
 
-        moduleBuilder.PreConfigure<RamshaIdentityOptions>(options =>
+
+
+        moduleBuilder.OnCreatingConfigure<RamshaIdentityTypesOptions>(options =>
         {
-            options.IdentityTypes<AppIdentityUser>();
+            options.UserType = typeof(AppIdentityUser);
         });
-
-
-
+        moduleBuilder.OnCreatingConfigure<RamshaIdentityContractsOptions>(options =>
+        {
+            options.UserDtoTypes(typeof(CreateAppUserDto));
+            options.ReplaceUserService<AppUserService>();
+        });
     }
 
     public override void OnConfiguring(ConfigureContext context)
@@ -103,16 +114,6 @@ public class AppModule : RamshaModule
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
 
-        // context.Services.AddScoped<IUserStore<RamshaIdentityUser>, RamshaUserStore>();
-        // context.Services.AddScoped<IRoleStore<RamshaIdentityRole>, RamshaRoleStore>();
-
-        // context.Services.TryAddScoped<RamshaUserStore>();
-
-
-        // context.Services.TryAddScoped(typeof(IUserStore<RamshaIdentityUser>), provider => provider.GetService(typeof(RamshaUserStore)));
-
-        // context.Services.TryAddScoped<RamshaRoleStore>();
-        // context.Services.TryAddScoped(typeof(IRoleStore<RamshaIdentityRole>), provider => provider.GetService(typeof(RamshaRoleStore)));
 
 
 
@@ -123,10 +124,6 @@ public class AppModule : RamshaModule
             options.Transformers.AddAfter<DemoClaimsTransformer, DemoClaimsTransformerAfter>();
 
         });
-
-
-
-
     }
 
     public override void OnInit(InitContext context)

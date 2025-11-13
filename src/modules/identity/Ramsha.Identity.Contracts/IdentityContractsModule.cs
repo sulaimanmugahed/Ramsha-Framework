@@ -8,5 +8,7 @@ public class IdentityContractsModule : RamshaModule
     {
         base.OnCreating(moduleBuilder);
         moduleBuilder.DependsOn<IdentityCoreModule>();
+
+        moduleBuilder.OnCreatingConfigure<RamshaIdentityContractsOptions>(options => { });
     }
 }
