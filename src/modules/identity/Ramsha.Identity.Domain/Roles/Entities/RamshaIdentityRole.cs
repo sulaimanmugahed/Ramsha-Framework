@@ -29,7 +29,7 @@ public class RamshaIdentityRole<TId> : RamshaIdentityRole<TId, RamshaIdentityUse
     }
 }
 
-public class RamshaIdentityRole<TId, TUserRole, TRoleClaim> : AggregateRoot<TId>
+public class RamshaIdentityRole<TId, TUserRole, TRoleClaim>:RamshaIdentityRoleBase<TId>
     where TId : IEquatable<TId>
     where TUserRole : RamshaIdentityUserRole<TId>
     where TRoleClaim : RamshaIdentityRoleClaim<TId>
@@ -37,8 +37,7 @@ public class RamshaIdentityRole<TId, TUserRole, TRoleClaim> : AggregateRoot<TId>
 
     public virtual ICollection<TUserRole> Users { get; } = new List<TUserRole>();
     public virtual ICollection<TRoleClaim> Claims { get; } = new List<TRoleClaim>();
-    public virtual string Name { get; set; }
-    public virtual string? NormalizedName { get; set; }
+
 
 
     public RamshaIdentityRole() { }
@@ -66,4 +65,11 @@ public class RamshaIdentityRole<TId, TUserRole, TRoleClaim> : AggregateRoot<TId>
     {
         return Claims.FirstOrDefault(x => x.ClaimType == claim.Type && x.ClaimValue == claim.Value);
     }
+}
+
+public abstract class RamshaIdentityRoleBase<TId> : AggregateRoot<TId>
+    where TId : IEquatable<TId>
+{
+    public virtual string Name { get; set; }
+    public virtual string? NormalizedName { get; set; }
 }

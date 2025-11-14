@@ -76,10 +76,14 @@ public class IdentityDomainModule : RamshaModule
 
         addClaimsFactoryGeneric.Invoke(builder, null);
 
+
+
         foreach (var configureAction in options.ConfigureIdentityActions)
         {
             configureAction(builder);
         }
+        
+         context.Services.AddRamshaIdentityDomainServices();
 
         context.Services.AddObjectAccessor(builder);
     }

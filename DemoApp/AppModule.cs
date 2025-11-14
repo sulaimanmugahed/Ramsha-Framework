@@ -66,7 +66,8 @@ public class AppModule : RamshaModule
         });
         moduleBuilder.OnCreatingConfigure<RamshaIdentityContractsOptions>(options =>
         {
-            options.UserDtoTypes(typeof(CreateAppUserDto));
+            options.ReplaceDto<CreateRamshaIdentityUserDto, CreateAppUserDto>();
+            options.ReplaceDto<UpdateRamshaIdentityUserDto, UpdateAppUserDto>();
             options.ReplaceUserService<AppUserService>();
         });
     }

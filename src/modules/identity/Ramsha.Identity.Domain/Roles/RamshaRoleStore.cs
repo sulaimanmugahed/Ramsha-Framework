@@ -9,17 +9,13 @@ using Microsoft.AspNetCore.Identity;
 namespace Ramsha.Identity.Domain;
 
 
-public class RamshaRoleStore<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
+public class RamshaIdentityRoleStore<TRole, TId, TUserRole, TRoleClaim>(
 IIdentityRoleRepository<TRole, TId> roleRepository
 ) :
 IRoleStore<TRole>,
 IRoleClaimStore<TRole>
-   where TId : IEquatable<TId>
-where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
- where TUserClaim : RamshaIdentityUserClaim<TId>
- where TUserRole : RamshaIdentityUserRole<TId>
- where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
+where TId : IEquatable<TId>
+where TUserRole : RamshaIdentityUserRole<TId>
 where TRoleClaim : RamshaIdentityRoleClaim<TId>
 where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
 {
@@ -87,7 +83,9 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
 
         try
         {
-            var result = await roleRepository.FindAsync(ConvertIdFromString(roleId));
+            var result = await roleRepository.FindAsync(
+                ConvertIdFromString(roleId)
+            , [r => r.Claims]);
 
             return result;
         }
@@ -106,7 +104,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
 
         try
         {
-            var result = await roleRepository.FindAsync(x => x.NormalizedName == normalizedRoleName);
+            var result = await roleRepository.FindAsync(x => x.NormalizedName == normalizedRoleName, [r => r.Claims]);
 
             return result;
         }

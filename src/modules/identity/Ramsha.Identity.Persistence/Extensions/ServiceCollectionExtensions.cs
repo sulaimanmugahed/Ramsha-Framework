@@ -58,9 +58,9 @@ public static class ServiceCollectionExtensions
 
     private static void AddIdentityStores(IServiceCollection services, Type userType, Type roleType, Type keyType, Type userRoleType, Type roleClaimType, Type userClaimType, Type userLoginType, Type userTokenType)
     {
-        Type userStoreType = typeof(RamshaUserStore<,,,,,,,>).MakeGenericType(userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+        Type userStoreType = typeof(RamshaIdentityUserStore<,,,,,,,>).MakeGenericType(userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
 
-        Type roleStoreType = typeof(RamshaRoleStore<,,,,,,,>).MakeGenericType(userType, roleType, keyType, userRoleType, roleClaimType, userClaimType, userLoginType, userTokenType);
+        Type roleStoreType = typeof(RamshaIdentityRoleStore<,,,>).MakeGenericType(roleType, keyType, userRoleType, roleClaimType);
 
         services.AddScoped(typeof(IUserStore<>).MakeGenericType(userType), userStoreType);
         services.AddScoped(typeof(IRoleStore<>).MakeGenericType(roleType), roleStoreType);

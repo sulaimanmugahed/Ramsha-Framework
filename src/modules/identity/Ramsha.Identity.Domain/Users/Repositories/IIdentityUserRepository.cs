@@ -8,7 +8,7 @@ namespace Ramsha.Identity.Domain;
 
 public interface IIdentityUserRepository<TUser, TId> : IRepository<TUser, TId>
  where TId : IEquatable<TId>
-where TUser : IEntity<TId>
+ where TUser : RamshaIdentityUserBase<TId>
 {
 
 }

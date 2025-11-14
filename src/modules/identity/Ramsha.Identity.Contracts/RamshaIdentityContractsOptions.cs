@@ -7,25 +7,46 @@ namespace Ramsha.Identity.Contracts;
 
 public class RamshaIdentityContractsOptions
 {
-    public Type CreateRoleDtoType { get; private set; } = typeof(CreateRamshaIdentityRoleDto);
-    public Type CreateUserDtoType { get; private set; } = typeof(CreateRamshaIdentityUserDto);
-    public Type? ReplacedUserServiceType { get; private set; }
+    public Dictionary<Type, Type?> ReplacedDtosTypes { get; } = [];
 
-    public RamshaIdentityContractsOptions UserDtoTypes(Type createDto)
+    public Type? ReplacedUserServiceType { get; private set; }
+    public Type? ReplacedRoleServiceType { get; private set; }
+
+
+    public RamshaIdentityContractsOptions ReplaceDto<TBaseDto, TTargetDto>()
     {
-        CreateUserDtoType = createDto;
+        ReplaceDto(typeof(TBaseDto), typeof(TTargetDto));
         return this;
     }
 
-    public RamshaIdentityContractsOptions ReplaceUserService<T>()
+    public RamshaIdentityContractsOptions ReplaceDto(Type baseDtoType, Type targetDtoType)
+    {
+        ReplacedDtosTypes[baseDtoType] = targetDtoType;
+        return this;
+    }
+
+    public Type GetReplacedDtoOrBase<TBaseDto>()
+    {
+        return GetReplacedDtoOrBase(typeof(TBaseDto));
+    }
+
+    public Type GetReplacedDtoOrBase(Type baseDto)
+    {
+        return ReplacedDtosTypes.ContainsKey(baseDto) ? ReplacedDtosTypes[baseDto] ?? baseDto : baseDto;
+    }
+
+    public RamshaIdentityContractsOptions ReplaceUserService<TService>()
+    where TService : IRamshaIdentityUserServiceBase
+    {
+        ReplacedUserServiceType = typeof(TService);
+        return this;
+    }
+
+    public RamshaIdentityContractsOptions ReplaceRoleService<T>()
     {
         ReplacedUserServiceType = typeof(T);
         return this;
     }
 
-    public RamshaIdentityContractsOptions RoleDtoTypes(Type createDto)
-    {
-        CreateRoleDtoType = createDto;
-        return this;
-    }
+
 }

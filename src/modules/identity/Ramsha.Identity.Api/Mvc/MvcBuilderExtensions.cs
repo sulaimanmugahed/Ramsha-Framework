@@ -16,8 +16,8 @@ public static class MvcBuilderExtensions
         var typesOptions = builder.Services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
         var contractsOptions = builder.Services.ExecutePreConfigured<RamshaIdentityContractsOptions>();
         builder.AddGenericControllers(
-            typeof(RolesController<,,>).MakeGenericType(typesOptions.RoleType, typesOptions.KeyType, contractsOptions.CreateRoleDtoType),
-            typeof(UsersController<,,>).MakeGenericType(contractsOptions.CreateUserDtoType, contractsOptions.CreateUserDtoType, typesOptions.KeyType)
+            typeof(RamshaIdentityRoleController<,,,>).MakeGenericType(contractsOptions.GetReplacedDtoOrBase<RamshaIdentityRoleDto>(), contractsOptions.GetReplacedDtoOrBase<CreateRamshaIdentityRoleDto>(), contractsOptions.GetReplacedDtoOrBase<UpdateRamshaIdentityRoleDto>(), typesOptions.KeyType),
+            typeof(RamshaIdentityUserController<,,,>).MakeGenericType(contractsOptions.GetReplacedDtoOrBase<RamshaIdentityUserDto>(), contractsOptions.GetReplacedDtoOrBase<CreateRamshaIdentityUserDto>(), contractsOptions.GetReplacedDtoOrBase<UpdateRamshaIdentityUserDto>(), typesOptions.KeyType)
             );
     }
 }

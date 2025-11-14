@@ -16,6 +16,11 @@ public class RamshaIdentityTypesOptions
     public Type UserLoginType { get; set; }
     public Type UserTokenType { get; set; }
 
+    public Type[] GetTypesParams()
+    {
+        return [UserType, RoleType, KeyType, UserRoleType, RoleClaimType, UserClaimType, UserLoginType, UserTokenType];
+    }
+
 
 
 }

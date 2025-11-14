@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Ramsha.Security.Claims;
 
-public class RamshaClaimsPrincipalFactory : IRamshaClaimsPrincipalFactory //ITransientDependency
+public class RamshaClaimsPrincipalFactory : IRamshaClaimsPrincipalFactory
 {
     public static string AuthenticationType => "Ramsha.App";
 

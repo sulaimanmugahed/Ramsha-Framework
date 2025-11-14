@@ -1,13 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Ramsha.Domain;
 
 public static class EntityHelper
 {
+    public static TId? ConvertId<TId>(string stringId)
+    where TId : IEquatable<TId>
+    {
+        var id = default(TId);
+
+        var converter = TypeDescriptor.GetConverter(typeof(TId));
+        if (converter != null && converter.CanConvertFrom(typeof(string)))
+        {
+            id = (TId)converter.ConvertFromInvariantString(stringId);
+        }
+        else
+        {
+            id = (TId)Convert.ChangeType(stringId, typeof(TId));
+        }
+        return id;
+    }
     public static Type? FindPrimaryKeyType(Type entityType)
     {
         if (!typeof(IEntity).IsAssignableFrom(entityType))

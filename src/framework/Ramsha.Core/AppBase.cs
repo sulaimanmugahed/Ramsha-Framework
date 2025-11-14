@@ -171,6 +171,7 @@ public abstract class RamshaAppBase : IRamshaApp
             {
                 await module.Instance.OnConfiguringAsync(context);
             }
+
             catch (Exception ex)
             {
                 throw new Exception($"An error occurred during {nameof(IRamshaModule.OnConfiguringAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);

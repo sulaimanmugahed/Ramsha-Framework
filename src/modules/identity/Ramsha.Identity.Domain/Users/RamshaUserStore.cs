@@ -5,10 +5,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Ramsha.Domain;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaUserStore<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
+public class RamshaIdentityUserStore<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
     IIdentityUserRepository<TUser, TId> userRepository,
     IIdentityRoleRepository<TRole, TId> roleRepository) :
     IUserStore<TUser>,
@@ -131,7 +132,8 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
 
         try
         {
-            var result = await userRepository.FindAsync(x => x.NormalizedEmail == normalizedEmail);
+            var result = await userRepository.FindAsync(x => x.NormalizedEmail == normalizedEmail,
+            [r => r.Claims, r => r.Roles, r => r.Tokens, r => r.Logins]);
 
             return result;
         }
@@ -151,21 +153,8 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
 
         try
         {
-            var key = default(TId);
-
-            var converter = TypeDescriptor.GetConverter(typeof(TId));
-            if (converter != null && converter.CanConvertFrom(typeof(string)))
-            {
-                key = (TId)converter.ConvertFromInvariantString(userId);
-            }
-            else
-            {
-                key = (TId)Convert.ChangeType(userId, typeof(TId));
-            }
-
-            var result = await userRepository.FindAsync(key);
-
-            return result;
+            var id = EntityHelper.ConvertId<TId>(userId);
+            return await userRepository.FindAsync(id, [r => r.Claims, r => r.Roles, r => r.Tokens, r => r.Logins]);
         }
         catch (Exception ex)
         {
@@ -179,7 +168,10 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
 
         try
         {
-            var result = await userRepository.FindAsync(x => x.Logins.Any(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey));
+            var result = await userRepository
+            .FindAsync(
+              x => x.Logins.Any(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey)
+            , [r => r.Claims, r => r.Roles, r => r.Tokens, r => r.Logins]);
 
             return result;
         }
@@ -198,7 +190,8 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
 
         try
         {
-            var result = await userRepository.FindAsync(x => x.NormalizedUserName == normalizedUserName);
+            var result = await userRepository.FindAsync(x => x.NormalizedUserName == normalizedUserName
+            , [r => r.Claims, r => r.Roles, r => r.Tokens, r => r.Logins]);
 
             return result;
         }
@@ -410,7 +403,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
             throw new ArgumentNullException(nameof(roleName));
 
 
-        var role = await roleRepository.FindAsync(x => x.Name == roleName);
+        var role = await roleRepository.FindAsync(x => x.Name == roleName,[r=>r.Users]);
 
         var userIds = role?.Users.Select(x => x.UserId) ?? [];
         return await userRepository.GetListAsync(x => userIds.Contains(x.Id));
@@ -576,7 +569,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
         return Task.FromResult(0);
     }
 
-    public Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
+    public Task SetNormalizedEmailAsync(TUser user, string? normalizedEmail, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -588,7 +581,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
         return Task.FromResult(0);
     }
 
-    public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
+    public Task SetNormalizedUserNameAsync(TUser user, string? normalizedName, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

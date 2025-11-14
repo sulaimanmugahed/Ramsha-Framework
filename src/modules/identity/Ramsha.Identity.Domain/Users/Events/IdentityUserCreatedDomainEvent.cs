@@ -5,7 +5,5 @@ using System.Threading.Tasks;
 
 namespace Ramsha.Identity.Domain;
 
-public class IIdentityUserManager
-{
+public record IdentityUserCreatedDomainEvent<TUser>(TUser User);
 
-}

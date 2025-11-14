@@ -7,5 +7,7 @@ namespace Ramsha.Identity.Core;
 
 public class RamshaIdentityErrorsCodes
 {
-    public const string CreateUserErrorCode = "identity:user:1";
+    public const string Prefix = "identity:";
+    public const string GenerateUsernameErrorCode = "identity:30";
+
 }
