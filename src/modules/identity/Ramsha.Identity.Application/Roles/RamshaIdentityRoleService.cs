@@ -11,10 +11,10 @@ namespace Ramsha.Identity.Application;
 public class RamshaIdentityRoleService<TRole, TId, TUserRole, TRoleClaim, TDto, TCreateDto, TUpdateDto>(RamshaIdentityRoleManager<TRole, TId, TUserRole, TRoleClaim> manager, IIdentityRoleRepository<TRole, TId> repository) : IRamshaIdentityRoleService<TDto, TCreateDto, TUpdateDto, TId>
 where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
     where TId : IEquatable<TId>
-    where TUserRole : RamshaIdentityUserRole<TId>
-    where TRoleClaim : RamshaIdentityRoleClaim<TId>
-    where TCreateDto : CreateRamshaIdentityRoleDto
-    where TUpdateDto : UpdateRamshaIdentityRoleDto
+    where TUserRole : RamshaIdentityUserRole<TId>, new()
+    where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
+    where TCreateDto : CreateRamshaIdentityRoleDto, new()
+    where TUpdateDto : UpdateRamshaIdentityRoleDto, new()
     where TDto : RamshaIdentityRoleDto, new()
 
 {

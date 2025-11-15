@@ -9,26 +9,27 @@ using Ramsha.Security.Claims;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaUserClaimsPrincipalFactory<TUser,TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
+public class RamshaUserClaimsPrincipalFactory<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(
    UserManager<TUser> userManager,
+RoleManager<TRole> roleManager,
         IOptions<IdentityOptions> options,
         IPrincipalAccessor principalAccessor,
         IRamshaClaimsPrincipalFactory ramshaClaimsPrincipalFactory
 )
-: UserClaimsPrincipalFactory<TUser>(userManager, options)
+: UserClaimsPrincipalFactory<TUser, TRole>(userManager, roleManager, options)
  where TId : IEquatable<TId>
-where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
- where TUserClaim : RamshaIdentityUserClaim<TId>
- where TUserRole : RamshaIdentityUserRole<TId>
- where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
+where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>, new()
+ where TUserClaim : RamshaIdentityUserClaim<TId>, new()
+ where TUserRole : RamshaIdentityUserRole<TId>, new()
+ where TUserLogin : RamshaIdentityUserLogin<TId>, new()
+where TUserToken : RamshaIdentityUserToken<TId>, new()
+where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
+where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 {
     public async override Task<ClaimsPrincipal> CreateAsync(TUser user)
     {
         var principal = await base.CreateAsync(user);
         var identity = principal.Identities.First();
-
-
 
         if (!string.IsNullOrEmpty(user.Email))
         {

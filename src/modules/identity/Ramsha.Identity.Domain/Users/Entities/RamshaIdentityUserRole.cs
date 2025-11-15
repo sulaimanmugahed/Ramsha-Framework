@@ -7,6 +7,10 @@ namespace Ramsha.Identity.Domain;
 
 public class RamshaIdentityUserRole<TId> where TId : IEquatable<TId>
 {
+    public RamshaIdentityUserRole()
+    {
+
+    }
     public RamshaIdentityUserRole(TId userId, TId roleId)
     {
         UserId = userId;

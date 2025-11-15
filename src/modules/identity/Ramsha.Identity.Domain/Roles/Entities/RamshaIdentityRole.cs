@@ -29,10 +29,10 @@ public class RamshaIdentityRole<TId> : RamshaIdentityRole<TId, RamshaIdentityUse
     }
 }
 
-public class RamshaIdentityRole<TId, TUserRole, TRoleClaim>:RamshaIdentityRoleBase<TId>
+public class RamshaIdentityRole<TId, TUserRole, TRoleClaim> : RamshaIdentityRoleBase<TId>
     where TId : IEquatable<TId>
     where TUserRole : RamshaIdentityUserRole<TId>
-    where TRoleClaim : RamshaIdentityRoleClaim<TId>
+    where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 {
 
     public virtual ICollection<TUserRole> Users { get; } = new List<TUserRole>();
@@ -49,7 +49,9 @@ public class RamshaIdentityRole<TId, TUserRole, TRoleClaim>:RamshaIdentityRoleBa
 
     public void AddClaim(Claim claim)
     {
-        Claims.Add((TRoleClaim)new RamshaIdentityRoleClaim<TId>(Id, claim));
+        var newClaim = new TRoleClaim() { RoleId = Id };
+        newClaim.InitializeFromClaim(claim);
+        Claims.Add(newClaim);
     }
 
     public void RemoveClaim(Claim claim)

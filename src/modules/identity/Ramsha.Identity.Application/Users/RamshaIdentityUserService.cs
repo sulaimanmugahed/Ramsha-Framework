@@ -13,8 +13,8 @@ namespace Ramsha.Identity.Application;
 public class RamshaIdentityUserService<TUser, TDto, TCreateDto, TUpdateDto>(RamshaIdentityUserManager<TUser> userManager, IIdentityUserRepository<TUser, Guid> repository)
 : RamshaIdentityUserService<TUser, RamshaIdentityRole, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>, TDto, TCreateDto, TUpdateDto>(userManager, repository)
 where TUser : RamshaIdentityUser, new()
-where TCreateDto : CreateRamshaIdentityUserDto
-where TUpdateDto : UpdateRamshaIdentityUserDto
+where TCreateDto : CreateRamshaIdentityUserDto, new()
+where TUpdateDto : UpdateRamshaIdentityUserDto, new()
 where TDto : RamshaIdentityUserDto, new()
 {
 
@@ -24,15 +24,15 @@ where TDto : RamshaIdentityUserDto, new()
 public class RamshaIdentityUserService<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken, TDto, TCreateDto, TUpdateDto>(RamshaIdentityUserManager<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken> userManager, IIdentityUserRepository<TUser, TId> repository) : IRamshaIdentityUserService<TDto, TCreateDto, TUpdateDto, TId>
 where TId : IEquatable<TId>
 where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>, new()
-where TUserClaim : RamshaIdentityUserClaim<TId>
-where TUserRole : RamshaIdentityUserRole<TId>
-where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
-where TRoleClaim : RamshaIdentityRoleClaim<TId>
-where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
+where TUserClaim : RamshaIdentityUserClaim<TId>, new()
+where TUserRole : RamshaIdentityUserRole<TId>, new()
+where TUserLogin : RamshaIdentityUserLogin<TId>, new()
+where TUserToken : RamshaIdentityUserToken<TId>, new()
+where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
+where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
 where TDto : RamshaIdentityUserDto, new()
-where TCreateDto : CreateRamshaIdentityUserDto
-where TUpdateDto : UpdateRamshaIdentityUserDto
+where TCreateDto : CreateRamshaIdentityUserDto, new()
+where TUpdateDto : UpdateRamshaIdentityUserDto, new()
 
 {
 

@@ -15,23 +15,23 @@ public static class ModelBuilderExtensions
     }
 
     public static void ConfigureIdentity<TUser>(this ModelBuilder modelBuilder)
-    where TUser : RamshaIdentityUser
+    where TUser : RamshaIdentityUser, new()
 
     {
         modelBuilder.ConfigureIdentity<TUser, RamshaIdentityRole<Guid>, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>();
     }
 
     public static void ConfigureIdentity<TUser, TRole>(this ModelBuilder modelBuilder)
-    where TUser : RamshaIdentityUser
-    where TRole : RamshaIdentityRole
+    where TUser : RamshaIdentityUser, new()
+    where TRole : RamshaIdentityRole, new()
 
     {
         modelBuilder.ConfigureIdentity<TUser, TRole, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>();
     }
 
     public static void ConfigureIdentity<TUser, TRole, TId>(this ModelBuilder modelBuilder)
-     where TUser : RamshaIdentityUser<TId>
-  where TRole : RamshaIdentityRole<TId>
+     where TUser : RamshaIdentityUser<TId>, new()
+  where TRole : RamshaIdentityRole<TId>, new()
 
      where TId : IEquatable<TId>
     {
@@ -39,13 +39,13 @@ public static class ModelBuilderExtensions
     }
     public static void ConfigureIdentity<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(this ModelBuilder modelBuilder)
          where TId : IEquatable<TId>
-     where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
-where TUserClaim : RamshaIdentityUserClaim<TId>
-where TUserRole : RamshaIdentityUserRole<TId>
-where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
-where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
-where TRoleClaim : RamshaIdentityRoleClaim<TId>
+     where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>, new()
+where TUserClaim : RamshaIdentityUserClaim<TId>, new()
+where TUserRole : RamshaIdentityUserRole<TId>, new()
+where TUserLogin : RamshaIdentityUserLogin<TId>, new()
+where TUserToken : RamshaIdentityUserToken<TId>, new()
+where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
+where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
     {
         modelBuilder.Entity<TUser>(entity =>
             {

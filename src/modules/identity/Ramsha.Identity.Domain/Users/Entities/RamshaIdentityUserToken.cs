@@ -8,9 +8,18 @@ namespace Ramsha.Identity.Domain;
 public class RamshaIdentityUserToken<TId>
 where TId : IEquatable<TId>
 {
+    public RamshaIdentityUserToken()
+    {
+
+    }
     public RamshaIdentityUserToken(TId userId, string loginProvider, string name, string? value)
     {
         UserId = userId;
+        InitializeFrom(loginProvider, name, value);
+    }
+
+    public void InitializeFrom(string loginProvider, string name, string? value)
+    {
         LoginProvider = loginProvider;
         Name = name;
         Value = value;

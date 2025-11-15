@@ -16,7 +16,7 @@ IRoleStore<TRole>,
 IRoleClaimStore<TRole>
 where TId : IEquatable<TId>
 where TUserRole : RamshaIdentityUserRole<TId>
-where TRoleClaim : RamshaIdentityRoleClaim<TId>
+where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
 {
     public void Dispose()

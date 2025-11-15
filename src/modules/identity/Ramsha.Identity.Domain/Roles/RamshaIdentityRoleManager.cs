@@ -22,17 +22,17 @@ public class RamshaIdentityRoleManager<TRole>(
               errors,
               logger
 )
-where TRole : RamshaIdentityRole
+where TRole : RamshaIdentityRole, new()
 {
 
 }
 
 
 public class RamshaIdentityRoleManager<TRole, TId, TUserRole, TRoleClaim> : RoleManager<TRole>
-where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
+where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
    where TId : IEquatable<TId>
-    where TUserRole : RamshaIdentityUserRole<TId>
-    where TRoleClaim : RamshaIdentityRoleClaim<TId>
+    where TUserRole : RamshaIdentityUserRole<TId>, new()
+    where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 {
 
     public RamshaIdentityRoleManager(

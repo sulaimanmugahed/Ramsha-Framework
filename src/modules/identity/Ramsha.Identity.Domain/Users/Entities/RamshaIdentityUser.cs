@@ -10,7 +10,7 @@ namespace Ramsha.Identity.Domain;
 
 public class RamshaIdentityUser : RamshaIdentityUser<Guid>
 {
-    protected RamshaIdentityUser()
+    public RamshaIdentityUser()
     {
 
     }
@@ -40,10 +40,10 @@ public class RamshaIdentityUser<TId>
 public class RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
  : RamshaIdentityUserBase<TId>
  where TId : IEquatable<TId>
- where TUserClaim : RamshaIdentityUserClaim<TId>
- where TUserRole : RamshaIdentityUserRole<TId>
- where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
+ where TUserClaim : RamshaIdentityUserClaim<TId>, new()
+ where TUserRole : RamshaIdentityUserRole<TId>, new()
+ where TUserLogin : RamshaIdentityUserLogin<TId>, new()
+where TUserToken : RamshaIdentityUserToken<TId>, new()
 
 {
 
@@ -53,7 +53,7 @@ where TUserToken : RamshaIdentityUserToken<TId>
         Id = id;
         UserName = userName;
     }
-   
+
     public virtual ICollection<TUserRole> Roles { get; } = new List<TUserRole>();
     public virtual ICollection<TUserClaim> Claims { get; } = new List<TUserClaim>();
     public virtual ICollection<TUserLogin> Logins { get; } = new List<TUserLogin>();
@@ -74,7 +74,7 @@ where TUserToken : RamshaIdentityUserToken<TId>
             return;
         }
 
-        Roles.Add((TUserRole)new RamshaIdentityUserRole<TId>(Id, roleId));
+        Roles.Add(new TUserRole() { UserId = Id, RoleId = roleId });
     }
 
     public virtual void RemoveRole(TId roleId)
@@ -96,7 +96,7 @@ where TUserToken : RamshaIdentityUserToken<TId>
         return Roles.Any(r => r.RoleId.Equals(roleId));
     }
 
-    public virtual RamshaIdentityUserClaim<TId>? FindClaim(Claim claim)
+    public virtual TUserClaim? FindClaim(Claim claim)
     {
         return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
     }
@@ -127,10 +127,20 @@ where TUserToken : RamshaIdentityUserToken<TId>
         }
     }
 
+
+
+    public virtual TUserLogin? FindLogin(string loginProvider, string providerKey)
+    {
+        return Logins.FirstOrDefault(userLogin =>
+                userLogin.LoginProvider == loginProvider && userLogin.ProviderKey == providerKey);
+    }
+
+    public virtual bool HasLogin(string loginProvider, string providerKey)
+    => FindLogin(loginProvider, providerKey) is not null;
+
     public virtual void RemoveLogin(string loginProvider, string providerKey)
     {
-        var login = Logins.FirstOrDefault(userLogin =>
-              userLogin.LoginProvider == loginProvider && userLogin.ProviderKey == providerKey);
+        var login = FindLogin(loginProvider, providerKey);
 
         if (login is not null)
         {
@@ -138,9 +148,18 @@ where TUserToken : RamshaIdentityUserToken<TId>
         }
     }
 
-    public virtual RamshaIdentityUserToken<TId>? FindToken(string loginProvider, string name)
+    public virtual TUserToken? FindToken(string loginProvider, string name)
     {
         return Tokens.FirstOrDefault(t => t.LoginProvider == loginProvider && t.Name == name);
+    }
+
+    public virtual bool HasClaim(Claim claim)
+    {
+        return FindClaim(claim) is not null;
+    }
+    public virtual bool HasToken(string loginProvider, string name)
+    {
+        return FindToken(loginProvider, name) is not null;
     }
 
 
@@ -158,9 +177,11 @@ where TUserToken : RamshaIdentityUserToken<TId>
 
     public virtual void AddClaim(Claim claim)
     {
-        if (!Claims.Any(x => x.ClaimType == claim.Type && x.ClaimValue == claim.Value))
+        if (!HasClaim(claim))
         {
-            Claims.Add((TUserClaim)new RamshaIdentityUserClaim<TId>(Id, claim));
+            var newClaim = new TUserClaim() { UserId = Id };
+            newClaim.InitializeFromClaim(claim);
+            Claims.Add(newClaim);
         }
     }
     public virtual void AddClaims(IEnumerable<Claim> claims)
@@ -172,14 +193,24 @@ where TUserToken : RamshaIdentityUserToken<TId>
     }
 
 
-    public virtual void AddLogin(UserLoginInfo login)
+    public virtual void AddLogin(string loginProvider, string providerKey, string? providerDisplayName = null)
     {
-        Logins.Add((TUserLogin)new RamshaIdentityUserLogin<TId>(Id, login));
+        if (!HasLogin(loginProvider, providerKey))
+        {
+            var newLogin = new TUserLogin() { UserId = Id };
+            newLogin.InitializeFrom(loginProvider, providerKey, providerDisplayName);
+            Logins.Add(newLogin);
+        }
     }
 
-    public virtual void AddToken(TUserToken token)
+    public virtual void AddToken(string loginProvider, string name, string? value)
     {
-        Tokens.Add(token);
+        if (!HasToken(loginProvider, name))
+        {
+            var token = new TUserToken() { UserId = Id };
+            token.InitializeFrom(loginProvider, name, value);
+            Tokens.Add(token);
+        }
     }
 
 
@@ -190,8 +221,8 @@ where TUserToken : RamshaIdentityUserToken<TId>
 
 }
 
-public abstract class RamshaIdentityUserBase<TId>:AggregateRoot<TId>, IAudit, ISoftDelete
-where TId:IEquatable<TId>
+public abstract class RamshaIdentityUserBase<TId> : AggregateRoot<TId>, IAudit, ISoftDelete
+where TId : IEquatable<TId>
 {
     public virtual string UserName { get; set; }
     public virtual string? Email { get; set; }

@@ -10,7 +10,7 @@ namespace Ramsha.Identity.Domain;
 public class RamshaIdentityUserClaim<TId> : Entity<TId>
 where TId : IEquatable<TId>
 {
-    private RamshaIdentityUserClaim()
+    public RamshaIdentityUserClaim()
     {
 
     }

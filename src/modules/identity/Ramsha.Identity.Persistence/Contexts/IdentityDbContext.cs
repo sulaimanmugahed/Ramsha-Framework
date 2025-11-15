@@ -10,13 +10,13 @@ namespace Ramsha.Identity.Persistence;
 public class IdentityDbContext<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>(DbContextOptions<IdentityDbContext<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>> options)
 : RamshaEFDbContext<IdentityDbContext<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>>(options), IIdentityDbContext<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>
      where TId : IEquatable<TId>
-     where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
-where TUserClaim : RamshaIdentityUserClaim<TId>
-where TUserRole : RamshaIdentityUserRole<TId>
-where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
-where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
-where TRoleClaim : RamshaIdentityRoleClaim<TId>
+     where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>, new()
+where TUserClaim : RamshaIdentityUserClaim<TId>, new()
+where TUserRole : RamshaIdentityUserRole<TId>, new()
+where TUserLogin : RamshaIdentityUserLogin<TId>, new()
+where TUserToken : RamshaIdentityUserToken<TId>, new()
+where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
+where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 {
     public DbSet<TUser> Users { get; set; }
 

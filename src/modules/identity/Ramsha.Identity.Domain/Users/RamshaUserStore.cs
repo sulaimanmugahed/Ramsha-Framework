@@ -25,13 +25,13 @@ public class RamshaIdentityUserStore<TUser, TRole, TId, TUserRole, TRoleClaim, T
     IUserTwoFactorStore<TUser>,
     IUserAuthenticationTokenStore<TUser>
      where TId : IEquatable<TId>
-     where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>
-where TUserClaim : RamshaIdentityUserClaim<TId>
-where TUserRole : RamshaIdentityUserRole<TId>
-where TUserLogin : RamshaIdentityUserLogin<TId>
-where TUserToken : RamshaIdentityUserToken<TId>
-where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
-where TRoleClaim : RamshaIdentityRoleClaim<TId>
+     where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>, new()
+where TUserClaim : RamshaIdentityUserClaim<TId>, new()
+where TUserRole : RamshaIdentityUserRole<TId>, new()
+where TUserLogin : RamshaIdentityUserLogin<TId>, new()
+where TUserToken : RamshaIdentityUserToken<TId>, new()
+where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
+where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 {
     public IQueryable<TUser> Users => throw new NotImplementedException();
 
@@ -54,7 +54,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
 
         ThrowIfUserNull(user);
 
-        user.AddLogin(login);
+        user.AddLogin(login.LoginProvider, login.ProviderKey, login.ProviderDisplayName);
     }
 
     public async Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
@@ -336,7 +336,14 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
         if (user == null)
             throw new ArgumentNullException(nameof(user));
 
-        return [];
+        var roleIds = user.Roles.Select(r => r.RoleId).ToList();
+
+        if (roleIds.Count == 0)
+            return [];
+
+        var roles = await roleRepository.GetListAsync(r => roleIds.Contains(r.Id));
+
+        return roles.Select(r => r.Name).ToList();
 
     }
 
@@ -403,7 +410,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>
             throw new ArgumentNullException(nameof(roleName));
 
 
-        var role = await roleRepository.FindAsync(x => x.Name == roleName,[r=>r.Users]);
+        var role = await roleRepository.FindAsync(x => x.Name == roleName, [r => r.Users]);
 
         var userIds = role?.Users.Select(x => x.UserId) ?? [];
         return await userRepository.GetListAsync(x => userIds.Contains(x.Id));
