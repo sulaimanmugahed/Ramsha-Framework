@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Identity.Application.Extensions;
 using Ramsha.Identity.Contracts;
-using Ramsha.Identity.Core.Options;
+using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
 using Ramsha.LocalMessaging.Abstractions;
 

@@ -21,7 +21,6 @@ namespace Microsoft.Extensions.DependencyInjection
              Action<AppCreationOptions>? optionsAction = null)
              where TStartupModule : IRamshaModule
         {
-            builder.Host.UseRamshaServiceProvider();
             return await builder.Services.AddApplicationAsync<TStartupModule>(options =>
             {
                 options.Services.ReplaceConfiguration(builder.Configuration);
@@ -38,7 +37,6 @@ namespace Microsoft.Extensions.DependencyInjection
         Action<DefaultStartupModuleBuilder>? moduleBuilder = null,
         Action<AppCreationOptions>? optionsAction = null)
         {
-            builder.Host.UseRamshaServiceProvider();
             return await builder.Services.AddApplicationAsync(moduleBuilder, options =>
             {
                 options.Services.ReplaceConfiguration(builder.Configuration);
@@ -58,7 +56,6 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Host.UseRamshaServiceProvider();
             return await builder.Services.AddApplicationAsync(startupModuleType, options =>
             {
-                options.Services.ReplaceConfiguration(builder.Configuration);
                 optionsAction?.Invoke(options);
                 if (string.IsNullOrWhiteSpace(options.Environment))
                 {

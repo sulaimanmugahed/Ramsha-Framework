@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Security;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.Domain;
 
@@ -18,17 +20,16 @@ public class DomainModule : RamshaModule
         base.OnConfiguring(context);
         context.Services.AddTransient<IConnectionStringResolver, DefaultConnectionStringResolver>();
 
-
-        var config = context.Services.GetConfiguration();
+        var config = context.Configuration;
         context.Services.Configure<ConnectionStringsOptions>(options =>
         {
             config.GetSection("ConnectionStrings").Bind(options.ConnectionStrings);
             options.Initialize();
         });
         context.Services.Configure<GlobalQueryFilterOptions>(config);
-        context.Services.AddSingleton<IGlobalQueryFilterManager, GlobalQueryFilterManager>();
 
-        context.Services.AddSingleton(typeof(IGlobalQueryFilterManager<>), typeof(GlobalQueryFilterManager<>));
+        context.Services.AddDomainServices();
+
 
 
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Identity.Contracts;
-using Ramsha.Identity.Core.Options;
+using Ramsha.Identity.Shared;
 
 namespace Ramsha.Identity.Application.Extensions;
 

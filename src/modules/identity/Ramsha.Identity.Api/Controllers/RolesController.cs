@@ -17,63 +17,28 @@ where TId : IEquatable<TId>
 where TCreateDto : CreateRamshaIdentityRoleDto
 where TUpdateDto : UpdateRamshaIdentityRoleDto
 where TDto : RamshaIdentityRoleDto
-
 {
-
     [HttpGet("{id}")]
     public async Task<RamshaResult<TDto>> Get(TId id)
-    {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
-        {
-            return await roleService.Get(id);
-        }
-
-        return RamshaResult<TDto>.Failure();
-    }
+    => await UnitOfWork(() => roleService.Get(id));
 
     [HttpGet]
     public async Task<RamshaResult<List<TDto>>> GetList(TId id)
-    {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
-        {
-            return await roleService.GetList(id);
-        }
-
-        return RamshaResult<List<TDto>>.Failure();
-    }
+  => await UnitOfWork(() => roleService.GetList(id));
 
     [HttpPost]
     public async Task<RamshaResult<string>> Create(TCreateDto createDto)
-    {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
-        {
-            return await roleService.Create(createDto);
-        }
-
-        return RamshaResult<string>.Failure();
-    }
+    => await UnitOfWork(() => roleService.Create(createDto));
 
     [HttpPut("{id}")]
     public async Task<RamshaResult> Update(TId id, TUpdateDto updateDto)
-    {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
-        {
-            return await roleService.Update(id, updateDto);
-        }
+   => await UnitOfWork(() => roleService.Update(id, updateDto));
 
-        return RamshaResult.Failure();
-    }
 
     [HttpDelete("{id}")]
     public async Task<RamshaResult> Delete(TId id)
-    {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
-        {
-            return await roleService.Delete(id);
-        }
+    => await UnitOfWork(() => roleService.Delete(id));
 
-        return RamshaResult.Failure();
-    }
 
-    
+
 }

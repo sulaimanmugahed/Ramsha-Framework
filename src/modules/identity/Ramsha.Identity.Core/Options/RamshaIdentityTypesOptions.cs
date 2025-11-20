@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ramsha.Identity.Core.Options;
+namespace Ramsha.Identity.Shared;
 
 public class RamshaIdentityTypesOptions
 {

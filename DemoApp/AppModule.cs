@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -26,9 +27,10 @@ using Ramsha.Identity.Api;
 using Ramsha.Identity.Application;
 using Ramsha.Identity.AspNetCore;
 using Ramsha.Identity.Contracts;
-using Ramsha.Identity.Core.Options;
+
 using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence;
+using Ramsha.Identity.Shared;
 using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
 using Ramsha.Security.Claims;
@@ -72,12 +74,15 @@ public class AppModule : RamshaModule
         });
     }
 
+
     public override void OnConfiguring(ConfigureContext context)
     {
         var configuration = context.Services.GetConfiguration();
         base.OnConfiguring(context);
-        context.Services.AddScoped<IRamshaService, RamshaService>();
-        context.Services.AddScoped<ITestService, TestService>();
+
+
+        context.Services.AddTransient<IRamshaService, RamshaService>();
+        context.Services.AddTransient<ITestService, TestService>();
 
 
 
@@ -115,9 +120,6 @@ public class AppModule : RamshaModule
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
 
-
-
-
         context.Services.Configure<RamshaClaimsPrincipalFactoryOptions>(options =>
         {
             options.Transformers.Add<DemoClaimsTransformer>();
@@ -132,6 +134,7 @@ public class AppModule : RamshaModule
         base.OnInit(context);
     }
 }
+
 
 public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

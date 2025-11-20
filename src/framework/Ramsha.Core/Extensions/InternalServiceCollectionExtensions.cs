@@ -30,13 +30,14 @@ internal static class InternalServiceCollectionExtensions
         }
 
 
-
         services.AddServiceProviderHook<PropertyInitializerServiceProviderHook>(ServiceLifetime.Transient);
         services.TryAddSingleton<IBootstrapLoggerFactory>(new DefaultBootstrapLoggerFactory());
         services.AddTransient<OnAppInitModuleLifecycleContributor>();
         services.AddTransient<OnAppShutdownModuleLifecycleContributor>();
         services.AddSingleton<IModuleManager, ModuleManager>();
         services.TryAddSingleton<IModuleLoader>(moduleLoader);
+
+
 
         services.Configure<ModuleLifecycleOptions>(options =>
         {

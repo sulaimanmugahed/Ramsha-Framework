@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ramsha;
 
-public interface IServiceProviderAccessor
-{
-    IServiceProvider ServiceProvider { get; }
-}
+// public interface IServiceProviderAccessor
+// {
+//     IServiceProvider ServiceProvider { get; }
+// }

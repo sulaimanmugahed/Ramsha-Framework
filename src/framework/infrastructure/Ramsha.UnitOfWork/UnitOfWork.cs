@@ -30,7 +30,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IServiceProvider ServiceProvider => _serviceProvider;
 
-    public const string UnitOfWorkReservationName = "_ActionUnitOfWork";
+    public const string UnitOfWorkReservationName = RamshaUnitOfWorkReservationNames.ActionUnitOfWorkReservationName;
 
     public Dictionary<string, object> Items { get; }
     protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Ramsha.EntityFrameworkCore;
 
-public class RamshaDbContextConfigurationContext : IServiceProviderAccessor
+public class RamshaDbContextConfigurationContext
 {
     public IServiceProvider ServiceProvider { get; }
 

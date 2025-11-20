@@ -24,12 +24,12 @@ public class AccountController(
     {
         var user = new AppIdentityUser(Guid.NewGuid(), username, profile) { Email = email };
 
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = true }))
+        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = true }))
         {
             var result = await userManager.CreateAsync(user, password);
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                return base.BadRequest(result.Errors);
             }
         }
 
@@ -39,12 +39,12 @@ public class AccountController(
     [HttpPost(nameof(Login))]
     public async Task<IActionResult> Login(string username, string password)
     {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
+        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new Ramsha.UnitOfWork.Abstractions.UnitOfWorkOptions { IsTransactional = false }))
         {
             var result = await signInManager.PasswordSignInAsync(username, password, false, false);
             if (!result.Succeeded)
             {
-                return BadRequest(result);
+                return base.BadRequest(result);
             }
         }
         return Ok();

@@ -13,6 +13,7 @@ namespace Ramsha.EntityFrameworkCore;
 public interface IRamshaEFDbContext : IRamshaDbContext, IEFDbContext
 {
     IServiceProvider ServiceProvider { get; set; }
+    void Init(EfDbContextInitContext initContext);
 }
 
 public interface IEFDbContext : IInfrastructure<IServiceProvider>, IDbContextDependencies, IDbSetCache, IDbContextPoolable, IDisposable

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ramsha;
 
-public class InitContext : IServiceProviderAccessor
+public class InitContext 
 {
     public IServiceProvider ServiceProvider { get; set; }
 

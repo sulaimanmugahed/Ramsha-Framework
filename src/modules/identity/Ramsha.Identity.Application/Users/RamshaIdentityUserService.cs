@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Ramsha.Core;
 using Ramsha.Identity.Contracts;
-using Ramsha.Identity.Core;
+using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
 
 namespace Ramsha.Identity.Application;

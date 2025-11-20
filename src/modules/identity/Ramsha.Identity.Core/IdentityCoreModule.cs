@@ -1,6 +1,6 @@
-﻿namespace Ramsha.Identity.Core;
+﻿namespace Ramsha.Identity.Shared;
 
-public class IdentityCoreModule : RamshaModule
+public class IdentitySharedModule : RamshaModule
 {
-    
+
 }

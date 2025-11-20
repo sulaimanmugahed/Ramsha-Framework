@@ -1,8 +1,10 @@
 
 using DemoApp.Data;
 using DemoApp.Entities;
+using DemoModule;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Ramsha;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Domain;
 using Ramsha.UnitOfWork;
@@ -16,8 +18,22 @@ public interface IFilter
 }
 
 
-public class ProductsController(IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
+public class ProductsController(ITestService testService, ProductManager productManager, IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
 {
+    [Injectable]
+    public IRamshaService RamshaService { get; set; }
+
+    [HttpGet(nameof(Test))]
+    public async Task<string> Test()
+    {
+        return RamshaService.Get();
+    }
+
+    [HttpGet(nameof(TestOut))]
+    public async Task<string> TestOut()
+    {
+        return testService.Get();
+    }
 
 
     [HttpGet]
@@ -25,7 +41,7 @@ public class ProductsController(IGlobalQueryFilterManager dataFilter, IProductRe
     {
         List<Product> products = null;
 
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             if (options.CurrentValue.Value)
             {
@@ -50,19 +66,9 @@ public class ProductsController(IGlobalQueryFilterManager dataFilter, IProductRe
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(string name, decimal price)
+    public async Task<RamshaResult<string>> Create(string name, decimal price)
     {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions { IsTransactional = true }))
-        {
-            await repository.CreateAsync(Product.Create(Guid.NewGuid(), name, price));
-            if (UnitOfWorkManager.Current is not null)
-            {
-                await UnitOfWorkManager.Current.SaveChangesAsync();
-                //throw new Exception("test");
-            }
-        }
-
-        return Ok();
+        return await productManager.Create(name, price);
     }
 
 

@@ -1,8 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Ramsha.Domain;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.EntityFrameworkCore;
 
@@ -10,9 +12,11 @@ public abstract class RamshaEFDbContext<TDbContext>(DbContextOptions<TDbContext>
 : DbContext(dbContextOptions), IRamshaEFDbContext
 where TDbContext : RamshaEFDbContext<TDbContext>
 {
+    [Injectable]
     public IServiceProvider ServiceProvider { get; set; } = default!;
     protected IOptions<RamshaDbContextOptions> Options => ServiceProvider.GetLazyRequiredService<IOptions<RamshaDbContextOptions>>().Value;
     protected IGlobalQueryFilterManager GlobalDataFilterManager => ServiceProvider.GetLazyRequiredService<IGlobalQueryFilterManager>().Value;
+    protected IUnitOfWorkManager UnitOfWorkManager => ServiceProvider.GetLazyService<IUnitOfWorkManager>().Value;
 
     public bool IsFilterEnabled<TFilter>()
     where TFilter : class
@@ -64,6 +68,18 @@ where TDbContext : RamshaEFDbContext<TDbContext>
         {
             ((Action<DbContext, ModelConfigurationBuilder>)conventionAction).Invoke(this, configurationBuilder);
         }
+    }
+
+    public virtual void Init(EfDbContextInitContext initContext)
+    {
+        if (initContext.UnitOfWork.Options.Timeout.HasValue &&
+            Database.IsRelational() &&
+            !Database.GetCommandTimeout().HasValue)
+        {
+            Database.SetCommandTimeout(TimeSpan.FromMilliseconds(initContext.UnitOfWork.Options.Timeout.Value));
+        }
+
+        ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
     }
 }
 

@@ -17,7 +17,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     public async Task<IActionResult> GetAll()
     {
         List<Category> categories = [];
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             using var _ = GlobalQueryFilterManager.Disable<IPrice>();
             categories = await categoryRepo.GetListAsync(includes: x => x.Products);
@@ -27,7 +27,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     [HttpPost]
     public async Task<IActionResult> Create(string name)
     {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             await categoryRepo.CreateAsync(new Category(Guid.NewGuid(), name));
         }
@@ -36,7 +36,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     [HttpPost(nameof(SeedAllProductsToCategory))]
     public async Task<IActionResult> SeedAllProductsToCategory(Guid categoryId)
     {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
+        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
             using var _ = GlobalQueryFilterManager.Disable<IPrice>();
             var products = await productRepo.GetListAsync();
@@ -44,7 +44,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
             var category = await categoryRepo.FindAsync(categoryId, x => x.Products);
             if (category is null)
             {
-                return NotFound("no category Found");
+                return base.NotFound("no category Found");
             }
 
             foreach (var product in products)

@@ -88,3 +88,50 @@ internal class RamshaServiceProvider : IRamshaServiceProvider, IEnumerable<Servi
 
     IEnumerator IEnumerable.GetEnumerator() => _services.GetEnumerator();
 }
+
+internal class RamshaServiceScopeFactory : IServiceScopeFactory
+{
+    private readonly IServiceCollection _services;
+
+    public RamshaServiceScopeFactory(IServiceCollection services)
+    {
+        _services = services;
+    }
+
+
+    public IServiceScope CreateScope()
+    {
+        return new RamshaServiceScope(_services);
+    }
+}
+
+internal class RamshaServiceScope : IServiceScope
+{
+    private readonly RamshaServiceProvider _serviceProvider;
+    private bool _disposed;
+
+
+    public RamshaServiceScope(IServiceCollection services)
+    {
+        _serviceProvider = new RamshaServiceProvider(services);
+    }
+
+
+    public IServiceProvider ServiceProvider
+    {
+        get
+        {
+            return _serviceProvider;
+        }
+    }
+
+    public void Dispose()
+    {
+
+    }
+
+
+
+
+
+}

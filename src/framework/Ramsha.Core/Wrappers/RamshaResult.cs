@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ramsha.Core;
+namespace Ramsha;
 
 public class RamshaResult
 {

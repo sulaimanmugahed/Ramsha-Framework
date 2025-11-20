@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Core;
 using Ramsha.Domain;
 using Ramsha.LocalMessaging.Abstractions;
@@ -14,27 +15,65 @@ public abstract class RamshaControllerBase : ControllerBase
     protected IUnitOfWorkManager UnitOfWorkManager => HttpContext.RequestServices.GetLazyRequiredService<IUnitOfWorkManager>().Value;
     protected IGlobalQueryFilterManager GlobalQueryFilterManager => HttpContext.RequestServices.GetLazyRequiredService<IGlobalQueryFilterManager>().Value;
 
-
-    protected async Task<RamshaResult> BeginUnitOfWork(Func<Task<RamshaResult>> action)
+    protected Task<T> TransactionalUnitOfWork<T>(Func<Task<T>> action)
     {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName,
-                new UnitOfWork.Abstractions.UnitOfWorkOptions()))
-        {
-            return await action();
-        }
-
-        return RamshaResult.Failure();
+        return UnitOfWork(action, true);
+    }
+    protected Task TransactionalUnitOfWork(Func<Task> action)
+    {
+        return UnitOfWork(action, true);
     }
 
-    protected async Task<RamshaResult<T>> BeginUnitOfWork<T>(Func<Task<RamshaResult<T>>> action)
+
+    protected async Task<T> UnitOfWork<T>(Func<Task<T>> action, bool isTransactional = false)
     {
-        if (UnitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWork.UnitOfWorkReservationName,
-                new UnitOfWork.Abstractions.UnitOfWorkOptions()))
+        var options = new UnitOfWorkOptions();
+        options.IsTransactional = isTransactional;
+
+        if (UnitOfWorkManager.TryBeginReserved(
+                RamshaUnitOfWorkReservationNames.ActionUnitOfWorkReservationName,
+                options))
         {
-            return await action();
+            var result = await action();
+            if (UnitOfWorkManager.Current is not null)
+            {
+                await UnitOfWorkManager.Current.SaveChangesAsync();
+            }
+            return result;
         }
 
-        return RamshaResult<T>.Failure();
+        using (var uow = UnitOfWorkManager.Begin(options))
+        {
+            var result = await action();
+            await uow.CompleteAsync();
+            return result;
+        }
     }
+
+    protected async Task UnitOfWork(Func<Task> action, bool isTransactional = false)
+    {
+        var options = new UnitOfWorkOptions();
+        options.IsTransactional = isTransactional;
+
+        if (UnitOfWorkManager.TryBeginReserved(
+                RamshaUnitOfWorkReservationNames.ActionUnitOfWorkReservationName,
+                options))
+        {
+            await action();
+            if (UnitOfWorkManager.Current is not null)
+            {
+                await UnitOfWorkManager.Current.SaveChangesAsync();
+            }
+            return;
+        }
+
+        using (var uow = UnitOfWorkManager.Begin(options))
+        {
+            await action();
+            await uow.CompleteAsync();
+        }
+    }
+
+
 
 }

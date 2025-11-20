@@ -13,7 +13,7 @@ public class UnitOfWorkMiddleware(RequestDelegate next, IUnitOfWorkManager unitO
 {
     public async Task InvokeAsync(HttpContext context)
     {
-        using (var uow = unitOfWorkManager.Reserve(UnitOfWork.UnitOfWork.UnitOfWorkReservationName))
+        using (var uow = unitOfWorkManager.Reserve(RamshaUnitOfWorkReservationNames.ActionUnitOfWorkReservationName))
         {
             await next(context);
             await uow.CompleteAsync();

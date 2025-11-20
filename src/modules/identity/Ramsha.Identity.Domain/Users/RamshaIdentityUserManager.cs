@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ramsha.Core;
-using Ramsha.Identity.Core;
+using Ramsha.Identity.Shared;
 
 namespace Ramsha.Identity.Domain;
 

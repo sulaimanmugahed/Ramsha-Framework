@@ -95,6 +95,8 @@ public abstract class RamshaAppBase : IRamshaApp
         ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
     }
 
+   
+
     protected virtual async Task InitializeModulesAsync()
     {
         using (var scope = ServiceProvider.CreateScope())

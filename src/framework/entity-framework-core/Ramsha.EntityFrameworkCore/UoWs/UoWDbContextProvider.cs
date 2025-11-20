@@ -72,6 +72,15 @@ public class UoWDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         using (DbContextCreationContext.Use(creationContext))
         {
             var dbContext = await CreateDbContextAsync(unitOfWork);
+
+            if (dbContext is IRamshaEFDbContext ramshaEfDbContext)
+            {
+                ramshaEfDbContext.Init(
+                    new EfDbContextInitContext(
+                        unitOfWork
+                    )
+                );
+            }
             return dbContext;
         }
     }
@@ -94,7 +103,9 @@ public class UoWDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
 
             try
             {
-                var dbTransaction = await dbContext.Database.BeginTransactionAsync();
+                var isolationLevel = unitOfWork.Options.IsolationLevel;
+                var dbTransaction = isolationLevel.HasValue ? await dbContext.Database.BeginTransactionAsync(isolationLevel.Value)
+                                    : await dbContext.Database.BeginTransactionAsync();
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,

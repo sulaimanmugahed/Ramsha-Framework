@@ -14,6 +14,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
 
+  
+
     public static IServiceProvider BuildRamshaServiceProvider(this IServiceCollection services, ServiceProviderOptions? options = null, IServiceProviderResolver? resolver = null)
     {
         ArgumentNullException.ThrowIfNull(services, nameof(services));
@@ -169,6 +171,24 @@ public static class ServiceCollectionExtensions
 
         return services.BuildServiceProvider();
     }
+
+    public static void InjectProperties(this IServiceProvider provider, Type type, object service)
+    {
+        if (service is null) return;
+        var propInfos = service.GetType()
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .Where(p => p.GetCustomAttribute<InjectableAttribute>() != null)
+            .ToList();
+        foreach (var propInfo in propInfos)
+        {
+            var instance = provider.GetService(propInfo.PropertyType);
+            propInfo.SetValue(service, instance);
+        }
+    }
+
+
+
+
 
     public static IServiceProvider BuildServiceProviderFromFactory<TContainerBuilder>([NotNull] this IServiceCollection services, Action<TContainerBuilder>? builderAction = null) where TContainerBuilder : notnull
     {
