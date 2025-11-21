@@ -19,7 +19,9 @@ public class RamshaIdentityUserManager<TUser>(
         ILookupNormalizer keyNormalizer,
         IdentityErrorDescriber errors,
         IServiceProvider services,
-        ILogger<RamshaIdentityUserManager<TUser>> logger
+        ILogger<RamshaIdentityUserManager<TUser>> logger,
+
+IIdentityRoleRepository<RamshaIdentityRole, Guid> roleRepository
 ) : RamshaIdentityUserManager<TUser, RamshaIdentityRole, Guid, RamshaIdentityUserRole<Guid>, RamshaIdentityRoleClaim<Guid>, RamshaIdentityUserClaim<Guid>, RamshaIdentityUserLogin<Guid>, RamshaIdentityUserToken<Guid>>(
 store,
      optionsAccessor,
@@ -29,7 +31,9 @@ store,
             keyNormalizer,
             errors,
             services,
-            logger
+            logger,
+
+roleRepository
 )
 where TUser : RamshaIdentityUser, new()
 {
@@ -45,7 +49,8 @@ public class RamshaIdentityUserManager<TUser, TRole, TId, TUserRole, TRoleClaim,
         ILookupNormalizer keyNormalizer,
         IdentityErrorDescriber errors,
         IServiceProvider services,
-        ILogger<RamshaIdentityUserManager<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>> logger) : UserManager<TUser>(store,
+        ILogger<RamshaIdentityUserManager<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken>> logger,
+        IIdentityRoleRepository<TRole, TId> roleRepository) : UserManager<TUser>(store,
             optionsAccessor,
             passwordHasher,
             userValidators,
@@ -64,6 +69,18 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
 where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 
 {
+
+    public virtual async Task AddToBaseRoles(TUser user)
+    {
+        var roles = await roleRepository.GetListAsync(x => x.IsBase);
+        foreach (var role in roles)
+        {
+            if (!user.IsInRole(role.Id))
+            {
+                user.AddRole(role.Id);
+            }
+        }
+    }
 
 
 

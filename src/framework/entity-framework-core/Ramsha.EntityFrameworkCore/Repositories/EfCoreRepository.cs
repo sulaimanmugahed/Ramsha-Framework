@@ -1,7 +1,7 @@
 
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 
@@ -81,7 +81,7 @@ where TEntity : class, IEntity
 
 public class EFCoreRepository<TDbContext, TEntity, TId>(IDbContextProvider<TDbContext> dbContextProvider) : EFCoreRepository<TDbContext, TEntity>(dbContextProvider), IRepository<TEntity, TId>
 where TDbContext : IEFDbContext
-where TId:IEquatable<TId>
+where TId : IEquatable<TId>
 where TEntity : class, IEntity<TId>
 
 {
@@ -99,7 +99,7 @@ where TEntity : class, IEntity<TId>
         {
             query = query.Include(include);
         }
-        return await query.FirstOrDefaultAsync();
+        return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
     public async Task<bool> DeleteAsync(TId id)

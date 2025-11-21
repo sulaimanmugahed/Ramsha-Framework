@@ -7,6 +7,7 @@ using Ramsha.Core;
 using Ramsha.Identity.Contracts;
 using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
+using Ramsha.Common.Application;
 
 namespace Ramsha.Identity.Application;
 
@@ -21,7 +22,7 @@ where TDto : RamshaIdentityUserDto, new()
 }
 
 
-public class RamshaIdentityUserService<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken, TDto, TCreateDto, TUpdateDto>(RamshaIdentityUserManager<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken> userManager, IIdentityUserRepository<TUser, TId> repository) : IRamshaIdentityUserService<TDto, TCreateDto, TUpdateDto, TId>
+public class RamshaIdentityUserService<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken, TDto, TCreateDto, TUpdateDto>(RamshaIdentityUserManager<TUser, TRole, TId, TUserRole, TRoleClaim, TUserClaim, TUserLogin, TUserToken> userManager, IIdentityUserRepository<TUser, TId> repository) : RamshaService, IRamshaIdentityUserService<TDto, TCreateDto, TUpdateDto, TId>
 where TId : IEquatable<TId>
 where TUser : RamshaIdentityUser<TId, TUserClaim, TUserRole, TUserLogin, TUserToken>, new()
 where TUserClaim : RamshaIdentityUserClaim<TId>, new()
@@ -44,6 +45,17 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
         {
             return identityResult.MapToRamshaErrors();
         }
+
+        if (createDto.Roles is not null)
+        {
+            var roleResult = await userManager.AddToRolesAsync(user, createDto.Roles);
+            if (!roleResult.Succeeded)
+            {
+                return roleResult.MapToRamshaErrors();
+            }
+        }
+
+        await userManager.AddToBaseRoles(user);
 
         return user.Id.ToString()!;
     }

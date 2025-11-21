@@ -1,5 +1,5 @@
 
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace DemoApp.Entities;
 

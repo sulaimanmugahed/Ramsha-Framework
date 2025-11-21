@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.LocalMessaging.Abstractions;
 using Ramsha.UnitOfWork;
 using Ramsha.UnitOfWork.Abstractions;

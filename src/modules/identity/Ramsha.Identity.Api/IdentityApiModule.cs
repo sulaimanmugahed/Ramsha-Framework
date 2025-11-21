@@ -10,7 +10,9 @@ public class IdentityApiModule : RamshaModule
     public override void OnCreating(ModuleBuilder moduleBuilder)
     {
         base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<IdentityContractsModule>();
+        moduleBuilder
+        .DependsOn<AspNetCoreMvcModule>()
+        .DependsOn<IdentityContractsModule>();
 
         moduleBuilder.OnCreatingConfigure<IMvcBuilder>(builder =>
         {

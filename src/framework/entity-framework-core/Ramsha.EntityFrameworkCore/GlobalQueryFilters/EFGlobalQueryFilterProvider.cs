@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 

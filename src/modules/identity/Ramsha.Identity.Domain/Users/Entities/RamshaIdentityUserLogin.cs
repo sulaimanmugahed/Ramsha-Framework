@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Ramsha.Common.Domain;
+
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaIdentityUserLogin<TId>
+public class RamshaIdentityUserLogin<TId>:Entity
  where TId : IEquatable<TId>
 {
     public RamshaIdentityUserLogin()

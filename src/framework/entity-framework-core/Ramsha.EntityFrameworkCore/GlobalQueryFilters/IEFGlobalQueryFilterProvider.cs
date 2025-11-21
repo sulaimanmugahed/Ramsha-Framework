@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.Internal;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 

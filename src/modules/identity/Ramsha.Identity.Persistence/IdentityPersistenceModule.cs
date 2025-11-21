@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence.Extensions;
 
@@ -10,7 +11,9 @@ public class IdentityPersistenceModule : RamshaModule
     public override void OnCreating(ModuleBuilder moduleBuilder)
     {
         base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<IdentityDomainModule>();
+        moduleBuilder
+        .DependsOn<IdentityDomainModule>()
+        .DependsOn<EntityFrameworkCoreModule>();
 
         moduleBuilder.OnCreatingConfigure<RamshaIdentityOptions>(options =>
         {

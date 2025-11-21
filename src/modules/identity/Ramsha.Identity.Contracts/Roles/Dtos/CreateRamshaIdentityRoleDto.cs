@@ -9,6 +9,7 @@ namespace Ramsha.Identity.Contracts;
 public class CreateRamshaIdentityRoleDto
 {
     public string Name { get; set; }
+    public bool IsBase { get; set; }
 }
 
 

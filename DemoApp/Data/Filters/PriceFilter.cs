@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Options;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 
 namespace DemoApp.Entities;

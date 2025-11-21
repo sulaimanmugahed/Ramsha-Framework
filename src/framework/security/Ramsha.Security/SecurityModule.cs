@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ramsha.Security.Claims;
 using Ramsha.Security.Users;
 
@@ -11,9 +12,9 @@ public class SecurityModule : RamshaModule
     {
         base.OnConfiguring(context);
 
-        context.Services.AddSingleton<IPrincipalAccessor, ThreadPrincipalAccessor>();
-        context.Services.AddTransient<IRamshaClaimsPrincipalFactory, RamshaClaimsPrincipalFactory>();
-        context.Services.AddScoped<ICurrentUser, CurrentUser>();
+        context.Services.TryAddSingleton<IPrincipalAccessor, ThreadPrincipalAccessor>();
+        context.Services.TryAddTransient<IRamshaClaimsPrincipalFactory, RamshaClaimsPrincipalFactory>();
+        context.Services.TryAddScoped<ICurrentUser, CurrentUser>();
         context.Services.AutoRegisterPrincipalTransformers();
     }
 

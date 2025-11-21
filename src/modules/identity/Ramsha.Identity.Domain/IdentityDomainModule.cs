@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Ramsha.Common.Domain;
 
 using Ramsha.Identity.Shared;
 
@@ -11,7 +12,9 @@ public class IdentityDomainModule : RamshaModule
     public override void OnCreating(ModuleBuilder moduleBuilder)
     {
         base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<IdentitySharedModule>();
+        moduleBuilder
+        .DependsOn<IdentitySharedModule>()
+        .DependsOn<CommonDomainModule>();
 
         moduleBuilder.OnCreatingConfigure<RamshaIdentityTypesOptions>(options =>
         {

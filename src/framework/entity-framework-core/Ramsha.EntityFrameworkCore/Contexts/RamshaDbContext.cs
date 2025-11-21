@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.EntityFrameworkCore;

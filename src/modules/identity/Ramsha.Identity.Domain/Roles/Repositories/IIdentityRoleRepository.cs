@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.Identity.Domain;
 

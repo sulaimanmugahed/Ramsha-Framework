@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\common\Ramsha.Common.Contracts\Ramsha.Common.Contracts.csproj" />
     <ProjectReference Include="..\..\..\framework\Ramsha.Core\Ramsha.Core.csproj" />
   </ItemGroup>
 

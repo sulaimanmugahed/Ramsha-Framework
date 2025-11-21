@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.UnitOfWork;
 using Ramsha.UnitOfWork.Abstractions;
 
@@ -13,7 +13,7 @@ public class EntityFrameworkCoreModule : RamshaModule
         base.OnCreating(moduleBuilder);
 
         moduleBuilder
-        .DependsOn<DomainModule>()
+        .DependsOn<CommonDomainModule>()
         .DependsOn<UnitOfWorkModule>();
     }
     public override void OnConfiguring(ConfigureContext context)

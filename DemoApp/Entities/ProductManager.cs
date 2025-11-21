@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DemoApp.Data;
 using Ramsha;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.UnitOfWork.Abstractions;
 
 namespace DemoApp.Entities;

@@ -4,6 +4,7 @@ using Ramsha.Identity.Contracts;
 using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
 using Ramsha.LocalMessaging.Abstractions;
+using Ramsha.ApplicationAbstractions;
 
 namespace Ramsha.Identity.Application;
 
@@ -14,7 +15,8 @@ public class IdentityApplicationModule : RamshaModule
         base.OnCreating(moduleBuilder);
         moduleBuilder
         .DependsOn<IdentityContractsModule>()
-        .DependsOn<IdentityDomainModule>();
+        .DependsOn<IdentityDomainModule>()
+        .DependsOn<CommonApplicationModule>();
 
 
         moduleBuilder.OnCreatingConfigure<LocalMessagingOptions>(messageOptions =>

@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ramsha.Common.Application;
 using Ramsha.Core;
 using Ramsha.Identity.Contracts;
 using Ramsha.Identity.Domain;
 
 namespace Ramsha.Identity.Application;
 
-public class RamshaIdentityRoleService<TRole, TId, TUserRole, TRoleClaim, TDto, TCreateDto, TUpdateDto>(RamshaIdentityRoleManager<TRole, TId, TUserRole, TRoleClaim> manager, IIdentityRoleRepository<TRole, TId> repository) : IRamshaIdentityRoleService<TDto, TCreateDto, TUpdateDto, TId>
+public class RamshaIdentityRoleService<TRole, TId, TUserRole, TRoleClaim, TDto, TCreateDto, TUpdateDto>(RamshaIdentityRoleManager<TRole, TId, TUserRole, TRoleClaim> manager, IIdentityRoleRepository<TRole, TId> repository) : RamshaService, IRamshaIdentityRoleService<TDto, TCreateDto, TUpdateDto, TId>
 where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
     where TId : IEquatable<TId>
     where TUserRole : RamshaIdentityUserRole<TId>, new()
@@ -46,7 +47,8 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         return new TDto()
         {
             Id = role.Id.ToString(),
-            Name = role.Name
+            Name = role.Name,
+            IsBase = role.IsBase
         };
     }
 
@@ -55,7 +57,8 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         return new TRole()
         {
             Id = GenerateId(),
-            Name = createDto.Name
+            Name = createDto.Name,
+            IsBase = createDto.IsBase
         };
     }
 

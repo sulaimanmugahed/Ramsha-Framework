@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ramsha;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection;

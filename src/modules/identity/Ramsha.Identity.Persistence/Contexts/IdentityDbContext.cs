@@ -1,6 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Domain;
 

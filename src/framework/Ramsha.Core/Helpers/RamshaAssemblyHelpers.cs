@@ -8,9 +8,13 @@ namespace Ramsha;
 
 public class RamshaAssemblyHelpers
 {
-    public static IEnumerable<Assembly> GetRamshaAssemblies()
+    public static IEnumerable<Assembly> GetAllRamshaAssemblies()
     {
-        var ramshaAssembly = typeof(IRamshaModule).Assembly;
+        return GetAssemblies(typeof(IRamshaModule));
+    }
+    public static IEnumerable<Assembly> GetAssemblies(Type referenceMarker)
+    {
+        var ramshaAssembly = referenceMarker.Assembly;
         var ramshaName = ramshaAssembly.GetName().Name!;
 
         var allAssemblies = AppDomain.CurrentDomain

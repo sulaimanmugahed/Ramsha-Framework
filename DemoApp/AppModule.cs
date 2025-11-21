@@ -19,9 +19,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Ramsha;
+using Ramsha.Account.Api;
+using Ramsha.Account.Application;
+using Ramsha.Account.Contracts;
 using Ramsha.AspNetCore;
 using Ramsha.AspNetCore.Mvc;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Api;
 using Ramsha.Identity.Application;
@@ -44,14 +47,12 @@ public class AppModule : RamshaModule
         base.OnCreating(moduleBuilder);
 
         moduleBuilder
-        .DependsOn<DemoModuleModule>()
-        .DependsOn<AspNetCoreMvcModule>()
-        .DependsOn<LocalMessagingModule>()
         .DependsOn<IdentityApplicationModule>()
-        .DependsOn<EntityFrameworkCoreModule>()
+        .DependsOn<AccountApplicationModule>()
         .DependsOn<IdentityPersistenceModule>()
         .DependsOn<IdentityAspNetCoreModule>()
         .DependsOn<IdentityApiModule>()
+        .DependsOn<AccountApiModule>()
         ;
 
 
@@ -72,6 +73,12 @@ public class AppModule : RamshaModule
             options.ReplaceDto<UpdateRamshaIdentityUserDto, UpdateAppUserDto>();
             options.ReplaceUserService<AppUserService>();
         });
+
+        moduleBuilder.OnCreatingConfigure<RamshaAccountContractsOptions>(options =>
+        {
+            options.ReplaceDto<RamshaRegisterDto, AppRegisterDto>();
+            options.ReplaceAccountService<AppAccountService>();
+        });
     }
 
 
@@ -81,7 +88,6 @@ public class AppModule : RamshaModule
         base.OnConfiguring(context);
 
 
-        context.Services.AddTransient<IRamshaService, RamshaService>();
         context.Services.AddTransient<ITestService, TestService>();
 
 

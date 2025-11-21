@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DemoApp.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.UnitOfWork;
 using Ramsha.UnitOfWork.Abstractions;
 

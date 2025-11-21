@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaIdentityUserToken<TId>
+public class RamshaIdentityUserToken<TId>:Entity
 where TId : IEquatable<TId>
 {
     public RamshaIdentityUserToken()

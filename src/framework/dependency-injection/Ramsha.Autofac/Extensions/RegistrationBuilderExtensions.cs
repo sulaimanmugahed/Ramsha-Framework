@@ -18,7 +18,7 @@ public static class RegistrationBuilderExtensions
     {
         builder.Populate(services);
 
-        var assemblies = RamshaAssemblyHelpers.GetRamshaAssemblies();
+        var assemblies = RamshaAssemblyHelpers.GetAllRamshaAssemblies();
 
         builder.RegisterAssemblyTypes(assemblies.ToArray())
               .Where(t => typeof(IHasPropertyInjection).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)

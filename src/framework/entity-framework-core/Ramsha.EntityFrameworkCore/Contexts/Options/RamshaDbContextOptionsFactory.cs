@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Ramsha;
 using Ramsha.AspNetCore.Mvc;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.UnitOfWork;
 using Ramsha.UnitOfWork.Abstractions;
 
@@ -20,14 +20,6 @@ public interface IFilter
 
 public class ProductsController(ITestService testService, ProductManager productManager, IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
 {
-    [Injectable]
-    public IRamshaService RamshaService { get; set; }
-
-    [HttpGet(nameof(Test))]
-    public async Task<string> Test()
-    {
-        return RamshaService.Get();
-    }
 
     [HttpGet(nameof(TestOut))]
     public async Task<string> TestOut()

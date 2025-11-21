@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace Ramsha.EntityFrameworkCore;
 

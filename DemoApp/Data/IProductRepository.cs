@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DemoApp.Entities;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 
 namespace DemoApp.Data;
 

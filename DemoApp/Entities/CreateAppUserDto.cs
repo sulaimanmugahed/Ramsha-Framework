@@ -6,12 +6,3 @@ using Ramsha.Identity.Contracts;
 
 namespace DemoApp.Entities;
 
-public class CreateAppUserDto : CreateRamshaIdentityUserDto
-{
-    public string Profile { get; set; }
-}
-
-public class UpdateAppUserDto : UpdateRamshaIdentityUserDto
-{
-    public string? Profile { get; set; }
-}

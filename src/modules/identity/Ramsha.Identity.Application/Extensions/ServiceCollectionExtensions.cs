@@ -37,10 +37,10 @@ public static class ServiceCollectionExtensions
             entityTypes.KeyType
             );
 
-        services.AddScoped(userServiceInterface, userServiceImplementation);
+        services.AddRamshaService(userServiceImplementation, userServiceInterface);
 
 
-        var roleServiceImplementation = contractsOptions.ReplacedRoleServiceType is not null ? contractsOptions.ReplacedUserServiceType : typeof(RamshaIdentityRoleService<,,,,,,>).MakeGenericType(
+        var roleServiceImplementation = contractsOptions.ReplacedRoleServiceType is not null ? contractsOptions.ReplacedRoleServiceType : typeof(RamshaIdentityRoleService<,,,,,,>).MakeGenericType(
             entityTypes.RoleType,
             entityTypes.KeyType,
             entityTypes.UserRoleType,
@@ -58,7 +58,7 @@ contractsOptions.GetReplacedDtoOrBase<RamshaIdentityRoleDto>(),
             entityTypes.KeyType
             );
 
-        services.AddScoped(roleServiceInterface, roleServiceImplementation);
+        services.AddRamshaService(roleServiceImplementation, roleServiceInterface);
 
         return services;
     }

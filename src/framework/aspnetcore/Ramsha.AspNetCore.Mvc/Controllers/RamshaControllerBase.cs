@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Core;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.LocalMessaging.Abstractions;
 using Ramsha.UnitOfWork;
 using Ramsha.UnitOfWork.Abstractions;

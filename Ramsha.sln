@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Autofac", "src\frame
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{C8AF7CE9-6C40-4FD3-91AE-2CD8D4D52734}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Domain", "src\framework\common\Ramsha.Domain\Ramsha.Domain.csproj", "{87D84F71-E3C5-4C17-AD96-F0574F45E6F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Common.Domain", "src\framework\common\Ramsha.Common.Domain\Ramsha.Common.Domain.csproj", "{87D84F71-E3C5-4C17-AD96-F0574F45E6F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "entity-framework-core", "entity-framework-core", "{71B26CA9-AFE7-F2E3-1AB1-CD956805BB92}"
 EndProject
@@ -51,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{EC44
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{0EC62A1A-9858-3A60-8A0C-FC9AACFA2EC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Identity.Shared", "src\modules\identity\Ramsha.Identity.Core\Ramsha.Identity.Shared.csproj", "{99B4EA5E-79F8-46F9-9AA2-B5832E5F41C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Identity.Shared", "src\modules\identity\Ramsha.Identity.Shared\Ramsha.Identity.Shared.csproj", "{99B4EA5E-79F8-46F9-9AA2-B5832E5F41C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Identity.Domain", "src\modules\identity\Ramsha.Identity.Domain\Ramsha.Identity.Domain.csproj", "{34518D01-08B6-4AC2-8C30-4F84529DB9A1}"
 EndProject
@@ -72,6 +72,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Account.Application", "src\modules\account\Ramsha.Account.Application\Ramsha.Account.Application.csproj", "{A7AB78FA-3509-4E8B-897F-45D770C2690E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Account.Api", "src\modules\account\Ramsha.Account.Api\Ramsha.Account.Api.csproj", "{B3679D47-835D-471F-8FA1-F663ECD8508E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Common.Application", "src\framework\common\Ramsha.Common.Application\Ramsha.Common.Application.csproj", "{34203111-0280-4A04-A925-D17F7481A005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Common.Contracts", "src\framework\common\Ramsha.Common.Contracts\Ramsha.Common.Contracts.csproj", "{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -359,6 +363,30 @@ Global
 		{B3679D47-835D-471F-8FA1-F663ECD8508E}.Release|x64.Build.0 = Release|Any CPU
 		{B3679D47-835D-471F-8FA1-F663ECD8508E}.Release|x86.ActiveCfg = Release|Any CPU
 		{B3679D47-835D-471F-8FA1-F663ECD8508E}.Release|x86.Build.0 = Release|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Debug|x64.Build.0 = Debug|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Debug|x86.Build.0 = Debug|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Release|x64.ActiveCfg = Release|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Release|x64.Build.0 = Release|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Release|x86.ActiveCfg = Release|Any CPU
+		{34203111-0280-4A04-A925-D17F7481A005}.Release|x86.Build.0 = Release|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Debug|x64.Build.0 = Debug|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Debug|x86.Build.0 = Debug|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Release|x64.ActiveCfg = Release|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Release|x64.Build.0 = Release|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Release|x86.ActiveCfg = Release|Any CPU
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -396,5 +424,7 @@ Global
 		{9FB99647-F849-44D3-B64F-F59F66238509} = {6EE2CD8D-C202-701D-0106-19DABBDFA130}
 		{A7AB78FA-3509-4E8B-897F-45D770C2690E} = {6EE2CD8D-C202-701D-0106-19DABBDFA130}
 		{B3679D47-835D-471F-8FA1-F663ECD8508E} = {6EE2CD8D-C202-701D-0106-19DABBDFA130}
+		{34203111-0280-4A04-A925-D17F7481A005} = {C8AF7CE9-6C40-4FD3-91AE-2CD8D4D52734}
+		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7} = {C8AF7CE9-6C40-4FD3-91AE-2CD8D4D52734}
 	EndGlobalSection
 EndGlobal

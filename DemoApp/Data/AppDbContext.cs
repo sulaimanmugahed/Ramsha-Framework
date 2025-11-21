@@ -6,7 +6,7 @@ using DemoApp.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Ramsha;
-using Ramsha.Domain;
+using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence;

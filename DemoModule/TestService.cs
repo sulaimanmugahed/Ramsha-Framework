@@ -13,10 +13,8 @@ public interface ITestService
 }
 public class TestService : ITestService, IHasPropertyInjection
 {
-    [Injectable]
-    public IRamshaService RamshaService { get; set; }
     public string Get()
     {
-        return RamshaService.Get();
+        return "this is test";
     }
 }

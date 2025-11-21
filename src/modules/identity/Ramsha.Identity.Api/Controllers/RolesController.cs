@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Core;
-using Ramsha.Domain;
 using Ramsha.Identity.Contracts;
 
 namespace Ramsha.Identity.Api;
