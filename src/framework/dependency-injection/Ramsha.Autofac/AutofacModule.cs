@@ -8,9 +8,9 @@ namespace Ramsha.Autofac;
 public class AutofacModule : RamshaModule
 {
 
-    public override void OnConfiguring(ConfigureContext context)
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
         //         context.Services.AddAutofac(builder =>
         // {
         //     builder.ConfigureAutofacContainer();

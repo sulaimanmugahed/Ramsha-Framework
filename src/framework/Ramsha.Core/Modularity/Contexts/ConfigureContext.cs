@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ramsha;
 
-public class ConfigureContext(IServiceCollection services)
+public class BuildServicesContext(IServiceCollection services)
 {
     public IServiceCollection Services { get; } = services;
     public IConfiguration Configuration => _config ??= Services.GetConfiguration();

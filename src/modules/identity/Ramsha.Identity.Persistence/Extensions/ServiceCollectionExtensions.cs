@@ -40,7 +40,7 @@ public static class ServiceCollectionExtensions
     }
     private static void RegisterServices(IServiceCollection services)
     {
-        var typesOptions = services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
+        var typesOptions = services.ExecutePreparedOptions<RamshaIdentityTypesOptions>();
         Validate(typesOptions.UserType, typesOptions.RoleType);
 
 

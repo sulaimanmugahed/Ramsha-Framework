@@ -1,15 +1,20 @@
 ﻿
+using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Identity.Shared;
 
 namespace Ramsha.Identity.Contracts;
 
 public class IdentityContractsModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<IdentitySharedModule>();
-
-        moduleBuilder.OnCreatingConfigure<RamshaIdentityContractsOptions>(options => { });
+        base.Register(context);
+        context
+        .DependsOn<IdentitySharedModule>();
+    }
+    public override void Prepare(PrepareContext context)
+    {
+        base.Prepare(context);
+        context.Configure<RamshaIdentityContractsOptions>(options => { });
     }
 }

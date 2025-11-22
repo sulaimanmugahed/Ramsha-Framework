@@ -10,8 +10,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAccountApplicationServices(this IServiceCollection services)
     {
-        var entityTypes = services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
-        var contractsOptions = services.ExecutePreConfigured<RamshaAccountContractsOptions>();
+        var entityTypes = services.ExecutePreparedOptions<RamshaIdentityTypesOptions>();
+        var contractsOptions = services.ExecutePreparedOptions<RamshaAccountContractsOptions>();
 
         var accountServiceImplementation = contractsOptions.ReplacedAccountServiceType is not null ? contractsOptions.ReplacedAccountServiceType : typeof(RamshaAccountService<,,,,,,,,>).MakeGenericType(
             entityTypes.UserType,

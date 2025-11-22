@@ -1,17 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Identity.Domain;
 
 namespace Ramsha.Identity.AspNetCore;
 
 public class IdentityAspNetCoreModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<IdentityDomainModule>();
+        base.Register(context);
+        context
+        .DependsOn<IdentityDomainModule>();
+    }
 
-        moduleBuilder.OnCreatingConfigure<RamshaIdentityOptions>(options =>
+    public override void Prepare(PrepareContext context)
+    {
+        base.Prepare(context);
+
+        context.Configure<RamshaIdentityOptions>(options =>
         {
             options.ConfigureIdentity(builder =>
             {
@@ -23,9 +30,10 @@ public class IdentityAspNetCoreModule : RamshaModule
 
     }
 
-    public override void OnConfiguring(ConfigureContext context)
+
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
         context.Services
                .AddAuthentication(o =>
                {

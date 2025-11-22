@@ -1,38 +1,29 @@
+using Ramsha.Core.Modularity.Contexts;
+
 namespace Ramsha;
 
 public interface IRamshaModule
 {
-    void OnCreating(ModuleBuilder moduleBuilder);
-    Task OnConfiguringAsync(ConfigureContext context);
-    void OnConfiguring(ConfigureContext context);
+    void Register(RegisterContext context);
+    Task RegisterAsync(RegisterContext context);
+    void Prepare(PrepareContext context);
+    Task PrepareAsync(PrepareContext context);
+    Task BuildServicesAsync(BuildServicesContext context);
+    void BuildServices(BuildServicesContext context);
 
 }
 
 public abstract class RamshaModule : IRamshaModule, IOnAppInit, IOnAppShutdown
 {
-    protected internal ConfigureContext ConfigureContext
-    {
-        get
-        {
-            if (_serviceConfigurationContext == null)
-            {
-                throw new Exception($"{nameof(ConfigureContext)} is only available in configurations methods.");
-            }
 
-            return _serviceConfigurationContext;
-        }
-        internal set => _serviceConfigurationContext = value;
-    }
-
-    private ConfigureContext? _serviceConfigurationContext;
-    public virtual void OnConfiguring(ConfigureContext context)
+    public virtual void BuildServices(BuildServicesContext context)
     {
 
     }
 
-    public virtual Task OnConfiguringAsync(ConfigureContext context)
+    public virtual Task BuildServicesAsync(BuildServicesContext context)
     {
-        OnConfiguring(context);
+        BuildServices(context);
         return Task.CompletedTask;
     }
 
@@ -58,9 +49,27 @@ public abstract class RamshaModule : IRamshaModule, IOnAppInit, IOnAppShutdown
         return Task.CompletedTask;
     }
 
-    public virtual void OnCreating(ModuleBuilder moduleBuilder)
+
+
+    public virtual void Register(RegisterContext context)
     {
 
+    }
+
+    public Task RegisterAsync(RegisterContext context)
+    {
+        Register(context);
+        return Task.CompletedTask;
+    }
+
+    public virtual void Prepare(PrepareContext context)
+    {
+    }
+
+    public virtual Task PrepareAsync(PrepareContext context)
+    {
+        Prepare(context);
+        return Task.CompletedTask;
     }
 
 

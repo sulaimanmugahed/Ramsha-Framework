@@ -8,9 +8,13 @@ namespace Ramsha.Security;
 
 public class SecurityModule : RamshaModule
 {
-    public override void OnConfiguring(ConfigureContext context)
+    public override void Register(RegisterContext context)
     {
-        base.OnConfiguring(context);
+        base.Register(context);
+    }
+    public override void BuildServices(BuildServicesContext context)
+    {
+        base.BuildServices(context);
 
         context.Services.TryAddSingleton<IPrincipalAccessor, ThreadPrincipalAccessor>();
         context.Services.TryAddTransient<IRamshaClaimsPrincipalFactory, RamshaClaimsPrincipalFactory>();

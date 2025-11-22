@@ -8,17 +8,16 @@ namespace Ramsha.EntityFrameworkCore;
 
 public class EntityFrameworkCoreModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-
-        moduleBuilder
-        .DependsOn<CommonDomainModule>()
+        base.Register(context);
+        context.DependsOn<CommonDomainModule>()
         .DependsOn<UnitOfWorkModule>();
     }
-    public override void OnConfiguring(ConfigureContext context)
+
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
 
         context.Services.AddTransient<DomainEventToUnitOfWorkInterceptor>();
         context.Services.AddTransient<EntityCreationInterceptor>();

@@ -5,9 +5,9 @@ namespace Ramsha.UnitOfWork;
 
 public class UnitOfWorkModule : RamshaModule
 {
-    override public void OnConfiguring(ConfigureContext context)
+    override public void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
         context.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
         context.Services.AddSingleton<ICurrentUnitOfWork, CurrentUnitOfWork>();

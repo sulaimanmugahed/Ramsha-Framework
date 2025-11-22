@@ -6,18 +6,18 @@ namespace Ramsha.Account.Application;
 
 public class AccountApplicationModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-
-        moduleBuilder
+        base.Register(context);
+        context
         .DependsOn<AccountContractsModule>()
         .DependsOn<IdentityDomainModule>();
     }
 
-    public override void OnConfiguring(ConfigureContext context)
+
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
         context.Services.AddAccountApplicationServices();
     }
 }

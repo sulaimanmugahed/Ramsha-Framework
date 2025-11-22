@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ramsha.Core.Modularity.Contexts;
 
 namespace Ramsha;
 
@@ -54,7 +55,7 @@ public abstract class RamshaAppBase : IRamshaApp
 
         services.AddCoreServices(this, options);
 
-        var dependenciesContext = new AppModulesContext();
+        var dependenciesContext = new RegisterContext(services);
         services.AddSingleton(dependenciesContext);
 
         Modules = LoadModules(services, options, dependenciesContext, startupModuleInstance);
@@ -95,7 +96,7 @@ public abstract class RamshaAppBase : IRamshaApp
         ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
     }
 
-   
+
 
     protected virtual async Task InitializeModulesAsync()
     {
@@ -134,7 +135,7 @@ public abstract class RamshaAppBase : IRamshaApp
 
 
 
-    protected virtual IReadOnlyList<IModuleDescriptor> LoadModules(IServiceCollection services, AppCreationOptions options, AppModulesContext dependenciesContext, IRamshaModule? startupModuleInstance = null)
+    protected virtual IReadOnlyList<IModuleDescriptor> LoadModules(IServiceCollection services, AppCreationOptions options, RegisterContext dependenciesContext, IRamshaModule? startupModuleInstance = null)
     {
         var loader = services
             .GetSingletonInstance<IModuleLoader>();
@@ -156,27 +157,36 @@ public abstract class RamshaAppBase : IRamshaApp
     {
         CheckMultipleConfigureServices();
 
-        var context = new ConfigureContext(Services);
-        Services.AddSingleton(context);
-
-        foreach (var module in Modules)
-        {
-            if (module.Instance is RamshaModule ramshaModule)
-            {
-                ramshaModule.ConfigureContext = context;
-            }
-        }
+        var prepareContext = new PrepareContext(Services);
+        Services.AddSingleton(prepareContext);
 
         foreach (var module in Modules)
         {
             try
             {
-                await module.Instance.OnConfiguringAsync(context);
+                await module.Instance.PrepareAsync(prepareContext);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred during {nameof(IRamshaModule.Prepare)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+            }
+        }
+
+        var context = new BuildServicesContext(Services);
+        Services.AddSingleton(context);
+
+
+
+        foreach (var module in Modules)
+        {
+            try
+            {
+                await module.Instance.BuildServicesAsync(context);
             }
 
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred during {nameof(IRamshaModule.OnConfiguringAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                throw new Exception($"An error occurred during {nameof(IRamshaModule.BuildServicesAsync)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
             }
         }
 
@@ -196,27 +206,36 @@ public abstract class RamshaAppBase : IRamshaApp
     {
         CheckMultipleConfigureServices();
 
-        var context = new ConfigureContext(Services);
-        Services.AddSingleton(context);
-
-        foreach (var module in Modules)
-        {
-            if (module.Instance is RamshaModule abpModule)
-            {
-                abpModule.ConfigureContext = context;
-            }
-        }
-
+        var prepareContext = new PrepareContext(Services);
+        Services.AddSingleton(prepareContext);
 
         foreach (var module in Modules)
         {
             try
             {
-                module.Instance.OnConfiguring(context);
+                module.Instance.Prepare(prepareContext);
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred during {nameof(IRamshaModule.OnConfiguring)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                throw new Exception($"An error occurred during {nameof(IRamshaModule.Prepare)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+            }
+        }
+
+
+
+
+        var context = new BuildServicesContext(Services);
+        Services.AddSingleton(context);
+
+        foreach (var module in Modules)
+        {
+            try
+            {
+                module.Instance.BuildServices(context);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred during {nameof(IRamshaModule.BuildServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
             }
         }
 

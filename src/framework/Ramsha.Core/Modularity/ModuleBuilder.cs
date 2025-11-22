@@ -1,55 +1,42 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+// using System;
+// using System.Collections.Generic;
+// using System.Linq;
+// using System.Threading.Tasks;
+// using Microsoft.Extensions.Configuration;
+// using Microsoft.Extensions.DependencyInjection;
 
-namespace Ramsha;
+// namespace Ramsha;
 
-public class ModuleBuilder
-{
-    private readonly Type _moduleType;
-    private readonly AppModulesContext _context;
-    private readonly IServiceCollection _services;
+// public class ModuleBuilder
+// {
+//     private readonly Type _moduleType;
+//     private readonly ModulesRegisterContext _context;
+//     private readonly IServiceCollection _services;
 
-    public ModuleBuilder(Type currentModuleType, IServiceCollection services, AppModulesContext context)
-    {
-        _services = services;
-        _moduleType = currentModuleType;
-        _context = context;
-        _context.InsureModuleExist(_moduleType);
-    }
+//     public ModuleBuilder(Type moduleType, IServiceCollection services, ModulesRegisterContext context)
+//     {
+//         _services = services;
+//         _moduleType = moduleType;
+//         _context = context;
+//         _context.InsureModuleExist(_moduleType);
+//     }
 
-    public ModuleBuilder OnCreatingConfigure<TOptions>(Action<TOptions> optionsAction)
-         where TOptions : class
-    {
-        _services.PreConfigure(optionsAction);
-        return this;
-    }
+//     public ModuleBuilder Configure<TOptions>(Action<TOptions> optionsAction)
+//          where TOptions : class
+//     {
+//         _services.PrepareConfigure(optionsAction);
+//         return this;
+//     }
 
-    public TOptions? GetOnCreatingOptions<TOptions>()
-      where TOptions : class, new()
-    {
-        return _services.ExecutePreConfigured<TOptions>();
-    }
+//     public TOptions? Configure<TOptions>()
+//       where TOptions : class, new()
+//     {
+//         return _services.ExecutePreparedOptions<TOptions>();
+//     }
 
-    public IConfiguration GetConfiguration()
-    {
-        return _services.GetConfiguration();
-    }
-
-    public ModuleBuilder DependsOn<TModule>() where TModule : IRamshaModule
-    {
-        return DependsOn(typeof(TModule));
-    }
-
-
-    public ModuleBuilder DependsOn(Type type)
-    {
-        _context.InsureModuleExist(type);
-        _context.AddDependency(_moduleType, type);
-        return this;
-    }
-}
+//     public IConfiguration GetConfiguration()
+//     {
+//         return _services.GetConfiguration();
+//     }
+// }
 

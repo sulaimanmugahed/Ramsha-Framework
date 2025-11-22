@@ -8,20 +8,20 @@ namespace Ramsha.LocalMessaging;
 
 public class LocalMessagingModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<LocalMessagingAbstractionsModule>();
+        base.Register(context);
+        context.DependsOn<LocalMessagingAbstractionsModule>();
     }
 
-    public override void OnConfiguring(ConfigureContext context)
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
         context.Services.AddScoped<IRamshaMediator, RamshaMediator>();
         context.Services.AddScoped<ILocalBus, LocalBus>();
         context.Services.AddScoped<IUnitOfWorkLocalEventBus, UnitOfWorkLocalBus>();
 
-        var options = context.Services.ExecutePreConfigured<LocalMessagingOptions>();
+        var options = context.Services.ExecutePreparedOptions<LocalMessagingOptions>();
 
         context.Services.RegisterLocalMessagingOptions(options);
     }

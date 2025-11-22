@@ -7,26 +7,35 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Ramsha.Core.Modularity.Contexts;
 using Scalar.AspNetCore;
 
 namespace Ramsha.AspNetCore.Mvc;
 
 public class AspNetCoreMvcModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<AspNetCoreModule>();
+        base.Register(context);
+
+        context.DependsOn<AspNetCoreModule>();
+
+    }
+
+    public override void Prepare(PrepareContext context)
+    {
+        base.Prepare(context);
     }
 
 
-    public override void OnConfiguring(ConfigureContext context)
+
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
 
         var mvcBuilder = context.Services.AddMvc();
 
-        context.Services.ExecutePreConfigured(mvcBuilder);
+        context.Services.ExecutePreparedOptions(mvcBuilder);
 
         mvcBuilder.AddControllersAsServices();
         context.Services.AddOpenApi();

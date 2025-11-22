@@ -7,20 +7,35 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Ramsha.AspNetCore.Security.Claims;
 using Ramsha.Common.Domain;
+using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Security.Claims;
 
 namespace Ramsha.AspNetCore;
 
 public class AspNetCoreModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<CommonDomainModule>();
+        base.Register(context);
+
+        context.DependsOn<CommonDomainModule>();
+
     }
-    public override void OnConfiguring(ConfigureContext context)
+
+    public override void Prepare(PrepareContext context)
     {
-        base.OnConfiguring(context);
+        base.Prepare(context);
+
+        context.Configure<TestDomainOptions>(options =>
+    {
+        options.Name = "aspnetcore";
+    });
+    }
+    public override void BuildServices(BuildServicesContext context)
+    {
+        var testOptions = context.Services.ExecutePreparedOptions<TestDomainOptions>();
+
+        base.BuildServices(context);
         context.Services.AddHttpContextAccessor();
         context.Services.AddSingleton<IPrincipalAccessor, HttpPrincipalAccessor>();
         context.Services.TryAddSingleton<IAppPipeline<IApplicationBuilder>, AppPipeline<IApplicationBuilder>>();

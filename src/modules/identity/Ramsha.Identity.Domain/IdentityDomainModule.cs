@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Common.Domain;
-
+using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Identity.Shared;
 
 namespace Ramsha.Identity.Domain;
@@ -9,14 +9,19 @@ namespace Ramsha.Identity.Domain;
 public class IdentityDomainModule : RamshaModule
 {
 
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder
-        .DependsOn<IdentitySharedModule>()
+        base.Register(context);
+        context
+       .DependsOn<IdentitySharedModule>()
         .DependsOn<CommonDomainModule>();
+    }
 
-        moduleBuilder.OnCreatingConfigure<RamshaIdentityTypesOptions>(options =>
+    public override void Prepare(PrepareContext context)
+    {
+        base.Prepare(context);
+
+        context.Configure<RamshaIdentityTypesOptions>(options =>
         {
             options.KeyType ??= typeof(Guid);
             options.UserType ??= typeof(RamshaIdentityUser);
@@ -28,15 +33,16 @@ public class IdentityDomainModule : RamshaModule
             options.UserRoleType ??= typeof(RamshaIdentityUserRole<Guid>);
         });
 
-        moduleBuilder.OnCreatingConfigure<RamshaIdentityOptions>(options => { });
+        context.Configure<RamshaIdentityOptions>(options => { });
     }
 
-    public override void OnConfiguring(ConfigureContext context)
-    {
-        base.OnConfiguring(context);
 
-        var options = context.Services.ExecutePreConfigured<RamshaIdentityOptions>();
-        var typesOptions = context.Services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
+    public override void BuildServices(BuildServicesContext context)
+    {
+        base.BuildServices(context);
+
+        var options = context.Services.ExecutePreparedOptions<RamshaIdentityOptions>();
+        var typesOptions = context.Services.ExecutePreparedOptions<RamshaIdentityTypesOptions>();
 
 
         var addIdentityCoreMethod = typeof(IdentityServiceCollectionExtensions)

@@ -13,7 +13,7 @@ public static class MvcBuilderExtensions
 {
     public static void AddAccountGenericControllers(this IMvcBuilder builder)
     {
-        var contractsOptions = builder.Services.ExecutePreConfigured<RamshaAccountContractsOptions>();
+        var contractsOptions = builder.Services.ExecutePreparedOptions<RamshaAccountContractsOptions>();
         builder.AddGenericControllers(
             typeof(RamshaAccountController<>).MakeGenericType(contractsOptions.GetReplacedDtoOrBase<RamshaRegisterDto>())
             );

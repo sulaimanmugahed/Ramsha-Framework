@@ -9,18 +9,18 @@ public interface IModuleLoader
     IModuleDescriptor[] LoadModules(
          IServiceCollection services,
        Type startupModuleType,
-       AppModulesContext dependenciesContext
+       RegisterContext dependenciesContext
 );
     IModuleDescriptor[] LoadModules(
           IServiceCollection services,
         IRamshaModule startupModuleInstance,
-        AppModulesContext dependenciesContext
+        RegisterContext dependenciesContext
  );
 }
 public class ModuleLoader : IModuleLoader
 {
 
-    public IModuleDescriptor[] LoadModules(IServiceCollection services, IRamshaModule startupInstance, AppModulesContext moduleContext)
+    public IModuleDescriptor[] LoadModules(IServiceCollection services, IRamshaModule startupInstance, RegisterContext moduleContext)
     {
         var startupModuleType = startupInstance.GetType();
         var visited = new HashSet<Type>();
@@ -28,7 +28,8 @@ public class ModuleLoader : IModuleLoader
         var logger = services.GetBootstrapLogger<RamshaAppBase>();
 
         moduleInstances[startupModuleType] = startupInstance;
-        BuildModule(startupInstance, services, moduleContext);
+        moduleContext.SetCurrentModule(startupInstance);
+        startupInstance.Register(moduleContext);
 
 
         var dependenciesTypes = moduleContext.GetDependenciesTypes(startupModuleType);
@@ -40,7 +41,7 @@ public class ModuleLoader : IModuleLoader
 
         return GetDescriptors(moduleContext, startupModuleType, moduleInstances, logger);
     }
-    public IModuleDescriptor[] LoadModules(IServiceCollection services, Type startupModuleType, AppModulesContext moduleContext)
+    public IModuleDescriptor[] LoadModules(IServiceCollection services, Type startupModuleType, RegisterContext moduleContext)
     {
         var visited = new HashSet<Type>();
         var moduleInstances = new Dictionary<Type, IRamshaModule>();
@@ -52,7 +53,7 @@ public class ModuleLoader : IModuleLoader
         return GetDescriptors(moduleContext, startupModuleType, moduleInstances, logger);
     }
 
-    public IModuleDescriptor[] GetDescriptors(AppModulesContext context, Type startupModuleType, Dictionary<Type, IRamshaModule> moduleInstances, ILogger<RamshaAppBase> logger)
+    public IModuleDescriptor[] GetDescriptors(RegisterContext context, Type startupModuleType, Dictionary<Type, IRamshaModule> moduleInstances, ILogger<RamshaAppBase> logger)
     {
         var moduleDescriptors = new List<ModuleDescriptor>();
         var descriptorMap = new Dictionary<Type, ModuleDescriptor>();
@@ -102,7 +103,7 @@ public class ModuleLoader : IModuleLoader
     private void LoadDependenciesModules(
           IServiceCollection services,
          Type moduleType,
-         AppModulesContext context,
+         RegisterContext context,
          Dictionary<Type, IRamshaModule> moduleInstances,
          ILogger<RamshaAppBase> logger)
     {
@@ -118,15 +119,15 @@ public class ModuleLoader : IModuleLoader
 
     }
 
-    private void BuildModule(IRamshaModule module, IServiceCollection services, AppModulesContext context)
-    {
-        var builder = new ModuleBuilder(module.GetType(), services, context);
-        module.OnCreating(builder);
-    }
+    // private void BuildModule(IRamshaModule module, IServiceCollection services, ModulesRegisterContext context)
+    // {
+    //     var builder = new ModuleBuilder(module.GetType(), services, context);
+    //     module.OnLoading(builder);
+    // }
     private void AddModulesRecursively(
          IServiceCollection services,
         Type moduleType,
-        AppModulesContext context,
+        RegisterContext context,
         HashSet<Type> visited,
         Dictionary<Type, IRamshaModule> moduleInstances,
         ILogger<RamshaAppBase> logger)
@@ -137,7 +138,8 @@ public class ModuleLoader : IModuleLoader
         {
             var module = CreateAndRegisterModuleInstance(moduleType, services, logger);
             moduleInstances[moduleType] = module;
-            BuildModule(module, services, context);
+            context.SetCurrentModule(module);
+            module.Register(context);
         }
 
         var modulesTypes = context.GetDependenciesTypes(moduleType).ToList();

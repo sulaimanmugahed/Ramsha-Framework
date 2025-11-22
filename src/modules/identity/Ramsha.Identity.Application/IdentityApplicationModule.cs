@@ -5,35 +5,31 @@ using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
 using Ramsha.LocalMessaging.Abstractions;
 using Ramsha.ApplicationAbstractions;
+using Ramsha.Core.Modularity.Contexts;
 
 namespace Ramsha.Identity.Application;
 
 public class IdentityApplicationModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder
-        .DependsOn<IdentityContractsModule>()
+        base.Register(context);
+        context
+              .DependsOn<IdentityContractsModule>()
         .DependsOn<IdentityDomainModule>()
         .DependsOn<CommonApplicationModule>();
-
-
-        moduleBuilder.OnCreatingConfigure<LocalMessagingOptions>(messageOptions =>
-        {
-            messageOptions.AddCommandHandler(typeof(CreateRoleCommandHandler<,,>));
-        });
-        ;
-
-
-
-
-
     }
-
-    public override void OnConfiguring(ConfigureContext context)
+    public override void Prepare(PrepareContext context)
     {
-        base.OnConfiguring(context);
+        base.Prepare(context);
+        context.Configure<LocalMessagingOptions>(messageOptions =>
+     {
+         messageOptions.AddCommandHandler(typeof(CreateRoleCommandHandler<,,>));
+     });
+    }
+    public override void BuildServices(BuildServicesContext context)
+    {
+        base.BuildServices(context);
         context.Services.AddRamshaIdentityApplicationServices();
     }
 }

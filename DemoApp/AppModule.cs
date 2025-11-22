@@ -25,6 +25,7 @@ using Ramsha.Account.Contracts;
 using Ramsha.AspNetCore;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Common.Domain;
+using Ramsha.Core.Modularity.Contexts;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Api;
 using Ramsha.Identity.Application;
@@ -42,50 +43,50 @@ namespace DemoApp;
 
 public class AppModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
-    {
-        base.OnCreating(moduleBuilder);
 
-        moduleBuilder
+    public override void Register(RegisterContext context)
+    {
+        base.Register(context);
+
+        context
         .DependsOn<IdentityApplicationModule>()
         .DependsOn<AccountApplicationModule>()
         .DependsOn<IdentityPersistenceModule>()
         .DependsOn<IdentityAspNetCoreModule>()
         .DependsOn<IdentityApiModule>()
-        .DependsOn<AccountApiModule>()
-        ;
+        .DependsOn<AccountApiModule>();
 
+    }
+    public override void Prepare(PrepareContext context)
+    {
+        base.Prepare(context);
+        context.Configure<LocalMessagingOptions>(options =>
+       {
+           options.AddMessagesFromAssembly<AppModule>();
+       });
 
-        moduleBuilder.OnCreatingConfigure<LocalMessagingOptions>(options =>
-        {
-            options.AddMessagesFromAssembly<AppModule>();
-        });
-
-
-
-        moduleBuilder.OnCreatingConfigure<RamshaIdentityTypesOptions>(options =>
+        context.Configure<RamshaIdentityTypesOptions>(options =>
         {
             options.UserType = typeof(AppIdentityUser);
         });
-        moduleBuilder.OnCreatingConfigure<RamshaIdentityContractsOptions>(options =>
+        context.Configure<RamshaIdentityContractsOptions>(options =>
         {
             options.ReplaceDto<CreateRamshaIdentityUserDto, CreateAppUserDto>();
             options.ReplaceDto<UpdateRamshaIdentityUserDto, UpdateAppUserDto>();
             options.ReplaceUserService<AppUserService>();
         });
 
-        moduleBuilder.OnCreatingConfigure<RamshaAccountContractsOptions>(options =>
+        context.Configure<RamshaAccountContractsOptions>(options =>
         {
             options.ReplaceDto<RamshaRegisterDto, AppRegisterDto>();
             options.ReplaceAccountService<AppAccountService>();
         });
     }
 
-
-    public override void OnConfiguring(ConfigureContext context)
+    public override void BuildServices(BuildServicesContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        base.OnConfiguring(context);
+        base.BuildServices(context);
 
 
         context.Services.AddTransient<ITestService, TestService>();

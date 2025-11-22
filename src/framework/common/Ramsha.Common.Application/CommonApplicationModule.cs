@@ -6,17 +6,18 @@ namespace Ramsha.ApplicationAbstractions;
 
 public class CommonApplicationModule : RamshaModule
 {
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder
-        .DependsOn<CommonDomainModule>()
+        base.Register(context);
+        context.DependsOn<CommonDomainModule>()
         .DependsOn<LocalMessagingAbstractionsModule>();
     }
 
-    public override void OnConfiguring(ConfigureContext context)
+
+    public override void BuildServices(BuildServicesContext context)
     {
-        base.OnConfiguring(context);
+        base.BuildServices(context);
         context.Services.AddCommonApplicationServices();
     }
 }

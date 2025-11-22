@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Security;
 using Ramsha.UnitOfWork.Abstractions;
 
@@ -9,15 +10,36 @@ namespace Ramsha.Common.Domain;
 public class CommonDomainModule : RamshaModule
 {
 
-    public override void OnCreating(ModuleBuilder moduleBuilder)
+    public override void Register(RegisterContext context)
     {
-        base.OnCreating(moduleBuilder);
-        moduleBuilder.DependsOn<SecurityModule>();
+        base.Register(context);
+        context.DependsOn<SecurityModule>();
+
     }
 
-    public override void OnConfiguring(ConfigureContext context)
+
+
+
+    public override void Prepare(PrepareContext context)
     {
-        base.OnConfiguring(context);
+        base.Prepare(context);
+
+        context.Configure<TestDomainOptions>(options =>
+        {
+            options.Name = "domain";
+        });
+    }
+
+    public override void BuildServices(BuildServicesContext context)
+    {
+        base.BuildServices(context);
+
+
+        var testOptions = context.Services.ExecutePreparedOptions<TestDomainOptions>();
+
+
+
+
         context.Services.AddTransient<IConnectionStringResolver, DefaultConnectionStringResolver>();
 
         var config = context.Configuration;

@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRamshaIdentityDomainServices(this IServiceCollection services)
     {
-        var typesOptions = services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
+        var typesOptions = services.ExecutePreparedOptions<RamshaIdentityTypesOptions>();
 
         // register userManager
         var ramshaUserManagerType = typeof(RamshaIdentityUserManager<,,,,,,,>).MakeGenericType(typesOptions.UserType, typesOptions.RoleType, typesOptions.KeyType, typesOptions.UserRoleType, typesOptions.RoleClaimType, typesOptions.UserClaimType, typesOptions.UserLoginType, typesOptions.UserTokenType);

@@ -12,8 +12,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRamshaIdentityApplicationServices(this IServiceCollection services)
     {
-        var entityTypes = services.ExecutePreConfigured<RamshaIdentityTypesOptions>();
-        var contractsOptions = services.ExecutePreConfigured<RamshaIdentityContractsOptions>();
+        var entityTypes = services.ExecutePreparedOptions<RamshaIdentityTypesOptions>();
+        var contractsOptions = services.ExecutePreparedOptions<RamshaIdentityContractsOptions>();
 
         var userServiceImplementation = contractsOptions.ReplacedUserServiceType is not null ? contractsOptions.ReplacedUserServiceType : typeof(RamshaIdentityUserService<,,,,,,,,,,>).MakeGenericType(
             entityTypes.UserType,
