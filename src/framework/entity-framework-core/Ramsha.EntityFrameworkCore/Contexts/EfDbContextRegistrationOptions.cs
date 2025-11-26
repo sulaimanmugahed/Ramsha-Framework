@@ -16,5 +16,6 @@ public class EfDbContextRegistrationOptions : DbContextRegistrationOptionsBase, 
     public EfDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
         : base(originalDbContextType, services)
     {
+       
     }
 }

@@ -25,8 +25,11 @@ where TDbContext : RamshaEFDbContext<TDbContext>
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return base.SaveChangesAsync(cancellationToken);
+    }
 
-
+    protected virtual IEnumerable<IEFGlobalQueryFilterProvider<TDbContext>> GetBuiltInFilters()
+    {
+        yield return new SoftDeleteFilterProvider<TDbContext>();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -44,8 +47,17 @@ where TDbContext : RamshaEFDbContext<TDbContext>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        var providers = ServiceProvider.GetService<IEnumerable<IEFGlobalQueryFilterProvider<TDbContext>>>();
         var filterApplier = ServiceProvider.GetRequiredService<EFGlobalQueryFilterApplier<TDbContext>>();
-        filterApplier.ApplyFilters(modelBuilder, (TDbContext)this);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var entityClrType = entityType.ClrType;
+            var entityBuilder = modelBuilder.Entity(entityClrType);
+
+            filterApplier.ApplyFilters(providers.Concat(GetBuiltInFilters()), entityClrType, entityBuilder, (TDbContext)this);
+
+        }
 
         Options.Value.DefaultOnModelCreatingAction?.Invoke(this, modelBuilder);
         foreach (var onModelCreatingAction in Options.Value.OnModelCreatingActions.FirstOrDefault(x => x.Key == typeof(TDbContext)).Value ?? [])

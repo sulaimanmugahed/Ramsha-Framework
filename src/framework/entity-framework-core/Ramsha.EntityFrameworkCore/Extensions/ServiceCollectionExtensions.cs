@@ -38,10 +38,11 @@ public static class ServiceCollectionExtensions
         services.TryAddTransient(dbContextType, sp => sp.CreateInstanceWithPropInjection(dbContextType));
 
         services.AddTransient(dbContextInterfaceType, sp => sp.GetRequiredService(dbContextType));
-        services.TryAddTransient(typeof(IRamshaEFDbContext),sp => sp.GetRequiredService(dbContextType));
-        services.TryAddTransient(typeof(IEFDbContext),sp => sp.GetRequiredService(dbContextType));
+        services.TryAddTransient(typeof(IRamshaEFDbContext), sp => sp.GetRequiredService(dbContextType));
+        services.TryAddTransient(typeof(IEFDbContext), sp => sp.GetRequiredService(dbContextType));
 
         var options = new EfDbContextRegistrationOptions(dbContextType, services);
+
         optionsBuilder?.Invoke(options);
 
         var createMethod = typeof(RamshaDbContextOptionsFactory)

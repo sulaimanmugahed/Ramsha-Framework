@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Common.Domain;
-using Ramsha.LocalMessaging.Abstractions;
+using Ramsha.LocalMessaging;
 
 namespace Ramsha.ApplicationAbstractions;
 
@@ -11,7 +11,7 @@ public class CommonApplicationModule : RamshaModule
     {
         base.Register(context);
         context.DependsOn<CommonDomainModule>()
-        .DependsOn<LocalMessagingAbstractionsModule>();
+        .DependsOn<LocalMessagingModule>();
     }
 
 

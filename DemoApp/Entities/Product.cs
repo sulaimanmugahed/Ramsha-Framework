@@ -12,7 +12,7 @@ namespace DemoApp.Entities;
 
 public record ProductCreatedEvent(Product Product);
 
-public sealed class Product : AggregateRoot<Guid>, IPrice, IEntityCreation
+public sealed class Product : AggregateRoot<Guid>, IPrice, IEntityCreation, ISoftDelete
 {
     public string Name { get; set; }
 
@@ -21,6 +21,8 @@ public sealed class Product : AggregateRoot<Guid>, IPrice, IEntityCreation
     public Guid? CategoryId { get; set; }
     public Guid? CreatedBy { get; set; }
     public DateTime CreationDate { get; set; }
+    public Guid? DeletedBy { get; set; }
+    public DateTime? DeletionDate { get; set; }
 
     private Product(Guid id, string name, decimal price) : base(id)
     {

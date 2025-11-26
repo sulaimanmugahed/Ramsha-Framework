@@ -5,7 +5,12 @@ namespace Ramsha.UnitOfWork;
 
 public class UnitOfWorkModule : RamshaModule
 {
-    override public void BuildServices(BuildServicesContext context)
+    public override void Register(RegisterContext context)
+    {
+        base.Register(context);
+        context.DependsOn<UnitOfWorkAbstractionsModule>();
+    }
+    public override void BuildServices(BuildServicesContext context)
     {
         base.BuildServices(context);
         context.Services.AddTransient<IUnitOfWork, UnitOfWork>();

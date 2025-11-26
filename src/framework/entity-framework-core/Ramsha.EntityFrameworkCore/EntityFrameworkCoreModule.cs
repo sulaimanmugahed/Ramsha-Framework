@@ -22,8 +22,12 @@ public class EntityFrameworkCoreModule : RamshaModule
         context.Services.AddTransient<DomainEventToUnitOfWorkInterceptor>();
         context.Services.AddTransient<EntityCreationInterceptor>();
         context.Services.AddTransient<EntityModificationInterceptor>();
+        context.Services.AddTransient<SoftDeleteInterceptor>();
 
-
+        context.Services.Configure<GlobalQueryFilterOptions>(options =>
+        {
+            options.DefaultStates[typeof(ISoftDelete)] = new GlobalQueryFilterState(true);
+        });
 
 
         context.Services.Configure<RamshaDbContextOptions>(options =>
@@ -35,9 +39,9 @@ public class EntityFrameworkCoreModule : RamshaModule
                .AddInterceptors(
                 configurationContext.ServiceProvider.GetRequiredService<EntityCreationInterceptor>(),
                 configurationContext.ServiceProvider.GetRequiredService<EntityModificationInterceptor>(),
+                configurationContext.ServiceProvider.GetRequiredService<SoftDeleteInterceptor>(),
                 configurationContext.ServiceProvider.GetRequiredService<DomainEventToUnitOfWorkInterceptor>()
-
-                );
+                    );
            });
        });
 

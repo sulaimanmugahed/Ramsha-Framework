@@ -12,48 +12,29 @@ using Ramsha.UnitOfWork.Abstractions;
 
 namespace DemoApp.Controllers;
 
-public interface IFilter
+
+
+
+public class ProductsController(ProductManager productManager, IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
 {
-
-}
-
-
-public class ProductsController(ITestService testService, ProductManager productManager, IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
-{
-
-    [HttpGet(nameof(TestOut))]
-    public async Task<string> TestOut()
+    [HttpDelete("{id}")]
+    public async Task<RamshaResult> Delete(Guid id)
     {
-        return testService.Get();
+        return await productManager.Delete(id);
     }
 
+    [HttpGet("{id}")]
+    public async Task<RamshaResult<Product?>> Get(Guid id)
+    {
+        var enabled = GlobalQueryFilterManager.IsEnabled<ISoftDelete>();
+
+        return await UnitOfWork(() => repository.FindAsync(id));
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        List<Product> products = null;
-
-        if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
-        {
-            if (options.CurrentValue.Value)
-            {
-                products = await repository.GetListAsync();
-
-            }
-            else
-            {
-                var tes1 = dataFilter.IsEnabled<IPrice>();
-                using (dataFilter.Disable<IPrice>())
-                {
-                    var tes2 = dataFilter.IsEnabled<IPrice>();
-
-                    products = await repository.GetListAsync();
-                }
-                var test3 = dataFilter.IsEnabled<IPrice>();
-
-            }
-
-        }
+        var products = await UnitOfWork(() => repository.GetListAsync());
         return Ok(products);
     }
 

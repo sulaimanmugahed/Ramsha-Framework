@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\messaging\Ramsha.LocalMessaging\Ramsha.LocalMessaging.csproj" />
-    <ProjectReference Include="..\Ramsha.Common.Domain\Ramsha.Common.Domain.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+    <ProjectReference Include="..\Ramsha.EntityFrameworkCore\Ramsha.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

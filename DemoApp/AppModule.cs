@@ -27,6 +27,7 @@ using Ramsha.AspNetCore.Mvc;
 using Ramsha.Common.Domain;
 using Ramsha.Core.Modularity.Contexts;
 using Ramsha.EntityFrameworkCore;
+using Ramsha.EntityFrameworkCore.SqlServer;
 using Ramsha.Identity.Api;
 using Ramsha.Identity.Application;
 using Ramsha.Identity.AspNetCore;
@@ -43,7 +44,6 @@ namespace DemoApp;
 
 public class AppModule : RamshaModule
 {
-
     public override void Register(RegisterContext context)
     {
         base.Register(context);
@@ -52,6 +52,7 @@ public class AppModule : RamshaModule
         .DependsOn<IdentityApplicationModule>()
         .DependsOn<AccountApplicationModule>()
         .DependsOn<IdentityPersistenceModule>()
+        .DependsOn<EntityFrameworkCoreSqlServerModule>()
         .DependsOn<IdentityAspNetCoreModule>()
         .DependsOn<IdentityApiModule>()
         .DependsOn<AccountApiModule>();
@@ -93,18 +94,13 @@ public class AppModule : RamshaModule
 
 
 
-        context.Services.Configure<RamshaDbContextOptions>(options =>
-        {
-            options.Configure(configurationContext =>
-            {
-                configurationContext.UseSqlServer();
-            });
-        });
+
 
         context.Services.AddRamshaDbContext<AppDbContext>(option =>
         {
             option.AddDefaultRepositories(true)
-            .AddGlobalQueryFilterProvider<PriceFilterProvider>()
+               .AddGlobalQueryFilterProvider<PriceFilterProvider>()
+
              .AddRepository<Product, IProductRepository, ProductRepository>()
              //  .ReplaceDbContext<IIdentityDbContext>()
              ;
@@ -121,7 +117,7 @@ public class AppModule : RamshaModule
 
         context.Services.Configure<GlobalQueryFilterOptions>(options =>
        {
-           options.DefaultStates[typeof(IFilter)] = new GlobalQueryFilterState(true);
+           options.DefaultStates[typeof(IPrice)] = new GlobalQueryFilterState(true);
        });
 
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
@@ -180,25 +176,5 @@ public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOption
 public static class RamshaDbContextConfigurationContextExtensions
 {
 
-    public static DbContextOptionsBuilder UseSqlServer(
-         this RamshaDbContextConfigurationContext context,
-          Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null)
-    {
-        if (context.ExistingConnection != null)
-        {
-            return context.DbContextOptions.UseSqlServer(context.ExistingConnection, optionsBuilder =>
-            {
-                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                sqlServerOptionsAction?.Invoke(optionsBuilder);
-            });
-        }
-        else
-        {
-            return context.DbContextOptions.UseSqlServer(context.ConnectionString, optionsBuilder =>
-            {
-                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                sqlServerOptionsAction?.Invoke(optionsBuilder);
-            });
-        }
-    }
+
 }

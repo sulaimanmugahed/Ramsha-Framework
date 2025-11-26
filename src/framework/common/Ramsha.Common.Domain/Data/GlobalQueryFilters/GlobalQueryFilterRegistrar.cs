@@ -18,12 +18,15 @@ public abstract class GlobalQueryFilterRegistrar<TOptions>
 
     public void RegisterFilters()
     {
+       
+
         foreach (var filterProvider in Options.GlobalQueryFilterProviders)
         {
             Options.Services.AddSingleton(filterProvider);
             Options.Services.AddSingleton(
                 GetGlobalQueryProviderInterface(Options.OriginalDbContextType),
                 filterProvider);
+
         }
     }
 

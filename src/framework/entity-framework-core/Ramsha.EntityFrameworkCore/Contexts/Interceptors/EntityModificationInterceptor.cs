@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Ramsha.Common.Domain;
+using Ramsha.Security.Users;
 
 namespace Ramsha.EntityFrameworkCore;
 
-public class EntityModificationInterceptor : SaveChangesInterceptor
+public class EntityModificationInterceptor(ICurrentUser currentUser) : SaveChangesInterceptor
 {
     public async override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
@@ -22,7 +23,8 @@ public class EntityModificationInterceptor : SaveChangesInterceptor
 
         foreach (var entry in entries)
         {
-            entry.Entity.LastUpdateDate ??= DateTime.UtcNow;
+            entry.Entity.LastUpdateDate = DateTime.UtcNow;
+            entry.Entity.UpdatedBy = currentUser.Id;
         }
 
         return result;

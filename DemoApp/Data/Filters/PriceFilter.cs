@@ -25,3 +25,5 @@ public class PriceFilterProvider : EFGlobalQueryFilterProvider<AppDbContext, IPr
     }
 
 }
+
+
