@@ -38,8 +38,8 @@ public class IdentityAspNetCoreModule : RamshaModule
                .AddAuthentication(o =>
                {
                    o.DefaultScheme = IdentityConstants.ApplicationScheme;
-                   o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-               })
-               .AddIdentityCookies();
+                   o.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+               }).AddIdentityCookies();
+
     }
 }

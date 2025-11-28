@@ -26,15 +26,9 @@ public class AspNetCoreModule : RamshaModule
     {
         base.Prepare(context);
 
-        context.Configure<TestDomainOptions>(options =>
-    {
-        options.Name = "aspnetcore";
-    });
     }
     public override void BuildServices(BuildServicesContext context)
     {
-        var testOptions = context.Services.ExecutePreparedOptions<TestDomainOptions>();
-
         base.BuildServices(context);
         context.Services.AddHttpContextAccessor();
         context.Services.AddSingleton<IPrincipalAccessor, HttpPrincipalAccessor>();

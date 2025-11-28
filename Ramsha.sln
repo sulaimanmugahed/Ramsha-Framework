@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleAppDemo", "SimpleAppD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.EntityFrameworkCore.SqlServer", "src\framework\entity-framework-core\Ramsha.EntityFrameworkCore.SqlServer\Ramsha.EntityFrameworkCore.SqlServer.csproj", "{DC516306-339A-45DD-B1FD-2E1C44F2FFF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Authorization", "src\framework\security\Ramsha.Authorization\Ramsha.Authorization.csproj", "{334A6992-E038-4B82-BF71-355DF55C5FD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -415,6 +417,18 @@ Global
 		{DC516306-339A-45DD-B1FD-2E1C44F2FFF7}.Release|x64.Build.0 = Release|Any CPU
 		{DC516306-339A-45DD-B1FD-2E1C44F2FFF7}.Release|x86.ActiveCfg = Release|Any CPU
 		{DC516306-339A-45DD-B1FD-2E1C44F2FFF7}.Release|x86.Build.0 = Release|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Debug|x64.Build.0 = Debug|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Debug|x86.Build.0 = Debug|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Release|x64.ActiveCfg = Release|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Release|x64.Build.0 = Release|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Release|x86.ActiveCfg = Release|Any CPU
+		{334A6992-E038-4B82-BF71-355DF55C5FD9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -455,5 +469,6 @@ Global
 		{34203111-0280-4A04-A925-D17F7481A005} = {C8AF7CE9-6C40-4FD3-91AE-2CD8D4D52734}
 		{D25D3820-F7E3-45DB-B0C8-E2B28BB878F7} = {C8AF7CE9-6C40-4FD3-91AE-2CD8D4D52734}
 		{DC516306-339A-45DD-B1FD-2E1C44F2FFF7} = {71B26CA9-AFE7-F2E3-1AB1-CD956805BB92}
+		{334A6992-E038-4B82-BF71-355DF55C5FD9} = {7DBA3115-775D-CEFB-93FD-24A148510556}
 	EndGlobalSection
 EndGlobal

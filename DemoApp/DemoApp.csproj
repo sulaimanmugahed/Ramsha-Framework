@@ -18,6 +18,7 @@
     <ProjectReference Include="..\src\framework\entity-framework-core\Ramsha.EntityFrameworkCore.SqlServer\Ramsha.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\src\framework\messaging\Ramsha.LocalMessaging\Ramsha.LocalMessaging.csproj" />
     <ProjectReference Include="..\src\framework\Ramsha.Core\Ramsha.Core.csproj" />
+    <ProjectReference Include="..\src\framework\security\Ramsha.Authorization\Ramsha.Authorization.csproj" />
     <ProjectReference Include="..\src\modules\account\Ramsha.Account.Api\Ramsha.Account.Api.csproj" />
     <ProjectReference Include="..\src\modules\account\Ramsha.Account.Application\Ramsha.Account.Application.csproj" />
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Api\Ramsha.Identity.Api.csproj" />

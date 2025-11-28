@@ -24,6 +24,7 @@ using Ramsha.Account.Application;
 using Ramsha.Account.Contracts;
 using Ramsha.AspNetCore;
 using Ramsha.AspNetCore.Mvc;
+using Ramsha.Authorization;
 using Ramsha.Common.Domain;
 using Ramsha.Core.Modularity.Contexts;
 using Ramsha.EntityFrameworkCore;
@@ -49,6 +50,7 @@ public class AppModule : RamshaModule
         base.Register(context);
 
         context
+        .DependsOn<AuthorizationModule>()
         .DependsOn<IdentityApplicationModule>()
         .DependsOn<AccountApplicationModule>()
         .DependsOn<IdentityPersistenceModule>()
@@ -122,7 +124,6 @@ public class AppModule : RamshaModule
 
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
-
         context.Services.Configure<RamshaClaimsPrincipalFactoryOptions>(options =>
         {
             options.Transformers.Add<DemoClaimsTransformer>();
@@ -139,42 +140,3 @@ public class AppModule : RamshaModule
 }
 
 
-public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
-{
-    public BasicAuthHandler(
-        IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger,
-        UrlEncoder encoder,
-        ISystemClock clock)
-        : base(options, logger, encoder, clock)
-    { }
-
-    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
-    {
-        if (!Request.Headers.ContainsKey("Authorization"))
-            return Task.FromResult(AuthenticateResult.Fail("Missing Authorization Header"));
-
-        var authHeader = Request.Headers["Authorization"].ToString();
-        if (authHeader != "Bearer testtoken")
-            return Task.FromResult(AuthenticateResult.Fail("Invalid Token"));
-
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, "123"),
-            new Claim(ClaimTypes.Name, "demo-user")
-        };
-
-        var identity = new ClaimsIdentity(claims, Scheme.Name);
-        var principal = new ClaimsPrincipal(identity);
-        var ticket = new AuthenticationTicket(principal, Scheme.Name);
-
-        return Task.FromResult(AuthenticateResult.Success(ticket));
-    }
-}
-
-
-public static class RamshaDbContextConfigurationContextExtensions
-{
-
-
-}
