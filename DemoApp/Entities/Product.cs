@@ -19,9 +19,9 @@ public sealed class Product : AggregateRoot<Guid>, IPrice, IEntityCreation, ISof
     public decimal Price { get; set; }
 
     public Guid? CategoryId { get; set; }
-    public Guid? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public DateTime CreationDate { get; set; }
-    public Guid? DeletedBy { get; set; }
+    public string? DeletedBy { get; set; }
     public DateTime? DeletionDate { get; set; }
 
     private Product(Guid id, string name, decimal price) : base(id)

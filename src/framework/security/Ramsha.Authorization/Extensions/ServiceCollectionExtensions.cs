@@ -17,24 +17,33 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPermissionDefinitionStore, InMemoryPermissionDefinitionStore>();
         services.AddSingleton<IPermissionDefinitionContext, PermissionDefinitionContext>();
 
-        services.AddSingleton<IPermissionStore, InMemoryUserPermissionStore>();
+        services.AddSingleton<IPermissionStore, InMemoryPermissionStore>();
 
         services.AddSingleton<IPermissionChecker, PermissionChecker>();
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, RamshaAuthorizationPolicyProvider>();
 
+        services.AddSingleton<PermissionProviderResolversManager>();
 
-        var providerInterfaceType = typeof(IPermissionDefinitionProvider);
 
-        var providers = RamshaAssemblyHelpers.GetAssemblies(typeof(AuthorizationModule))
-   .SelectMany(a => a.GetTypes())
-   .Where(t => t.IsClass &&
-               !t.IsAbstract && typeof(IPermissionDefinitionProvider).IsAssignableFrom(t))
-   .ToList();
+        var permissionResolverInterfaceType = typeof(IPermissionProviderResolver);
 
-        foreach (var provider in providers)
+        var permissionResolvers = RamshaTypeHelpers.GetRamshaTypes<AuthorizationModule>(permissionResolverInterfaceType);
+        foreach (var resolver in permissionResolvers)
         {
-            services.AddTransient(providerInterfaceType, provider);
+            services.AddTransient(resolver);
+        }
+
+
+
+
+
+
+        var definitionProviderInterfaceType = typeof(IPermissionDefinitionProvider);
+        var definitionProviderTypes = RamshaTypeHelpers.GetRamshaTypes<AuthorizationModule>(definitionProviderInterfaceType);
+        foreach (var provider in definitionProviderTypes)
+        {
+            services.AddTransient(definitionProviderInterfaceType, provider);
         }
 
 

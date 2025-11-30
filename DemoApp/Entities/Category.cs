@@ -6,7 +6,7 @@ namespace DemoApp.Entities;
 public class Category : Entity<Guid>, IEntityCreation
 {
     public string Name { get; set; }
-    public Guid? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public DateTime CreationDate { get; set; }
     public Category(Guid id, string name)
     {

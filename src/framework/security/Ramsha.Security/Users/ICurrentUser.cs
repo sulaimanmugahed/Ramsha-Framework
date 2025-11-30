@@ -8,7 +8,7 @@ namespace Ramsha.Security.Users;
 
 public interface ICurrentUser
 {
-    Guid? Id { get; }
+    string? Id { get; }
     string? Username { get; }
     string? Email { get; }
     Claim? FindClaim(string claimType);

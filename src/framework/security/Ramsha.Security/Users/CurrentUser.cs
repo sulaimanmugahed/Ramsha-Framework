@@ -10,11 +10,11 @@ namespace Ramsha.Security.Users;
 
 public class CurrentUser(IPrincipalAccessor accessor) : ICurrentUser
 {
-    public Guid? Id => accessor.Principal.FindUserId();
+    public string? Id => accessor.Principal.FindUserId();
     public string? Username => accessor.Principal.FindUsername();
     public string? Email => accessor.Principal.FindEmail();
     public string[] GetRoles() => accessor.Principal.GetRoles();
-    public bool IsAuthenticated() => Id.HasValue;
+    public bool IsAuthenticated() => Id is not null;
     public bool IsInRole(string roleName)
     => accessor.Principal.HasRole(roleName);
     public Claim? FindClaim(string claimType)

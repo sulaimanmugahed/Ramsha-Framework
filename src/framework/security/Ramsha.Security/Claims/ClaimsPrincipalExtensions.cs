@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Ramsha;
 using Ramsha.Security.Claims;
 
 namespace System.Security.Principal;
@@ -63,23 +64,35 @@ public static class ClaimsPrincipalExtensions
     {
         return identity.FindFirst(RamshaClaimsTypes.Username)?.Value;
     }
-    public static Guid? FindUserId(this ClaimsPrincipal principal)
+
+    public static string? FindUserId(this ClaimsPrincipal principal)
     {
-        var userId = principal.FindFirst(RamshaClaimsTypes.UserId)?.Value;
-        if (!string.IsNullOrEmpty(userId) && Guid.TryParse(userId, out Guid id))
-        {
-            return id;
-        }
-        return null;
+        return principal.FindFirst(RamshaClaimsTypes.UserId)?.Value;
     }
 
-    public static Guid? FindUserId(this ClaimsIdentity identity)
+    public static TId? FindUserId<TId>(this ClaimsPrincipal principal)
+    where TId : IEquatable<TId>
+    {
+        var userId = principal.FindFirst(RamshaClaimsTypes.UserId)?.Value;
+        if (userId is not null)
+        {
+            return RamshaTypeHelpers.ConvertId<TId>(userId);
+        }
+
+        return default;
+    }
+
+    public static TId? FindUserId<TId>(this ClaimsIdentity identity)
+    where TId : IEquatable<TId>
+
     {
         var userId = identity.FindFirst(RamshaClaimsTypes.UserId)?.Value;
-        if (!string.IsNullOrEmpty(userId) && Guid.TryParse(userId, out Guid id))
+        if (userId is null)
         {
-            return id;
+            return default;
         }
-        return null;
+        return RamshaTypeHelpers.ConvertId<TId>(userId);
+
+
     }
 }

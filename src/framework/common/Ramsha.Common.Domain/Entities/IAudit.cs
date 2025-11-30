@@ -7,19 +7,19 @@ namespace Ramsha.Common.Domain;
 
 public interface ISoftDelete
 {
-    Guid? DeletedBy { get; set; }
+    string? DeletedBy { get; set; }
     DateTime? DeletionDate { get; set; }
 }
 
 public interface IEntityModification
 {
-    Guid? UpdatedBy { get; set; }
+    string? UpdatedBy { get; set; }
     DateTime? LastUpdateDate { get; set; }
 }
 
 public interface IEntityCreation
 {
-    Guid? CreatedBy { get; set; }
+    string? CreatedBy { get; set; }
     DateTime CreationDate { get; set; }
 
 }

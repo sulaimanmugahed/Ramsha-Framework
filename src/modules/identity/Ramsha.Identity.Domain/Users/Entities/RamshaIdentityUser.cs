@@ -238,10 +238,10 @@ where TId : IEquatable<TId>
     public virtual DateTimeOffset? LockoutEnd { get; set; }
     public virtual bool LockoutEnabled { get; set; }
     public virtual int AccessFailedCount { get; set; }
-    public Guid? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public DateTime CreationDate { get; set; }
-    public Guid? UpdatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
     public DateTime? LastUpdateDate { get; set; }
-    public Guid? DeletedBy { get; set; }
+    public string? DeletedBy { get; set; }
     public DateTime? DeletionDate { get; set; }
 }

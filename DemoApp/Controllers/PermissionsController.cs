@@ -27,9 +27,9 @@ public class PermissionsController(IPermissionStore store) : RamshaApiController
     }
 
     [HttpPost(nameof(Grant))]
-    public async Task Grant(string permissionName, string sourceKey, bool isGrant)
+    public async Task Grant(string permissionName,string providerName, string providerKey, bool isGrant)
     {
-        await store.GrantPermissionAsync(permissionName, sourceKey, isGrant);
+        await store.GrantPermissionAsync(permissionName,providerName, providerKey, isGrant);
     }
 
 

@@ -13,4 +13,10 @@ public class BuildServicesContext(IServiceCollection services)
     public IConfiguration Configuration => _config ??= Services.GetConfiguration();
     private IConfiguration? _config;
 
+    public void Configure<TOptions>(Action<TOptions> optionsAction)
+     where TOptions : class
+    {
+        Services.Configure(optionsAction);
+    }
+
 }

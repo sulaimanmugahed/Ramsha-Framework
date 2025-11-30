@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Ramsha.Authorization;
 
@@ -10,8 +11,10 @@ public class AuthorizationModule : RamshaModule
 
         context.Services.AddAuthorizationServices();
 
-
-
+        context.Configure<RamshaPermissionOptions>(options =>
+        {
+            options.PermissionResolvers.Add<UserPermissionProviderResolver>();
+        });
     }
 
 
