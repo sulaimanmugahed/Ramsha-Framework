@@ -7,8 +7,7 @@ using Ramsha.EntityFrameworkCore;
 
 namespace DemoApp.Data;
 
-public class ProductRepository(IDbContextProvider<AppDbContext> dbContextProvider
-) : EFCoreRepository<AppDbContext, Product, Guid>(dbContextProvider), IProductRepository
+public class ProductRepository : EFCoreRepository<AppDbContext, Product, Guid>, IProductRepository
 {
 
 }

@@ -5,29 +5,9 @@ public class InMemoryPermissionStore : IPermissionStore
     private readonly Dictionary<(string ProviderName, string ProviderKey), HashSet<string>> _permissions =
             new();
 
-    public Task GrantPermissionAsync(
-        string permissionName,
-        string providerName,
-        string providerKey,
-        bool isGrant)
-    {
-        var key = (providerName, providerKey);
 
-        if (!_permissions.TryGetValue(key, out var set))
-        {
-            set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            _permissions[key] = set;
-        }
 
-        if (isGrant)
-            set.Add(permissionName);
-        else
-            set.Remove(permissionName);
-
-        return Task.CompletedTask;
-    }
-
-    public Task<bool> HasPermissionAsync(
+    public Task<bool> IsAssignedAsync(
         string permissionName,
         string providerName,
         string providerKey)

@@ -6,7 +6,7 @@ using Ramsha.Common.Domain;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaIdentityUserToken<TId>:Entity
+public class RamshaIdentityUserToken<TId> : Entity
 where TId : IEquatable<TId>
 {
     public RamshaIdentityUserToken()
@@ -24,6 +24,11 @@ where TId : IEquatable<TId>
         LoginProvider = loginProvider;
         Name = name;
         Value = value;
+    }
+
+    public override object GetId()
+    {
+        return new { UserId, LoginProvider, Name };
     }
 
     public virtual TId UserId { get; set; } = default!;

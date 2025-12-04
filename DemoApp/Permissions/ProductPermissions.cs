@@ -6,17 +6,31 @@ using Ramsha.Authorization;
 
 namespace DemoApp.Permissions;
 
-public class ProductPermissions : IPermissionDefinitionProvider
+public static class ProductPermissions
+{
+    public const string GroupName = "products";
+
+    public static class Manage
+    {
+        public const string Default = $"{GroupName}:manage";
+
+        public const string Create = $"{GroupName}:manage:create";
+        public const string Update = $"{GroupName}:manage:update";
+        public const string Delete = $"{GroupName}:manage:delete";
+    }
+}
+
+public class ProductPermissionsDefinition : IPermissionDefinitionProvider
 {
     public void Define(IPermissionDefinitionContext context)
     {
-        context.Group("products", g =>
+        context.Group(ProductPermissions.GroupName, g =>
         {
-            g.Permission("manage").Children(c =>
+            g.Permission(ProductPermissions.Manage.Default).Children(c =>
             {
-                c.Add("create");
-                c.Add("update");
-                c.Add("delete");
+                c.Add(ProductPermissions.Manage.Create);
+                c.Add(ProductPermissions.Manage.Update);
+                c.Add(ProductPermissions.Manage.Delete);
             });
         });
     }

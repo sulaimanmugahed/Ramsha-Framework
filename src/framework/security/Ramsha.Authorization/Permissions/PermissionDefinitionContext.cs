@@ -2,11 +2,12 @@ namespace Ramsha.Authorization;
 
 public class PermissionDefinitionContext : IPermissionDefinitionContext
 {
-    private readonly IPermissionDefinitionStore _store;
+    private readonly Dictionary<string, PermissionGroupDefinition> _groups;
+    public Dictionary<string, PermissionGroupDefinition> Groups => _groups;
 
-    public PermissionDefinitionContext(IPermissionDefinitionStore store)
+    public PermissionDefinitionContext()
     {
-        _store = store;
+        _groups = new();
     }
 
     public void Group(string name, Action<GroupBuilder> configure)
@@ -16,7 +17,7 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
         var groupBuilder = new GroupBuilder(group);
         configure(groupBuilder);
 
-        _store.AddGroupAsync(group);
+        _groups.Add(name, group);
     }
 }
 

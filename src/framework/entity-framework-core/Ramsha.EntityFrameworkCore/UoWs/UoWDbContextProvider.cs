@@ -21,6 +21,7 @@ public class UoWDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
     protected readonly IConnectionStringResolver ConnectionStringResolver;
     protected readonly IEfDbContextTypeProvider DbContextTypeProvider;
 
+
     public UoWDbContextProvider(IUnitOfWorkManager uowManager, IConnectionStringResolver connectionStringResolver, IEfDbContextTypeProvider dbContextTypeProvider)
     {
         Logger = NullLogger<UoWDbContextProvider<TDbContext>>.Instance;

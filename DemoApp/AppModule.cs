@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DemoApp.Controllers;
 using DemoApp.Data;
 using DemoApp.Entities;
+using DemoApp.Permissions;
 using DemoModule;
 using LiteBus.Commands;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
@@ -39,6 +40,9 @@ using Ramsha.Identity.Persistence;
 using Ramsha.Identity.Shared;
 using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
+using Ramsha.Permissions.Api;
+using Ramsha.Permissions.Application;
+using Ramsha.Permissions.Persistence;
 using Ramsha.Security.Claims;
 
 namespace DemoApp;
@@ -53,11 +57,14 @@ public class AppModule : RamshaModule
         .DependsOn<AuthorizationModule>()
         .DependsOn<IdentityApplicationModule>()
         .DependsOn<AccountApplicationModule>()
+        .DependsOn<PermissionsApplicationModule>()
+        .DependsOn<PermissionsPersistenceModule>()
         .DependsOn<IdentityPersistenceModule>()
         .DependsOn<EntityFrameworkCoreSqlServerModule>()
         .DependsOn<IdentityAspNetCoreModule>()
         .DependsOn<IdentityApiModule>()
-        .DependsOn<AccountApiModule>();
+        .DependsOn<AccountApiModule>()
+        .DependsOn<PermissionsApiModule>();
 
     }
     public override void Prepare(PrepareContext context)
@@ -130,6 +137,11 @@ public class AppModule : RamshaModule
             options.Transformers.AddBefore<DemoClaimsTransformer, DemoClaimsTransformerBefore>();
             options.Transformers.AddAfter<DemoClaimsTransformer, DemoClaimsTransformerAfter>();
 
+        });
+
+        context.Configure<RamshaPermissionOptions>(options =>
+        {
+            options.DefinitionProviders.Add<ProductPermissionsDefinition>();
         });
     }
 

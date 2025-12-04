@@ -15,7 +15,7 @@ public class PermissionAuthorizationHandler(IPermissionChecker permissionChecker
         PermissionAuthorizationRequirement requirement)
     {
         if (context.User.Identity?.IsAuthenticated == true
-            && await permissionChecker.HasPermissionAsync(context.User, requirement.Permission))
+            && await permissionChecker.IsAssignedAsync(context.User, requirement.Permission))
         {
             context.Succeed(requirement);
         }

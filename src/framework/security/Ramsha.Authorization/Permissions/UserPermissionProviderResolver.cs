@@ -18,7 +18,7 @@ public class UserPermissionProviderResolver(IPermissionStore store) : IPermissio
             return PermissionStatus.None;
         }
 
-        var result = await store.HasPermissionAsync(context.Permission.Name, GetProviderName(), userId);
+        var result = await store.IsAssignedAsync(context.Permission.Name, GetProviderName(), userId);
         return result ? PermissionStatus.Allow : PermissionStatus.None;
     }
 }

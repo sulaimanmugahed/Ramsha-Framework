@@ -8,7 +8,7 @@ using Ramsha.Common.Domain;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaIdentityUserLogin<TId>:Entity
+public class RamshaIdentityUserLogin<TId> : Entity
  where TId : IEquatable<TId>
 {
     public RamshaIdentityUserLogin()
@@ -27,6 +27,11 @@ public class RamshaIdentityUserLogin<TId>:Entity
         LoginProvider = loginProvider;
         ProviderKey = providerKey;
         ProviderDisplayName = providerDisplayName;
+    }
+
+    public override object GetId()
+    {
+        return new { LoginProvider, ProviderKey };
     }
 
     public virtual string LoginProvider { get; set; }

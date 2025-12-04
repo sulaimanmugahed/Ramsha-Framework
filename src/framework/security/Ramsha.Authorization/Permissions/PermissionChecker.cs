@@ -8,19 +8,19 @@ public class PermissionChecker(
         IPermissionDefinitionStore definitionStore) : IPermissionChecker
 {
 
-    public Task<bool> HasPermissionAsync(string name)
+    public Task<bool> IsAssignedAsync(string name)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> HasPermissionAsync(ClaimsPrincipal? claimsPrincipal, string permissionName)
+    public async Task<bool> IsAssignedAsync(ClaimsPrincipal? claimsPrincipal, string permissionName)
     {
         var userId = claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId))
             return false;
 
 
-        var permission = await definitionStore.GetAsync(permissionName);
+        var permission = await definitionStore.GetPermissionAsync(permissionName);
         if (permission is null)
             return false;
 

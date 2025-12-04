@@ -1,106 +1,100 @@
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 
 namespace Ramsha.Authorization;
 
 public class InMemoryPermissionDefinitionStore : IPermissionDefinitionStore
 {
-    private readonly ConcurrentDictionary<string, PermissionGroupDefinition> _groups =
-        new(StringComparer.OrdinalIgnoreCase);
+    private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyGroupDefinitions;
+    private IDictionary<string, PermissionGroupDefinition> GroupDefinitions => _lazyGroupDefinitions.Value;
+    private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
+    private IDictionary<string, PermissionDefinition> PermissionsDefinitions => _lazyPermissionDefinitions.Value;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly RamshaPermissionOptions _options;
 
-    public Task AddGroupAsync(PermissionGroupDefinition group)
+
+    public InMemoryPermissionDefinitionStore(
+        IServiceProvider serviceProvider
+    , IOptions<RamshaPermissionOptions> options)
     {
-        _groups[group.Name] = DeepCloneGroup(group);
-        return Task.CompletedTask;
+        _options = options.Value;
+        _serviceProvider = serviceProvider;
+        _lazyGroupDefinitions = new(CreateGroups, true);
+        _lazyPermissionDefinitions = new(CreatePermission, true);
     }
 
-    public Task AddPermissionAsync(string groupName, PermissionDefinition permission)
+    private Dictionary<string, PermissionGroupDefinition> CreateGroups()
     {
-        if (_groups.TryGetValue(groupName, out var group))
+        using var scope = _serviceProvider.CreateScope();
+        var context = new PermissionDefinitionContext();
+
+        var providers = _options
+        .DefinitionProviders
+        .Select(dp => scope.ServiceProvider.GetRequiredService(dp) as IPermissionDefinitionProvider)
+        .ToList();
+
+        foreach (var provider in providers)
+            provider?.Define(context);
+
+        return context.Groups;
+    }
+
+
+    private Dictionary<string, PermissionDefinition> CreatePermission()
+    {
+        var permissions = new Dictionary<string, PermissionDefinition>();
+        foreach (var group in GroupDefinitions.Values)
         {
-            if (!group.Permissions.Any(p => p.Name.Equals(permission.Name, StringComparison.OrdinalIgnoreCase)))
+            foreach (var permission in group.Permissions)
             {
-                group.Permissions.Add(DeepClonePermission(permission));
+                AddPermissionRecurve(permission, permissions);
             }
         }
 
-        return Task.CompletedTask;
+        return permissions;
+    }
+
+    private void AddPermissionRecurve(PermissionDefinition permission, Dictionary<string, PermissionDefinition> permissions)
+    {
+        var name = permission.Name;
+        if (permissions.ContainsKey(name))
+        {
+            throw new Exception("duplicate permission");
+        }
+
+        permissions[name] = permission;
+
+        foreach (var child in permission.Children)
+        {
+            AddPermissionRecurve(child, permissions);
+        }
     }
 
     public Task<PermissionGroupDefinition?> GetGroupAsync(string groupName)
     {
-        _groups.TryGetValue(groupName, out var group);
-        return Task.FromResult(group is null ? null : DeepCloneGroup(group));
+        GroupDefinitions.TryGetValue(groupName, out var group);
+        return Task.FromResult(group);
     }
 
     public Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
     {
-        var list = _groups.Values
-            .Select(DeepCloneGroup)
-            .ToList()
-            .AsReadOnly();
-
-        return Task.FromResult((IReadOnlyList<PermissionGroupDefinition>)list);
+        return Task.FromResult<IReadOnlyList<PermissionGroupDefinition>>(GroupDefinitions.Values.ToImmutableArray());
     }
 
-    public Task<IReadOnlyList<PermissionDefinition>> GetAllPermissionsAsync()
+    public Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
-        var all = _groups.Values
-            .SelectMany(g => g.Permissions)
-            .Select(DeepClonePermission)
-            .ToList()
-            .AsReadOnly();
-
-        return Task.FromResult((IReadOnlyList<PermissionDefinition>)all);
+        return Task.FromResult<IReadOnlyList<PermissionDefinition>>(PermissionsDefinitions.Values.ToImmutableArray());
     }
 
-
-
-    private PermissionGroupDefinition DeepCloneGroup(PermissionGroupDefinition source)
+    public Task<PermissionDefinition?> GetPermissionAsync(string name)
     {
-        return new PermissionGroupDefinition
-        {
-            Name = source.Name,
-            Permissions = source.Permissions.Select(DeepClonePermission).ToList()
-        };
+        PermissionsDefinitions.TryGetValue(name, out var permission);
+        return Task.FromResult(permission);
     }
 
-    private PermissionDefinition DeepClonePermission(PermissionDefinition source)
-    {
-        return new PermissionDefinition
-        {
-            Name = source.Name,
-            Description = source.Description,
-            Children = source.Children.Select(DeepClonePermission).ToList()
-        };
-    }
-
-    public Task<PermissionDefinition?> GetAsync(string name)
-    {
-        foreach (var group in _groups.Values)
-        {
-            var found = FindPermission(group.Permissions, name);
-            if (found != null)
-                return Task.FromResult<PermissionDefinition?>(DeepClonePermission(found));
-        }
-
-        return Task.FromResult<PermissionDefinition?>(null);
-    }
-
-    private PermissionDefinition? FindPermission(IEnumerable<PermissionDefinition> list, string name)
-    {
-        foreach (var p in list)
-        {
-            if (p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                return p;
-
-            var child = FindPermission(p.Children, name);
-            if (child != null)
-                return child;
-        }
-
-        return null;
-    }
 }
 
 

@@ -33,7 +33,7 @@ public class ProductManager(IProductRepository repository)
     {
         return await UnitOfWork(async () =>
         {
-            var product = await repository.CreateAsync(Product.Create(Guid.NewGuid(), name, price));
+            var product = await repository.AddAsync(Product.Create(Guid.NewGuid(), name, price));
             if (product is null)
             {
                 return RamshaResult<string>.Failure();

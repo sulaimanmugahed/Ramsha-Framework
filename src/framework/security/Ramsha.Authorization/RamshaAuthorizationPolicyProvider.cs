@@ -19,7 +19,7 @@ public class RamshaAuthorizationPolicyProvider(IOptions<AuthorizationOptions> op
             return policy;
         }
 
-        var permission = await definitionStore.GetAsync(policyName);
+        var permission = await definitionStore.GetPermissionAsync(policyName);
 
         if (permission is not null)
         {

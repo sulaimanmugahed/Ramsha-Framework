@@ -76,7 +76,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 
         try
         {
-            var result = await userRepository.CreateAsync(user);
+            var result = await userRepository.AddAsync(user);
 
             if (!result.Equals(default(TId)))
             {

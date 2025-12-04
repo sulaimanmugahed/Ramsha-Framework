@@ -1,22 +1,36 @@
+using System.Diagnostics;
+
 namespace Ramsha.Authorization;
 
-public class PermissionDefinitionManager
+public interface IPermissionDefinitionManager
 {
-    private readonly IEnumerable<IPermissionDefinitionProvider> _providers;
-    private readonly IPermissionDefinitionContext _context;
+    public Task<PermissionDefinition?> GetPermissionAsync(string permissionName);
+    public Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync();
 
-    public PermissionDefinitionManager(
-        IEnumerable<IPermissionDefinitionProvider> providers,
-        IPermissionDefinitionContext context)
+    public Task<PermissionGroupDefinition?> GetGroupAsync(string groupName);
+    public Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync();
+
+}
+public class PermissionDefinitionManager(IPermissionDefinitionStore memoryDefinitions) : IPermissionDefinitionManager
+{
+    public async Task<PermissionDefinition?> GetPermissionAsync(string permissionName)
     {
-        _providers = providers;
-        _context = context;
+        return await memoryDefinitions.GetPermissionAsync(permissionName);
     }
 
-    public void Initialize()
+    public async Task<PermissionGroupDefinition?> GetGroupAsync(string groupName)
     {
-        foreach (var provider in _providers)
-            provider.Define(_context);
+        return await memoryDefinitions.GetGroupAsync(groupName);
+    }
+
+    public async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
+    {
+        return await memoryDefinitions.GetGroupsAsync();
+    }
+
+    public async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
+    {
+        return await memoryDefinitions.GetPermissionsAsync();
     }
 }
 

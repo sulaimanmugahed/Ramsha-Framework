@@ -25,6 +25,9 @@
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Application\Ramsha.Identity.Application.csproj" />
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.AspNetCore\Ramsha.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity.Persistence\Ramsha.Identity.Persistence.csproj" />
+    <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions.Api\Ramsha.Permissions.Api.csproj" />
+    <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions.Application\Ramsha.Permissions.Application.csproj" />
+    <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions.Persistence\Ramsha.Permissions.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,7 +18,7 @@ where TId : IEquatable<TId>
 
 public interface IEntity
 {
-
+    object GetId();
 }
 
 public interface IEntity<TId> : IEntity, IHasId<TId>
@@ -27,9 +27,9 @@ where TId : IEquatable<TId>
 {
 }
 
-public class Entity : IEntity
+public abstract class Entity : IEntity
 {
-
+    public abstract object GetId();
 }
 
 public abstract class Entity<TId> : IEntity<TId>

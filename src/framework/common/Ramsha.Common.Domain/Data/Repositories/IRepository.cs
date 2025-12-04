@@ -13,7 +13,7 @@ where TEntity : IEntity
     Task<int> GetCountAsync();
     Task<int> GetCountAsync(Expression<Func<TEntity, bool>> criteria);
     Task DeleteAsync(TEntity entity);
-    Task<TEntity?> CreateAsync(TEntity entity);
+    Task<TEntity?> AddAsync(TEntity entity);
     Task<List<TEntity>> GetListAsync();
     Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> criteria, params Expression<Func<TEntity, object>>[] includes);
     Task<List<TEntity>> GetListAsync(params Expression<Func<TEntity, object>>[] includes);

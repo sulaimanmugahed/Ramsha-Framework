@@ -31,7 +31,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>
             throw new ArgumentNullException(nameof(role));
         try
         {
-            var result = await roleRepository.CreateAsync(role);
+            var result = await roleRepository.AddAsync(role);
 
             return result is not null ? IdentityResult.Success : IdentityResult.Failed();
         }

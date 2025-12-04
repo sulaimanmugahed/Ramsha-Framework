@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\common\Ramsha.Common.Application\Ramsha.Common.Application.csproj" />
+    <ProjectReference Include="..\Ramsha.Permissions.Contracts\Ramsha.Permissions.Contracts.csproj" />
+    <ProjectReference Include="..\Ramsha.Permissions.Domain\Ramsha.Permissions.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

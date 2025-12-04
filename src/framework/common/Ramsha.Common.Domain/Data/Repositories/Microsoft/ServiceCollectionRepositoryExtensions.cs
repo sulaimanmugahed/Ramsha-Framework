@@ -1,4 +1,5 @@
 
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ramsha.Common.Domain;
 
@@ -20,7 +21,7 @@ public static class ServiceCollectionRepositoryExtensions
     Type repositoryImplementation
 )
     {
-        services.AddTransient(repositoryInterface, repositoryImplementation);
+        services.AddTransient(repositoryInterface, p => p.CreateInstanceWithPropInjection(repositoryImplementation));
         return services;
     }
     public static IServiceCollection RegisterDefaultRepository(
@@ -55,7 +56,7 @@ public static class ServiceCollectionRepositoryExtensions
         Type implementationType,
         bool replaceExisting)
     {
-        var descriptor = ServiceDescriptor.Transient(serviceType, implementationType);
+        var descriptor = ServiceDescriptor.Transient(serviceType, p => p.CreateInstanceWithPropInjection(implementationType));
 
         if (replaceExisting)
         {

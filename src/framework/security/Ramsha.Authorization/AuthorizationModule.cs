@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Ramsha.Authorization;
@@ -18,12 +20,9 @@ public class AuthorizationModule : RamshaModule
     }
 
 
-    public override void OnInit(InitContext context)
+    public override async Task OnInitAsync(InitContext context)
     {
         base.OnInit(context);
-
-
-        var manager = context.ServiceProvider.GetRequiredService<PermissionDefinitionManager>();
-        manager.Initialize();
+        _ = context.ServiceProvider.GetRequiredService<IPermissionDefinitionStore>();
     }
 }

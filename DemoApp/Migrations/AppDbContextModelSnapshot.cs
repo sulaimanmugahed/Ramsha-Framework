@@ -286,6 +286,28 @@ namespace DemoApp.Migrations
                     b.ToTable("RamshaIdentityUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Ramsha.Permissions.Domain.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions", (string)null);
+                });
+
             modelBuilder.Entity("DemoApp.Entities.Product", b =>
                 {
                     b.HasOne("DemoApp.Entities.Category", null)

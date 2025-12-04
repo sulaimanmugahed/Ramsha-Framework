@@ -7,7 +7,7 @@ using Ramsha.Common.Domain;
 
 namespace Ramsha.Identity.Domain;
 
-public class RamshaIdentityUserRole<TId>:Entity
+public class RamshaIdentityUserRole<TId> : Entity
  where TId : IEquatable<TId>
 {
     public RamshaIdentityUserRole()
@@ -22,4 +22,9 @@ public class RamshaIdentityUserRole<TId>:Entity
 
     public virtual TId UserId { get; set; }
     public virtual TId RoleId { get; set; }
+
+    public override object GetId()
+    {
+        return new { UserId, RoleId };
+    }
 }

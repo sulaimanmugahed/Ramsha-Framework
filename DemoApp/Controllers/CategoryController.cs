@@ -29,7 +29,7 @@ public class CategoriesController(IRepository<Product> productRepo, IRepository<
     {
         if (UnitOfWorkManager.TryBeginReserved(Ramsha.UnitOfWork.UnitOfWork.UnitOfWorkReservationName, new UnitOfWorkOptions()))
         {
-            await categoryRepo.CreateAsync(new Category(Guid.NewGuid(), name));
+            await categoryRepo.AddAsync(new Category(Guid.NewGuid(), name));
         }
         return Ok();
     }
