@@ -1,10 +1,10 @@
 namespace Ramsha.Authorization;
 
-public class GroupBuilder
+public class PermissionGroupBuilder
 {
     private readonly PermissionGroupDefinition _group;
 
-    public GroupBuilder(PermissionGroupDefinition group)
+    public PermissionGroupBuilder(PermissionGroupDefinition group)
     {
         _group = group;
     }

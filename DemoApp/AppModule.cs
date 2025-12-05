@@ -9,6 +9,7 @@ using DemoApp.Controllers;
 using DemoApp.Data;
 using DemoApp.Entities;
 using DemoApp.Permissions;
+using DemoApp.Settings;
 using DemoModule;
 using LiteBus.Commands;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
@@ -44,6 +45,7 @@ using Ramsha.Permissions.Api;
 using Ramsha.Permissions.Application;
 using Ramsha.Permissions.Persistence;
 using Ramsha.Security.Claims;
+using Ramsha.Settings;
 
 namespace DemoApp;
 
@@ -54,6 +56,7 @@ public class AppModule : RamshaModule
         base.Register(context);
 
         context
+        .DependsOn<SettingsModule>()
         .DependsOn<AuthorizationModule>()
         .DependsOn<IdentityApplicationModule>()
         .DependsOn<AccountApplicationModule>()
@@ -139,10 +142,16 @@ public class AppModule : RamshaModule
 
         });
 
-        context.Configure<RamshaPermissionOptions>(options =>
+        context.Services.Configure<RamshaPermissionOptions>(options =>
         {
             options.DefinitionProviders.Add<ProductPermissionsDefinition>();
         });
+
+        context.Services.Configure<RamshaSettingsOptions>(options =>
+        {
+            options.DefinitionProviders.Add<ProductSettingDefinitions>();
+        });
+
     }
 
     public override void OnInit(InitContext context)

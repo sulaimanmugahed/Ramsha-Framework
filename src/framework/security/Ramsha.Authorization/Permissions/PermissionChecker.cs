@@ -29,7 +29,7 @@ public class PermissionChecker(
         var context = new PermissionResolveContext(permission, claimsPrincipal);
         foreach (var provider in providerManager.PermissionResolvers)
         {
-            if (ShouldSkipProvider(context.Permission.Providers, provider.GetProviderName()))
+            if (ShouldSkipResolver(context.Permission.Providers, provider.GetProviderName()))
             {
                 continue;
             }
@@ -49,9 +49,9 @@ public class PermissionChecker(
         return allowed;
     }
 
-    private bool ShouldSkipProvider(List<string> permissionAllowedProviders, string providerName)
+    private bool ShouldSkipResolver(List<string> permissionAllowedProviders, string resolverProviderName)
     => permissionAllowedProviders.Any() &&
-                !permissionAllowedProviders.Contains(providerName);
+                !permissionAllowedProviders.Contains(resolverProviderName);
 
 
 

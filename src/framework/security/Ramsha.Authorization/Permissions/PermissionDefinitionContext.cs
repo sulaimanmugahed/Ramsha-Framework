@@ -10,11 +10,11 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
         _groups = new();
     }
 
-    public void Group(string name, Action<GroupBuilder> configure)
+    public void Group(string name, Action<PermissionGroupBuilder> configure)
     {
         var group = new PermissionGroupDefinition { Name = name };
 
-        var groupBuilder = new GroupBuilder(group);
+        var groupBuilder = new PermissionGroupBuilder(group);
         configure(groupBuilder);
 
         _groups.Add(name, group);
