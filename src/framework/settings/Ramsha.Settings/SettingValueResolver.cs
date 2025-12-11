@@ -5,7 +5,7 @@ namespace Ramsha.Settings;
 public abstract class SettingValueResolver : ISettingValueResolver
 {
     public abstract string GetProviderName();
-    public abstract Task<T?> GetAsync<T>(SettingDefinition def);
+    public abstract Task<T?> ResolveAsync<T>(SettingDefinition def);
 
 
     protected virtual T? Deserialize<T>(string raw, Type originalValueType)

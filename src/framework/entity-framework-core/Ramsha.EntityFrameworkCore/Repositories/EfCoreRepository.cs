@@ -178,6 +178,15 @@ where TEntity : class, IEntity
     return await context.Set<TEntity>().Where(criteria).CountAsync();
 });
     }
+
+    public async Task DeleteRangeAsync(IEnumerable<TEntity> entities)
+    {
+        await UnitOfWork(async () =>
+ {
+     var context = await GetDbContextAsync();
+     context.RemoveRange(entities);
+ });
+    }
 }
 
 
@@ -214,15 +223,15 @@ where TEntity : class, IEntity<TId>
     {
         return await UnitOfWork(async () =>
 {
-   var context = await GetDbContextAsync();
-   var entity = await context.Set<TEntity>().FindAsync(id);
-   if (entity is null)
-   {
-       return false;
-   }
+    var context = await GetDbContextAsync();
+    var entity = await context.Set<TEntity>().FindAsync(id);
+    if (entity is null)
+    {
+        return false;
+    }
 
-   context.Remove(entity);
-   return true;
+    context.Remove(entity);
+    return true;
 });
     }
 
@@ -230,9 +239,9 @@ where TEntity : class, IEntity<TId>
     {
         return await UnitOfWork(async () =>
 {
-   var context = await GetDbContextAsync();
-   var existEntity = await context.Set<TEntity>().FindAsync(id);
-   return existEntity is not null;
+    var context = await GetDbContextAsync();
+    var existEntity = await context.Set<TEntity>().FindAsync(id);
+    return existEntity is not null;
 });
     }
 }

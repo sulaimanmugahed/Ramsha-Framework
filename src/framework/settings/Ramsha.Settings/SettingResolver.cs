@@ -4,7 +4,7 @@ public class SettingResolver(
     ISettingDefinitionStore definitionStore,
     ISettingValueResolverManager settingValueResolver) : ISettingResolver
 {
-    public async Task<T?> GetAsync<T>(string name)
+    public async Task<T?> ResolveAsync<T>(string name)
     {
         var setting = await definitionStore.FindAsync(name);
         if (setting is null)
@@ -26,7 +26,7 @@ public class SettingResolver(
             {
                 continue;
             }
-            var value = await resolver.GetAsync<T>(setting);
+            var value = await resolver.ResolveAsync<T>(setting);
             if (value != null)
             {
                 return value;

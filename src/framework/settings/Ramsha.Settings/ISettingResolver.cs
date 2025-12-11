@@ -2,5 +2,5 @@ namespace Ramsha.Settings;
 
 public interface ISettingResolver
 {
-    Task<T?> GetAsync<T>(string name);
+    Task<T?> ResolveAsync<T>(string name);
 }

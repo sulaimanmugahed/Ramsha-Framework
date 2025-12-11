@@ -11,6 +11,7 @@ using Ramsha.EntityFrameworkCore;
 using Ramsha.Identity.Domain;
 using Ramsha.Identity.Persistence;
 using Ramsha.Permissions.Persistence;
+using Ramsha.SettingsManagement.Persistence;
 
 namespace DemoApp;
 
@@ -29,6 +30,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 
         modelBuilder.ConfigureIdentity<AppIdentityUser>();
         modelBuilder.ConfigurePermissions();
+        modelBuilder.ConfigureSettingsManagement();
+
 
         modelBuilder.Entity<Category>(e =>
         {

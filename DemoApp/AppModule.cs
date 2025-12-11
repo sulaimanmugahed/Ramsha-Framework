@@ -46,6 +46,9 @@ using Ramsha.Permissions.Application;
 using Ramsha.Permissions.Persistence;
 using Ramsha.Security.Claims;
 using Ramsha.Settings;
+using Ramsha.SettingsManagement.Api;
+using Ramsha.SettingsManagement.Application;
+using Ramsha.SettingsManagement.Persistence;
 
 namespace DemoApp;
 
@@ -56,18 +59,20 @@ public class AppModule : RamshaModule
         base.Register(context);
 
         context
-        .DependsOn<SettingsModule>()
-        .DependsOn<AuthorizationModule>()
         .DependsOn<IdentityApplicationModule>()
         .DependsOn<AccountApplicationModule>()
         .DependsOn<PermissionsApplicationModule>()
+        .DependsOn<SettingsManagementApplicationModule>()
         .DependsOn<PermissionsPersistenceModule>()
         .DependsOn<IdentityPersistenceModule>()
+        .DependsOn<SettingsManagementPersistenceModule>()
         .DependsOn<EntityFrameworkCoreSqlServerModule>()
         .DependsOn<IdentityAspNetCoreModule>()
         .DependsOn<IdentityApiModule>()
         .DependsOn<AccountApiModule>()
-        .DependsOn<PermissionsApiModule>();
+        .DependsOn<PermissionsApiModule>()
+        .DependsOn<SettingsManagementApiModule>();
+
 
     }
     public override void Prepare(PrepareContext context)

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Security;
+using Ramsha.Settings;
 using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.Common.Domain;
@@ -13,7 +14,9 @@ public class CommonDomainModule : RamshaModule
     public override void Register(RegisterContext context)
     {
         base.Register(context);
-        context.DependsOn<SecurityModule>();
+        context
+        .DependsOn<SecurityModule>()
+        .DependsOn<SettingsModule>();
 
     }
 

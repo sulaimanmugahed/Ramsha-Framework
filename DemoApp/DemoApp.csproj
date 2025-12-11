@@ -29,6 +29,10 @@
     <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions.Api\Ramsha.Permissions.Api.csproj" />
     <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions.Application\Ramsha.Permissions.Application.csproj" />
     <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions.Persistence\Ramsha.Permissions.Persistence.csproj" />
+
+    <ProjectReference Include="..\src\modules\settings-management\Ramsha.SettingsManagement.Api\Ramsha.SettingsManagement.Api.csproj" />
+    <ProjectReference Include="..\src\modules\settings-management\Ramsha.SettingsManagement.Application\Ramsha.SettingsManagement.Application.csproj" />
+    <ProjectReference Include="..\src\modules\settings-management\Ramsha.SettingsManagement.Persistence\Ramsha.SettingsManagement.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -55,5 +56,10 @@ public class InMemorySettingDefinitionStore : ISettingDefinitionStore
     public async Task<SettingDefinition?> FindAsync(string name)
     {
         return SettingDefinitions.TryGetValue(name, out var def) ? def : null;
+    }
+
+    public Task<IReadOnlyList<SettingDefinition>> GetAllAsync()
+    {
+        return Task.FromResult<IReadOnlyList<SettingDefinition>>(SettingDefinitions.Values.ToImmutableArray());
     }
 }

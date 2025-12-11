@@ -13,8 +13,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ISettingDefinitionStore>(p => p.GetRequiredService<InMemorySettingDefinitionStore>());
 
 
-        services.AddSingleton<InMemorySettingStore>();
-        services.TryAddTransient<ISettingStore>(p => p.GetRequiredService<InMemorySettingStore>());
+        services.AddSingleton<NoneSettingStore>();
+        services.TryAddTransient<ISettingStore>(p => p.GetRequiredService<NoneSettingStore>());
 
         services.AddTransient<ISettingResolver, SettingResolver>();
 

@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\src\framework\aspnetcore\Ramsha.AspNetCore\Ramsha.AspNetCore.csproj" />
     <ProjectReference Include="..\src\framework\Ramsha.Core\Ramsha.Core.csproj" />
+
   </ItemGroup>
 
 </Project>

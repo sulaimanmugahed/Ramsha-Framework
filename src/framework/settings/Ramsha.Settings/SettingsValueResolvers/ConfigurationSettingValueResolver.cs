@@ -8,7 +8,7 @@ namespace Ramsha.Settings;
 
 public class ConfigurationSettingValueResolver(IConfiguration configuration) : ISettingValueResolver
 {
-    public Task<T?> GetAsync<T>(SettingDefinition def)
+    public Task<T?> ResolveAsync<T>(SettingDefinition def)
     {
         var section = def.GroupName is not null ? configuration.GetSection(def.GroupName).GetSection(def.Name) : configuration.GetSection(def.Name);
         return Task.FromResult(section.Get<T>());

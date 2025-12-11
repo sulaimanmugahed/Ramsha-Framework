@@ -9,6 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\infrastructure\Ramsha.UnitOfWork.Abstractions\Ramsha.UnitOfWork.Abstractions.csproj" />
     <ProjectReference Include="..\..\security\Ramsha.Security\Ramsha.Security.csproj" />
+      <ProjectReference Include="..\..\..\framework\settings\Ramsha.Settings\Ramsha.Settings.csproj" />
+
   </ItemGroup>
 
 </Project>
