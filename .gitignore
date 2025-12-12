@@ -366,3 +366,6 @@ FodyWeavers.xsd
 packages/
 
 src-packages/
+
+dotnet-templates/container/mtr/content
+dotnet-templates/templates-packages
