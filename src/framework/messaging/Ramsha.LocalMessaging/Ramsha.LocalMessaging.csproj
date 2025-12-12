@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+ <Import Project="..\..\..\..\common.props" />
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiteBus" Version="4.0.0" />
-    <PackageReference Include="LiteBus.Commands" Version="4.0.0" />
-    <PackageReference Include="LiteBus.Events" Version="4.0.0" />
-    <PackageReference Include="LiteBus.Extensions.Microsoft.DependencyInjection" Version="4.0.0" />
-    <PackageReference Include="LiteBus.Queries" Version="4.0.0" />
+    <PackageReference Include="LiteBus"  />
+    <PackageReference Include="LiteBus.Commands"  />
+    <PackageReference Include="LiteBus.Events"  />
+    <PackageReference Include="LiteBus.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="LiteBus.Queries" />
 
   </ItemGroup>
 

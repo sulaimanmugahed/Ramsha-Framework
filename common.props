@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SolutionDir>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))</SolutionDir>
+    <Version>9.2025.12.1</Version>
+
+    <Authors>Sulaiman Mugahed</Authors>
+    <Product>Ramsha Framework</Product>
+    <Description>Modular extensible framework built on top of ASP.NET Core.</Description>
+    <PackageTags>aspnetcore ramsha framework web api mvc csharp webapp</PackageTags>
+
+    <PackageId>$(MSBuildProjectName)</PackageId>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sulaimanmugahed/Ramsha-Framework/</RepositoryUrl>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+   </PropertyGroup>
+</Project>
+
+

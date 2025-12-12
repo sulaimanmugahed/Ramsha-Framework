@@ -2,11 +2,10 @@
 using Ramsha.Common.Domain;
 using Ramsha.LocalMessaging;
 
-namespace Ramsha.ApplicationAbstractions;
+namespace Ramsha.Common.Application;
 
 public class CommonApplicationModule : RamshaModule
 {
-
     public override void Register(RegisterContext context)
     {
         base.Register(context);

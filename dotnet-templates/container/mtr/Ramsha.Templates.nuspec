@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Ramsha.Templates</id>
+    <version>2.0.0</version>
+    <description>Ramsha Framework Templates.</description>
+    <authors>Sulaiman Mugahed</authors>
+    <title>Ramsha Templates</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+   
+	<packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>
+
+  <files>
+   <file src="**" exclude="**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;_rels\**\*;package\**\*" />
+  </files>
+
+</package>

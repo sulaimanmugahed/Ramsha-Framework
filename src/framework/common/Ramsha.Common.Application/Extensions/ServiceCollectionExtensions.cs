@@ -2,7 +2,6 @@
 
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ramsha;
-using Ramsha.ApplicationAbstractions;
 using Ramsha.Common.Application;
 
 namespace Microsoft.Extensions.DependencyInjection;

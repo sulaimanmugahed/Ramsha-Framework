@@ -1,0 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
+using Ramsha.AspNetCore.Mvc;
+
+namespace {{ namespace }}
+{
+    public class {{ name }}:{{ mvc ? "RamshaController" : "RamshaApiController" }}
+    {
+       
+    }
+}

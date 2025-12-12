@@ -1,0 +1,6 @@
+@CleanWebApiTemplate.WebHost_HostAddress = http://localhost:5036
+
+GET {{CleanWebApiTemplate.WebHost_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

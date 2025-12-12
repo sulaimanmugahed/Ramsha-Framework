@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="..\..\..\..\common.props" />
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -9,8 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\common\Ramsha.Common.Domain\Ramsha.Common.Domain.csproj" />
     <ProjectReference Include="..\..\infrastructure\Ramsha.UnitOfWork.Abstractions\Ramsha.UnitOfWork.Abstractions.csproj" />
-
-      <PackageReference Include="Microsoft.AspNetCore.App" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App"  />
   </ItemGroup>
 
 </Project>

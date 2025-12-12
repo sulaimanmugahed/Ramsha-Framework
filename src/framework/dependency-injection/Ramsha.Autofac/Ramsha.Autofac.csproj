@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+ <Import Project="..\..\..\..\common.props" />
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="8.4.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Autofac"  />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection"  />
     <ProjectReference Include="..\..\Ramsha.Core\Ramsha.Core.csproj" />
   </ItemGroup>
 

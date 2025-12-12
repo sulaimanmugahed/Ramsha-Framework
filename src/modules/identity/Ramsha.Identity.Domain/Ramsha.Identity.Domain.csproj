@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+ <Import Project="..\..\..\..\common.props" />
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -13,7 +13,7 @@
 
 
   <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Core" />
   </ItemGroup>
 
 </Project>

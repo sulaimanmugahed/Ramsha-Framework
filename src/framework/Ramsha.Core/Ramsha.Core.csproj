@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+ <Import Project="..\..\..\common.props" />
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -8,20 +8,18 @@
 
   <ItemGroup>
   
-    <!-- <PackageReference Include="Metalama.Extensions.DependencyInjection" Version="2025.1.16" /> -->
-  
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.9" />
-    <PackageReference Include="Nito.AsyncEx.Context" Version="5.1.2" />
-    <PackageReference Include="System.Management" Version="9.0.9" />
-      <PackageReference Include="System.Linq.Dynamic.Core" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"  />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets"  />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"  />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions"  />
+    <PackageReference Include="Microsoft.Extensions.Localization"  />
+    <PackageReference Include="Microsoft.Extensions.Logging"  />
+    <PackageReference Include="Microsoft.Extensions.Options"  />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"  />
+    <PackageReference Include="Nito.AsyncEx.Context"  />
+    <PackageReference Include="System.Management"  />
+      <PackageReference Include="System.Linq.Dynamic.Core"  />
   </ItemGroup>
 
 </Project>
