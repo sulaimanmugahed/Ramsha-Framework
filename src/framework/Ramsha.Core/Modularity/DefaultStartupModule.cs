@@ -8,146 +8,111 @@ namespace Ramsha;
 
 public class DefaultStartupModuleBuilder
 {
-    private readonly DefaultStartupModule _module;
+    private readonly DefaultStartupModule _module = new();
 
-    public DefaultStartupModuleBuilder()
+    public DefaultStartupModuleBuilder Register(Action<RegisterContext> action)
     {
-        _module = new DefaultStartupModule();
-    }
-
-
-    public DefaultStartupModuleBuilder OnCreating(Action<PrepareContext> context)
-    {
-        _module.AddModuleBuilderAction(context);
+        _module.AddRegisterAction(action);
         return this;
     }
 
-    public DefaultStartupModuleBuilder OnConfigureAsync(Func<BuildServicesContext, Task> configure)
+    public DefaultStartupModuleBuilder Prepare(Action<PrepareContext> action)
+        => Prepare(ctx =>
+        {
+            action(ctx);
+            return Task.CompletedTask;
+        });
+
+    public DefaultStartupModuleBuilder Prepare(Func<PrepareContext, Task> action)
     {
-        _module.AddConfigureAsyncAction(configure);
+        _module.AddPrepareAction(action);
         return this;
     }
 
-    public DefaultStartupModuleBuilder OnInitAsync(Func<InitContext, Task> init)
+    public DefaultStartupModuleBuilder BuildServices(Action<BuildServicesContext> action)
+        => BuildServices(ctx =>
+        {
+            action(ctx);
+            return Task.CompletedTask;
+        });
+
+    public DefaultStartupModuleBuilder BuildServices(Func<BuildServicesContext, Task> action)
     {
-        _module.AddInitAsyncAction(init);
+        _module.AddBuildServicesAction(action);
         return this;
     }
 
-    public DefaultStartupModuleBuilder OnShutdownAsync(Func<ShutdownContext, Task> shutdown)
+    public DefaultStartupModuleBuilder OnInit(Action<InitContext> action)
+        => OnInit(ctx =>
+        {
+            action(ctx);
+            return Task.CompletedTask;
+        });
+
+    public DefaultStartupModuleBuilder OnInit(Func<InitContext, Task> action)
     {
-        _module.AddShutdownAsyncAction(shutdown);
+        _module.AddInitAction(action);
         return this;
     }
 
+    public DefaultStartupModuleBuilder OnShutdown(Action<ShutdownContext> action)
+        => OnShutdown(ctx =>
+        {
+            action(ctx);
+            return Task.CompletedTask;
+        });
 
-    public DefaultStartupModuleBuilder OnConfigure(Action<BuildServicesContext> configure)
+    public DefaultStartupModuleBuilder OnShutdown(Func<ShutdownContext, Task> action)
     {
-        _module.AddConfigureAction(configure);
+        _module.AddShutdownAction(action);
         return this;
     }
-
-
-    public DefaultStartupModuleBuilder OnInit(Action<InitContext> init)
-    {
-        _module.AddInitAction(init);
-        return this;
-    }
-
-
-    public DefaultStartupModuleBuilder OnShutdown(Action<ShutdownContext> shutdown)
-    {
-        _module.AddShutdownAction(shutdown);
-        return this;
-    }
-
 
     internal DefaultStartupModule Build() => _module;
 }
 
+
 public sealed class DefaultStartupModule : RamshaModule
 {
-    private readonly List<Action<BuildServicesContext>> _configureActions = new();
-    private readonly List<Action<InitContext>> _initActions = new();
-    private readonly List<Action<ShutdownContext>> _shutdownActions = new();
+    private readonly List<Action<RegisterContext>> _register = new();
+    private readonly List<Func<PrepareContext, Task>> _prepare = new();
+    private readonly List<Func<BuildServicesContext, Task>> _buildServices = new();
+    private readonly List<Func<InitContext, Task>> _init = new();
+    private readonly List<Func<ShutdownContext, Task>> _shutdown = new();
 
-    private readonly List<Func<BuildServicesContext, Task>> _asyncConfigureActions = new();
-    private readonly List<Func<InitContext, Task>> _asyncInitActions = new();
-    private readonly List<Func<ShutdownContext, Task>> _asyncShutdownActions = new();
+    internal void AddRegisterAction(Action<RegisterContext> action) => _register.Add(action);
+    internal void AddPrepareAction(Func<PrepareContext, Task> action) => _prepare.Add(action);
+    internal void AddBuildServicesAction(Func<BuildServicesContext, Task> action) => _buildServices.Add(action);
+    internal void AddInitAction(Func<InitContext, Task> action) => _init.Add(action);
+    internal void AddShutdownAction(Func<ShutdownContext, Task> action) => _shutdown.Add(action);
 
-    private readonly List<Action<PrepareContext>> _modulePrepareActions = new();
-    private readonly List<Func<PrepareContext, Task>> _asyncModulePrepareActions = new();
-
-
-
-    internal void AddModuleBuilderAction(Action<PrepareContext> action) => _modulePrepareActions.Add(action);
-    internal void AddConfigureAction(Action<BuildServicesContext> action) => _configureActions.Add(action);
-    internal void AddInitAction(Action<InitContext> action) => _initActions.Add(action);
-    internal void AddShutdownAction(Action<ShutdownContext> action) => _shutdownActions.Add(action);
-
-    internal void AddConfigureAsyncAction(Func<BuildServicesContext, Task> action) => _asyncConfigureActions.Add(action);
-    internal void AddInitAsyncAction(Func<InitContext, Task> action) => _asyncInitActions.Add(action);
-    internal void AddShutdownAsyncAction(Func<ShutdownContext, Task> action) => _asyncShutdownActions.Add(action);
-
-    public override async Task BuildServicesAsync(BuildServicesContext context)
+    public override void Register(RegisterContext context)
     {
-        foreach (var action in _asyncConfigureActions)
-        {
-            await action(context);
-        }
-    }
-
-    public override async Task OnInitAsync(InitContext context)
-    {
-        foreach (var action in _asyncInitActions)
-        {
-            await action(context);
-        }
-    }
-
-    public override async Task OnShutdownAsync(ShutdownContext context)
-    {
-        foreach (var action in _asyncShutdownActions)
-        {
-            await action(context);
-        }
-    }
-
-
-
-
-
-    public override void Prepare(PrepareContext context)
-    {
-        foreach (var action in _modulePrepareActions)
-        {
+        foreach (var action in _register)
             action(context);
-        }
     }
 
     public override async Task PrepareAsync(PrepareContext context)
     {
-        foreach (var action in _asyncModulePrepareActions)
-        {
+        foreach (var action in _prepare)
             await action(context);
-        }
     }
 
-    public override void BuildServices(BuildServicesContext context)
+    public override async Task BuildServicesAsync(BuildServicesContext context)
     {
-        foreach (var action in _configureActions)
-            action(context);
+        foreach (var action in _buildServices)
+            await action(context);
     }
 
-    public override void OnInit(InitContext context)
+    public override async Task OnInitAsync(InitContext context)
     {
-        foreach (var action in _initActions)
-            action(context);
+        foreach (var action in _init)
+            await action(context);
     }
 
-    public override void OnShutdown(ShutdownContext context)
+    public override async Task OnShutdownAsync(ShutdownContext context)
     {
-        foreach (var action in _shutdownActions)
-            action(context);
+        foreach (var action in _shutdown)
+            await action(context);
     }
 }

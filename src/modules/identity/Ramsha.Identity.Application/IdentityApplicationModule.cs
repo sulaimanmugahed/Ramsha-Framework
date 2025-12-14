@@ -4,8 +4,8 @@ using Ramsha.Identity.Contracts;
 using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
 using Ramsha.LocalMessaging.Abstractions;
-using Ramsha.ApplicationAbstractions;
 using Ramsha.Core.Modularity.Contexts;
+using Ramsha.Common.Application;
 
 namespace Ramsha.Identity.Application;
 

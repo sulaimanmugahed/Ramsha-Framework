@@ -1,0 +1,120 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Sulaiman Mugahed",
+    "classifications": [
+        "Modular",
+        "Ramsha",
+        "DotNet",
+        "Web",
+        "API",
+        "Simple"
+    ],
+    "identity": "Ramsha.WebApi.Template",
+    "name": "Ramsha.WebApi",
+    "description": "Modular and Simple Template for Ramsha Framework.",
+    "defaultName": "RamshaWebApi",
+    "shortName": "ramsha-api",
+    "sourceName": "SimpleWebApiTemplate",
+    "preferNameDirectory": true,
+    "tags": {
+        "language": "C#",
+        "type": "solution"
+    },
+    "guids": [
+        "15DBEF26-2284-BB6A-CEA8-1D9902114D6E"
+    ],
+    "symbols": {
+        "ramshaVersion": {
+            "type": "parameter",
+            "replaces": "9.2025.12.2",
+            "defaultValue": "9.2025.12.2",
+            "longName": "version",
+            "shortName": "v"
+        },
+        "useDatabase": {
+            "type": "parameter",
+            "datatype": "bool",
+            "defaultValue": "false",
+            "description": "Include database support"
+        },
+        "dbProvider": {
+            "type": "parameter",
+            "datatype": "choice",
+            "choices": [
+                {
+                    "choice": "mssql",
+                    "description": "Microsoft SQL Server With EfCore"
+                },
+                {
+                    "choice": "postgres",
+                    "description": "PostgreSQL With EfCore"
+                },
+                {
+                    "choice": "lite",
+                    "description": "SQLite With EfCore"
+                }
+            ],
+            "defaultValue": "mssql",
+            "description": "Database provider to use"
+        },
+        "useSqlServer": {
+            "type": "computed",
+            "value": "useDatabase && dbProvider == \"mssql\""
+        },
+        "usePostgres": {
+            "type": "computed",
+            "value": "useDatabase && dbProvider == \"postgres\""
+        },
+        "useSqlite": {
+            "type": "computed",
+            "value": "useDatabase && dbProvider == \"lite\""
+        },
+        "HttpsPortGenerated": {
+            "type": "generated",
+            "generator": "port",
+            "parameters": {
+                "low": 7000,
+                "high": 7999
+            }
+        },
+        "HttpsPortReplacer": {
+            "type": "generated",
+            "generator": "coalesce",
+            "parameters": {
+                "sourceVariableName": "HttpsPort",
+                "fallbackVariableName": "HttpsPortGenerated"
+            },
+            "replaces": "7722"
+        },
+        "HttpPortGenerated": {
+            "type": "generated",
+            "generator": "port",
+            "parameters": {
+                "low": 5000,
+                "high": 5999
+            }
+        },
+        "HttpPortReplacer": {
+            "type": "generated",
+            "generator": "coalesce",
+            "parameters": {
+                "sourceVariableName": "HttpPort",
+                "fallbackVariableName": "HttpPortGenerated"
+            },
+            "replaces": "5522"
+        }
+    },
+    "sources": [
+        {
+            "modifiers": [
+                {
+                    "condition": "(!useDatabase)",
+                    "exclude": [
+                        "Data/SimpleWebApiTemplateDbContext.cs",
+                        "Data/SimpleWebApiTemplateDbContextDesignTimeFactory.cs"
+                    ]
+                }
+            ]
+        }
+    ]
+}

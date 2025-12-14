@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Ramsha.Templates</id>
-    <version>2.0.0</version>
+    <version>3.0.5</version>
     <description>Ramsha Framework Templates.</description>
     <authors>Sulaiman Mugahed</authors>
     <title>Ramsha Templates</title>
@@ -15,7 +15,7 @@
   </metadata>
 
   <files>
-   <file src="**" exclude="**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;_rels\**\*;package\**\*" />
+   <file src="**" exclude="**\.vscode\**;**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;_rels\**\*;package\**\*" />
   </files>
 
 </package>

@@ -5,7 +5,6 @@ namespace Ramsha;
 public interface IRamshaModule
 {
     void Register(RegisterContext context);
-    Task RegisterAsync(RegisterContext context);
     void Prepare(PrepareContext context);
     Task PrepareAsync(PrepareContext context);
     Task BuildServicesAsync(BuildServicesContext context);
@@ -56,11 +55,6 @@ public abstract class RamshaModule : IRamshaModule, IOnAppInit, IOnAppShutdown
 
     }
 
-    public Task RegisterAsync(RegisterContext context)
-    {
-        Register(context);
-        return Task.CompletedTask;
-    }
 
     public virtual void Prepare(PrepareContext context)
     {

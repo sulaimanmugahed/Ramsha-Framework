@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Ramsha.ApplicationAbstractions;
+using Ramsha.Common.Application;
 using Ramsha.SettingsManagement.Contracts;
 using Ramsha.SettingsManagement.Domain;
 

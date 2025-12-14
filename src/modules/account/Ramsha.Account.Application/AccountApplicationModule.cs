@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Account.Contracts;
+using Ramsha.Common.Application;
 using Ramsha.Identity.Domain;
 
 namespace Ramsha.Account.Application;
@@ -11,7 +12,8 @@ public class AccountApplicationModule : RamshaModule
         base.Register(context);
         context
         .DependsOn<AccountContractsModule>()
-        .DependsOn<IdentityDomainModule>();
+        .DependsOn<IdentityDomainModule>()
+        .DependsOn<CommonApplicationModule>();
     }
 
 

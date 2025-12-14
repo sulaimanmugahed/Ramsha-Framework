@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\framework\aspnetcore\Ramsha.AspNetCore.Mvc\Ramsha.AspNetCore.Mvc.csproj" />
+    <PackageReference Include="Ramsha.AspNetCore.Mvc" Version="9.2025.12.2" />
+      <!--#if (useSqlServer) -->
+    <PackageReference Include="Ramsha.EntityFrameworkCore.SqlServer" Version="9.2025.12.2" />
+      <!--#endif -->
   </ItemGroup>
 
 </Project>

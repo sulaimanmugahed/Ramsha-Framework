@@ -49,7 +49,7 @@ switch ($updateMethod) {
     }
     "3" {
         $newVersion = Read-Host "Enter the new version (e.g., 1.2.3)"
-        if (-not ($newVersion -match '^\d+\.\d+\.\d+$')) {
+        if (-not ($newVersion -match '^\d+\.\d+\.\d+\.\d+$')) {
             Write-Error "Invalid format. Use 'X.Y.Z' (e.g., 1.2.3)"
             exit 1
         }

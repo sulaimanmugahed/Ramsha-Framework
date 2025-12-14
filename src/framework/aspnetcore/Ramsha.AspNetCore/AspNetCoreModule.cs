@@ -5,10 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Ramsha.AspNetCore.Security.Claims;
 using Ramsha.Common.Domain;
 using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Security.Claims;
+using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.AspNetCore;
 
@@ -58,10 +60,12 @@ public class AspNetCoreModule : RamshaModule
             app.UseStaticFiles();
         }, entryOptions);
 
+        var unitOfWorkOptions = context.ServiceProvider.GetRequiredService<IOptions<GlobalUnitOfWorkOptions>>().Value;
+
         appPipeline.Use(AspNetCorePipelineEntries.UnitOfWork, app =>
         {
             app.UseUnitOfWork();
-        }, entryOptions);
+        }, entryOptions, () => unitOfWorkOptions.IsEnabled);
 
         appPipeline.Use(AspNetCorePipelineEntries.Routing, app =>
         {
