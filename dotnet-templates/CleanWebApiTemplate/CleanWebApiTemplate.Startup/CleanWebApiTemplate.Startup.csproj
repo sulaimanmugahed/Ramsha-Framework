@@ -7,13 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CleanWebApiTemplate.Api\CleanWebApiTemplate.Api.csproj" />
     <ProjectReference Include="..\CleanWebApiTemplate.Application\CleanWebApiTemplate.Application.csproj" />
+    <!--#if (useDatabase) -->
     <ProjectReference Include="..\CleanWebApiTemplate.Persistence\CleanWebApiTemplate.Persistence.csproj" />
+    <!--#endif -->
   </ItemGroup>
 
 </Project>

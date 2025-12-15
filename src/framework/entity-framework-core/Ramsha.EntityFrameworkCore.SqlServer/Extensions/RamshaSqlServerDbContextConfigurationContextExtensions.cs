@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Ramsha.EntityFrameworkCore.SqlServer;
 
-public static class RamshaDbContextConfigurationContextExtensions
+public static class RamshaSqlServerDbContextConfigurationContextExtensions
 {
     public static DbContextOptionsBuilder UseSqlServer(
                this RamshaDbContextConfigurationContext context,

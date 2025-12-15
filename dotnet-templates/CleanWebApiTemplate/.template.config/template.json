@@ -17,6 +17,108 @@
     "preferNameDirectory": true,
     "tags": {
         "language": "C#",
-        "type": "project"
-    }
+        "type": "solution"
+    },
+    "guids": [
+        "8C1CD050-0118-4E67-802A-C90ECB5D8055",
+        "0DDD9E91-5605-403F-8BB2-07DE66EB3BEC",
+        "FF5FF280-28C1-40AA-9BD4-B53C943EC1E9",
+        "620DA98A-66BA-44DD-B316-DE8B0D43A502",
+        "28893D3B-D2B3-46E6-BEBD-DE2729D132F7",
+        "DB22B909-4299-4479-AE91-A6E0C2AA6479",
+        "F2BEFA1C-9813-45B5-BE04-4DBE05D649C6"
+    ],
+    "symbols": {
+        "ramshaVersion": {
+            "type": "parameter",
+            "replaces": "9.2025.12.2",
+            "defaultValue": "9.2025.12.2",
+            "longName": "version",
+            "shortName": "v"
+        },
+        "useDatabase": {
+            "type": "parameter",
+            "datatype": "bool",
+            "defaultValue": "false",
+            "description": "Include database support"
+        },
+        "dbProvider": {
+            "type": "parameter",
+            "datatype": "choice",
+            "choices": [
+                {
+                    "choice": "mssql",
+                    "description": "Microsoft SQL Server With EfCore"
+                },
+                {
+                    "choice": "postgres",
+                    "description": "PostgreSQL With EfCore"
+                },
+                {
+                    "choice": "lite",
+                    "description": "SQLite With EfCore"
+                }
+            ],
+            "defaultValue": "mssql",
+            "description": "Database provider to use"
+        },
+        "useSqlServer": {
+            "type": "computed",
+            "value": "useDatabase && dbProvider == \"mssql\""
+        },
+        "usePostgres": {
+            "type": "computed",
+            "value": "useDatabase && dbProvider == \"postgres\""
+        },
+        "useSqlite": {
+            "type": "computed",
+            "value": "useDatabase && dbProvider == \"lite\""
+        },
+        "HttpsPortGenerated": {
+            "type": "generated",
+            "generator": "port",
+            "parameters": {
+                "low": 7000,
+                "high": 7999
+            }
+        },
+        "HttpsPortReplacer": {
+            "type": "generated",
+            "generator": "coalesce",
+            "parameters": {
+                "sourceVariableName": "HttpsPort",
+                "fallbackVariableName": "HttpsPortGenerated"
+            },
+            "replaces": "7722"
+        },
+        "HttpPortGenerated": {
+            "type": "generated",
+            "generator": "port",
+            "parameters": {
+                "low": 5000,
+                "high": 5999
+            }
+        },
+        "HttpPortReplacer": {
+            "type": "generated",
+            "generator": "coalesce",
+            "parameters": {
+                "sourceVariableName": "HttpPort",
+                "fallbackVariableName": "HttpPortGenerated"
+            },
+            "replaces": "5522"
+        }
+    },
+    "sources": [
+        {
+            "modifiers": [
+                {
+                    "condition": "(!useDatabase)",
+                    "exclude": [
+                        "CleanWebApiTemplate.Persistence/**.cs"
+                    ]
+                }
+            ]
+        }
+    ]
 }

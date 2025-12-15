@@ -1,7 +1,9 @@
 ﻿using CleanWebApiTemplate.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha;
+#if (useSqlServer)
 using Ramsha.EntityFrameworkCore.SqlServer;
+#endif
 
 namespace CleanWebApiTemplate.Persistence;
 
@@ -11,9 +13,10 @@ public class CleanWebApiTemplatePersistenceModule : RamshaModule
     {
         base.Register(context);
 
-        context
-        .DependsOn<CleanWebApiTemplateDomainModule>()
-        .DependsOn<EntityFrameworkCoreSqlServerModule>();
+        context.DependsOn<CleanWebApiTemplateDomainModule>();
+#if (useSqlServer)
+        context.DependsOn<EntityFrameworkCoreSqlServerModule>();
+#endif
     }
 
     public override void BuildServices(BuildServicesContext context)

@@ -24,7 +24,7 @@
   <PackageVersion Include="Microsoft.AspNetCore.App" Version="2.3.0" />
    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
-       <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="9.0.9"  />
+    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="9.0.9"  />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.9.0" />
     <PackageVersion Include="Scalar.AspNetCore.Microsoft" Version="2.9.0" />
 
@@ -37,8 +37,10 @@
 
   <!-- entityframeworkcore -->
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
-  <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.9" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+<PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.9" />
   <!-- entityframeworkcore -->
 
 
