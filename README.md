@@ -21,8 +21,9 @@ Use the CLI tool to scaffold a new application:
 ramsha new api MyApp -d
 ```
 
-This creates a new ASP.NET Core Simple API project with the Ramsha framework.
+This creates a new ASP.NET Core API project with the Ramsha framework.
 
+For full documentation and guides, visit the [Ramsha Framework Docs](https://sulaimanmugahed.github.io/Ramsha-Framework/).
 
 
 ## License
