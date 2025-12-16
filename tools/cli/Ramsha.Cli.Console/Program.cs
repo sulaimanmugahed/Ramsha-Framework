@@ -45,7 +45,9 @@ app.AddSubCommand("new", options =>
         [Argument] string name,
         [Option('o')] string output = ".",
         [Option('c')] bool clean = false,
-        [Option('f')] bool force = false
+        [Option('f')] bool force = false,
+        [Option('d', Description = "Include database support")] bool useDatabase = false,
+        [Option(Description = "Database provider: mssql, postgres, lite")] string dbProvider = "mssql"
      ) =>
     {
         try
@@ -54,7 +56,10 @@ app.AddSubCommand("new", options =>
                new DotnetTemplateModel(clean ? DotnetTemplates.CleanWebApi.Name : DotnetTemplates.WebApi.Name)
                .WithName(name)
                .WithOutput(Path.Combine(output, name))
-               .WithForce(force));
+               .WithForce(force)
+                .WithParam("useDatabase", useDatabase)
+                .WithParam("dbProvider", dbProvider, condition: useDatabase)
+               );
             Console.WriteLine("Project created successfully.");
         }
         catch (Exception ex)

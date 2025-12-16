@@ -32,8 +32,11 @@ public class TemplateModel<T> : ITemplateModel<T> where T : TemplateModel<T>
     public bool ContainsParam(string key) => _parameters.ContainsKey(key);
     public IEnumerable<string> Keys => _parameters.Keys;
 
-    public T WithParam(string name, object? value, bool required = false)
+    public T WithParam(string name, object? value, bool required = false, bool condition = true)
     {
+        if (!condition)
+            return (T)this;
+
         if (required && value is null) throw new ArgumentNullException(nameof(value));
 
         else if (!required && value is null)
@@ -92,8 +95,11 @@ public class TemplateModel : ITemplateModel<TemplateModel>
     public Dictionary<string, object> GetParameters()
    => new(_parameters);
 
-    public TemplateModel WithParam(string name, object? value, bool required = false)
+    public TemplateModel WithParam(string name, object? value, bool required = false, bool condition = true)
     {
+        if (!condition)
+            return this;
+
         if (required && value is null) throw new ArgumentNullException(nameof(value));
 
         else if (!required && value is null)
@@ -156,7 +162,7 @@ public interface IHasParameter
 }
 public interface IHasParameter<T> : IHasParameter where T : IHasParameter<T>
 {
-    T WithParam(string name, object value, bool required = false);
+    T WithParam(string name, object value, bool required = false, bool condition = true);
 }
 
 public interface ITemplateModel
