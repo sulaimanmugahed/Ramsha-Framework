@@ -6,7 +6,7 @@ A modular .NET framework , designed for building scalable and maintainable appli
 
 - .NET SDK 9.0  (download from [dotnet.microsoft.com](https://dotnet.microsoft.com/download))
 
-### CLI Tool - Direct Download (Windows)
+### CLI Tool - Direct Download 
 Download the latest `ramsha.exe` from [GitHub Releases](https://github.com/sulaimanmugahed/Ramsha-Framework/releases).
 
 Place the executable in a directory included in your PATH, or run it directly.
