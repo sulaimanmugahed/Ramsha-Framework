@@ -1,6 +1,6 @@
 # Ramsha-Framework
 
-A modular .NET framework inspired by ABP Framework, designed for building scalable and maintainable applications with dependency injection, modularity, and extensibility.
+A modular .NET framework , designed for building scalable and maintainable applications with  modularity, and extensibility.
 
 ## Prerequisites
 
