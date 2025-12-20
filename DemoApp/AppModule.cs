@@ -110,13 +110,11 @@ public class AppModule : RamshaModule
         context.Services.AddTransient<ITestService, TestService>();
 
 
-
-
-
         context.Services.AddRamshaDbContext<AppDbContext>(option =>
         {
-            option.AddGlobalQueryFilterProvider<PriceFilterProvider>()
-
+            option
+             .AddDefaultRepositories(true)
+            .AddGlobalQueryFilterProvider<PriceFilterProvider>()
              .AddRepository<Product, IProductRepository, ProductRepository>()
              //  .ReplaceDbContext<IIdentityDbContext>()
              ;
