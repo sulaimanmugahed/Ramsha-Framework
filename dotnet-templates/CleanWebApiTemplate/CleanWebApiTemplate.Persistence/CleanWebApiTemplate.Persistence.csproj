@@ -13,13 +13,13 @@
   <!--#if (useDatabase) -->
   <ItemGroup>
       <!--#if (useSqlServer) -->
-    <PackageReference Include="Ramsha.EntityFrameworkCore.SqlServer" Version="9.2025.12.1" />
+    <PackageReference Include="Ramsha.EntityFrameworkCore.SqlServer" Version="$(RamshaVersion)" />
       <!--#endif -->
       <!--#if (usePostgres) -->
-    <PackageReference Include="Ramsha.EntityFrameworkCore.PostgreSql" Version="9.2025.12.1" />
+    <PackageReference Include="Ramsha.EntityFrameworkCore.PostgreSql" Version="$(RamshaVersion)" />
       <!--#endif -->
       <!--#if (useSqlite) -->
-    <PackageReference Include="Ramsha.EntityFrameworkCore.Sqlite" Version="9.2025.12.1" />
+    <PackageReference Include="Ramsha.EntityFrameworkCore.Sqlite" Version="$(RamshaVersion)" />
       <!--#endif -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
   </ItemGroup>

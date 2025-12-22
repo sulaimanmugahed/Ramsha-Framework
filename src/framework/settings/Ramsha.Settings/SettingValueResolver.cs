@@ -2,11 +2,10 @@ using System.Text.Json;
 
 namespace Ramsha.Settings;
 
-public abstract class SettingValueResolver : ISettingValueResolver
+public abstract class SettingValueResolver(string providerName) : ISettingValueResolver
 {
-    public abstract string GetProviderName();
+    public string GetProviderName() => providerName;
     public abstract Task<T?> ResolveAsync<T>(SettingDefinition def);
-
 
     protected virtual T? Deserialize<T>(string raw, Type originalValueType)
     {

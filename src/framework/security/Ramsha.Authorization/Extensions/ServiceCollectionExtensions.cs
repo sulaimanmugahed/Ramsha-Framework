@@ -34,7 +34,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<PermissionProviderResolversManager>();
 
 
-        var permissionResolverInterfaceType = typeof(IPermissionProviderResolver);
+        var permissionResolverInterfaceType = typeof(IPermissionValueResolver);
 
         var permissionResolvers = RamshaTypeHelpers.GetRamshaTypes<AuthorizationModule>(permissionResolverInterfaceType);
         foreach (var resolver in permissionResolvers)

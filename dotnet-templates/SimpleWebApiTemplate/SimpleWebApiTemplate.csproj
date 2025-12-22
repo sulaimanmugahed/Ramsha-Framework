@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ramsha.AspNetCore.Mvc" Version="9.2025.12.2" />
+    <PackageReference Include="Ramsha.AspNetCore.Mvc" Version="$(RamshaVersion)" />
       <!--#if (useSqlServer) -->
-    <PackageReference Include="Ramsha.EntityFrameworkCore.SqlServer" Version="9.2025.12.2" />
+    <PackageReference Include="Ramsha.EntityFrameworkCore.SqlServer" Version="$(RamshaVersion)" />
       <!--#endif -->
   </ItemGroup>
 

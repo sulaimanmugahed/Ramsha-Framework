@@ -12,10 +12,8 @@ namespace DemoApp.Data;
 public class DbContextDesignTimeFactory : RamshaDesignTimeDbContext<AppModule, AppDbContext>
 {
 
-    protected override IConfigurationRoot BuildConfiguration()
-    {
-        Console.WriteLine("*************************App*********");
-
-        return ConfigurationHelper.BuildConfiguration();
-    }
+    // protected override IConfigurationRoot BuildConfiguration()
+    // {
+    //     return ConfigurationHelper.BuildConfiguration();
+    // }
 }

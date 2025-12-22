@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ramsha.LocalMessaging.Abstractions" Version="9.2025.12.1" />
+    <PackageReference Include="Ramsha.LocalMessaging.Abstractions" Version="$(RamshaVersion)"/>
   </ItemGroup>
 
 </Project>

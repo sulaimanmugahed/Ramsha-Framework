@@ -3,14 +3,11 @@ using System.Security.Principal;
 
 namespace Ramsha.Authorization;
 
-public class UserPermissionProviderResolver(IPermissionStore store) : IPermissionProviderResolver
+public class UserPermissionValueResolver(IPermissionStore store)
+ : PermissionValueResolver("U")
 {
-    public string GetProviderName()
-    {
-        return "U";
-    }
 
-    public async Task<PermissionStatus> ResolveAsync(PermissionResolveContext context)
+    public override async Task<PermissionStatus> ResolveAsync(PermissionResolveContext context)
     {
         var userId = context.Principal?.FindUserId();
         if (userId is null)

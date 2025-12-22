@@ -115,8 +115,7 @@ public class AppModule : RamshaModule
 
         context.Services.AddRamshaDbContext<AppDbContext>(option =>
         {
-            option.AddDefaultRepositories(true)
-               .AddGlobalQueryFilterProvider<PriceFilterProvider>()
+            option.AddGlobalQueryFilterProvider<PriceFilterProvider>()
 
              .AddRepository<Product, IProductRepository, ProductRepository>()
              //  .ReplaceDbContext<IIdentityDbContext>()

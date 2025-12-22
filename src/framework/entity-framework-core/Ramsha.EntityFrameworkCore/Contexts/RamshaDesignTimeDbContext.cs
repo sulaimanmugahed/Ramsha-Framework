@@ -36,5 +36,8 @@ public abstract class RamshaDesignTimeDbContext<TModule, TContext> : IDesignTime
 
     }
 
-    protected abstract IConfigurationRoot BuildConfiguration();
+    protected virtual IConfigurationRoot BuildConfiguration()
+    {
+        return ConfigurationHelper.BuildConfiguration();
+    }
 }

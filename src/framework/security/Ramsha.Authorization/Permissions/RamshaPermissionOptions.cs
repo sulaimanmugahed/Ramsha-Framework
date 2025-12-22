@@ -2,13 +2,13 @@ namespace Ramsha.Authorization;
 
 public class RamshaPermissionOptions
 {
-    public ITypeList<IPermissionProviderResolver> PermissionResolvers { get; }
+    public ITypeList<IPermissionValueResolver> ValueResolvers { get; }
     public ITypeList<IPermissionDefinitionProvider> DefinitionProviders { get; }
 
 
     public RamshaPermissionOptions()
     {
-        PermissionResolvers = new TypeList<IPermissionProviderResolver>();
+        ValueResolvers = new TypeList<IPermissionValueResolver>();
         DefinitionProviders = new TypeList<IPermissionDefinitionProvider>();
 
     }

@@ -14,6 +14,6 @@ public class AppSettingsController(ISettingResolver settingResolver) : RamshaApi
     [HttpGet(nameof(GetProductDiscountSettings))]
     public async Task<ProductDiscountSettings?> GetProductDiscountSettings()
     {
-        return await settingResolver.ResolveAsync<ProductDiscountSettings>("DiscountSettings");
+        return await settingResolver.ResolveAsync<ProductDiscountSettings>(ProductSettingNames.DiscountSettings);
     }
 }

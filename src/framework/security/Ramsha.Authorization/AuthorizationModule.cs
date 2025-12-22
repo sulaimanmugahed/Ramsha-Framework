@@ -15,7 +15,7 @@ public class AuthorizationModule : RamshaModule
 
         context.Configure<RamshaPermissionOptions>(options =>
         {
-            options.PermissionResolvers.Add<UserPermissionProviderResolver>();
+            options.ValueResolvers.Add<UserPermissionValueResolver>();
         });
     }
 

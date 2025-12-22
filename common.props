@@ -4,7 +4,7 @@
     <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SolutionDir>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))</SolutionDir>
-    <Version>9.2025.12.2</Version>
+   <Version>$(RamshaVersion)</Version>
 
     <Authors>Sulaiman Mugahed</Authors>
     <Product>Ramsha Framework</Product>

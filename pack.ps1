@@ -3,13 +3,13 @@
     [string]$ModulesPath = "./src"
 )
 
-$propsPath = "common.props"
+$propsPath = "Directory.Build.props"
 
 $propsContent = Get-Content $propsPath -Raw
-if ($propsContent -match '<Version>(.*?)</Version>') {
+if ($propsContent -match '<RamshaVersion>(.*?)</RamshaVersion>') {
     $currentVersion = $matches[1]
 } else {
-    Write-Error "Could not find Version in $propsPath"
+    Write-Error "Could not find RamshaVersion in $propsPath"
     exit 1
 }
 
@@ -49,7 +49,7 @@ switch ($updateMethod) {
     }
     "3" {
         $newVersion = Read-Host "Enter the new version (e.g., 1.2.3)"
-        if (-not ($newVersion -match '^\d+\.\d+\.\d+\.\d+$')) {
+        if (-not ($newVersion -match '^\d+\.\d+\.\d+$')) {
             Write-Error "Invalid format. Use 'X.Y.Z' (e.g., 1.2.3)"
             exit 1
         }
@@ -63,7 +63,7 @@ switch ($updateMethod) {
 
 if ($newVersion -ne $currentVersion) {
     Write-Host "Updating version to: $newVersion ..."
-    $updatedContent = $propsContent -replace "<Version>.*?</Version>", "<Version>$newVersion</Version>"
+    $updatedContent = $propsContent -replace "<RamshaVersion>.*?</RamshaVersion>", "<RamshaVersion>$newVersion</RamshaVersion>"
     $updatedContent | Set-Content $propsPath
 }
 

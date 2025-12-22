@@ -6,8 +6,8 @@ namespace Ramsha.Authorization;
 
 public class PermissionProviderResolversManager
 {
-    public IReadOnlyList<IPermissionProviderResolver> PermissionResolvers => _lazyResolvers.Value;
-    private readonly Lazy<List<IPermissionProviderResolver>> _lazyResolvers;
+    public IReadOnlyList<IPermissionValueResolver> PermissionResolvers => _lazyResolvers.Value;
+    private readonly Lazy<List<IPermissionValueResolver>> _lazyResolvers;
 
     public PermissionProviderResolversManager(
         IServiceProvider serviceProvider,
@@ -21,11 +21,11 @@ public class PermissionProviderResolversManager
     protected RamshaPermissionOptions Options { get; }
     protected IServiceProvider ServiceProvider { get; }
 
-    protected virtual List<IPermissionProviderResolver> GetResolvers()
+    protected virtual List<IPermissionValueResolver> GetResolvers()
     {
         var providers = Options
-            .PermissionResolvers
-            .Select(type => (ServiceProvider.GetRequiredService(type) as IPermissionProviderResolver)!)
+            .ValueResolvers
+            .Select(type => (ServiceProvider.GetRequiredService(type) as IPermissionValueResolver)!)
             .ToList();
 
         var multipleResolvers = providers.GroupBy(p => p.GetProviderName()).FirstOrDefault(x => x.Count() > 1);

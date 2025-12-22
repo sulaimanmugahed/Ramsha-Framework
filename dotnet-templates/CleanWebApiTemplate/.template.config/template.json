@@ -29,34 +29,29 @@
         "F2BEFA1C-9813-45B5-BE04-4DBE05D649C6"
     ],
     "symbols": {
-        "ramshaVersion": {
-            "type": "parameter",
-            "replaces": "9.2025.12.2",
-            "defaultValue": "9.2025.12.2",
-            "longName": "version",
-            "shortName": "v"
-        },
         "useDatabase": {
             "type": "parameter",
             "datatype": "bool",
             "defaultValue": "false",
-            "description": "Include database support"
+            "description": "Include database support",
+            "displayName": "Use Database"
         },
         "dbProvider": {
             "type": "parameter",
             "datatype": "choice",
+            "displayName": "Database Provider",
             "choices": [
                 {
                     "choice": "mssql",
-                    "description": "Microsoft SQL Server With EfCore"
+                    "description": "Microsoft SQL Server Provider"
                 },
                 {
                     "choice": "postgres",
-                    "description": "PostgreSQL With EfCore"
+                    "description": "PostgreSQL Provider"
                 },
                 {
                     "choice": "lite",
-                    "description": "SQLite With EfCore"
+                    "description": "SQLite Provider"
                 }
             ],
             "defaultValue": "mssql",

@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ramsha.AspNetCore.Mvc" Version="9.2025.12.1" />
+    <PackageReference Include="Ramsha.AspNetCore.Mvc" Version="$(RamshaVersion)" />
   </ItemGroup>
 
 </Project>
