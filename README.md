@@ -4,7 +4,7 @@ A modular .NET framework , designed for building scalable and maintainable appli
 
 ## Prerequisites
 
-- .NET SDK 9.0  (download from [dotnet.microsoft.com](https://dotnet.microsoft.com/download))
+- .NET SDK Latest Version  (download from [dotnet.microsoft.com](https://dotnet.microsoft.com/download))
 
 ### CLI Tool - Direct Download 
 Download the latest Ramsha cli from [GitHub Releases](https://github.com/sulaimanmugahed/Ramsha-Framework/releases).
