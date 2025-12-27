@@ -63,7 +63,7 @@ public class PermissionManager(
 
               if (permission is null)
               {
-                  return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, $"no permission exist with this name: {name}");
+                  return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, $"no permission exist with this name: {name}");
               }
 
               var exist = await assignmentRepository.FindAsync(x => x.Name == name && x.ProviderKey == providerKey && x.ProviderName == providerName);
@@ -93,7 +93,7 @@ public class PermissionManager(
 
               if (permission is null)
               {
-                  return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, $"no permission exist with this name: {name}");
+                  return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, $"no permission exist with this name: {name}");
               }
 
               var exist = await assignmentRepository.FindAsync(x => x.Name == name && x.ProviderKey == providerKey && x.ProviderName == providerName);

@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using DemoApp.Data;
 using Ramsha;
 using Ramsha.Common.Domain;
-using Ramsha.Core;
-using Ramsha.UnitOfWork.Abstractions;
 
 namespace DemoApp.Entities;
 
@@ -22,7 +20,7 @@ public class ProductManager(IProductRepository repository)
             var product = await repository.FindAsync(id);
             if (product is null)
             {
-                return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode);
+                return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND);
             }
 
             await repository.DeleteAsync(id);

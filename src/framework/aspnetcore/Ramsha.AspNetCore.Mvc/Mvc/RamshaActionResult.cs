@@ -1,0 +1,62 @@
+
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+
+namespace Ramsha.AspNetCore.Mvc;
+
+public class RamshaActionResult : ObjectResult
+{
+    public RamshaActionResult(
+        [ActionResultObjectValue] IRamshaResult result,
+        HttpContext httpContext
+    ) : base(
+            result is IRamshaValueSuccessResult valueSuccessResult ? valueSuccessResult.Value : result is not IRamshaErrorResult error ? result : new RamshaActionResultError(error, httpContext)
+        )
+    {
+        MapStatus(result);
+    }
+
+    protected virtual void MapStatus(IRamshaResult result)
+    {
+        StatusCode = (int)result.Status;
+    }
+
+}
+
+public class RamshaActionResultError(IRamshaErrorResult error, HttpContext context)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? ConnectionId { get; } =
+        ((ushort)error.Status) is < 500 ? null
+            : context.Connection.Id;
+
+    // TODO: this throws error if no session is created.
+    //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    //public string? SessionId { get; } = ((ushort)error.Status) is < 500 ? null 
+    //    : context.Session.Id;
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? TraceId { get; } =
+        ((ushort)error.Status) is < 500 ? null : context.TraceIdentifier;
+
+    public string? Code { get; } = error.Code;
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Message { get; } = error.Message;
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IEnumerable<NamedError>? Errors { get; } = error.Errors;
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RamshaErrorContext? Context { get; } =
+        error.Context is null
+            ? null
+            : new(
+                CorrelationId: error.Context.CorrelationId,
+                ExceptionMeta: error.Context.ExceptionMeta,
+                ActivityMeta: error.Context.ActivityMeta,
+                SourceName: error.Context.SourceName
+            );
+}

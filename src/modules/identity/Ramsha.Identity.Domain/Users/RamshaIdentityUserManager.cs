@@ -129,7 +129,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
         var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
         if (user == null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, "no user found with this id");
+            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no user found with this id");
         }
 
         return user;

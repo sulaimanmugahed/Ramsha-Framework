@@ -25,7 +25,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         var role = await manager.FindByIdAsync(id.ToString());
         if (role is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, "no role found with this id");
+            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no role found with this id");
         }
 
         return ToDto(role);
@@ -84,7 +84,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         var role = await manager.FindByIdAsync(id.ToString());
         if (role is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, "no role found with this id");
+            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no role found with this id");
         }
 
         var result = await manager.DeleteAsync(role);
@@ -102,7 +102,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         var role = await manager.FindByIdAsync(id.ToString());
         if (role is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, "no role found with this id");
+            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no role found with this id");
         }
 
         MapUpdate(role, updateDto);

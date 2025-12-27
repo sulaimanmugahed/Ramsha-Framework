@@ -15,6 +15,11 @@ public abstract class RamshaControllerBase : ControllerBase
     protected IUnitOfWorkManager UnitOfWorkManager => HttpContext.RequestServices.GetLazyRequiredService<IUnitOfWorkManager>().Value;
     protected IGlobalQueryFilterManager GlobalQueryFilterManager => HttpContext.RequestServices.GetLazyRequiredService<IGlobalQueryFilterManager>().Value;
 
+    protected virtual RamshaActionResult RamshaResult(IRamshaResult result)
+    {
+        return new RamshaActionResult(result, HttpContext);
+    }
+
     protected Task<T> TransactionalUnitOfWork<T>(Func<Task<T>> action)
     {
         return UnitOfWork(action, true);

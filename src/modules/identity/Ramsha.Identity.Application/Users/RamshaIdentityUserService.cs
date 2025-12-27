@@ -139,7 +139,7 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
         var user = await repository.FindAsync(id);
         if (user is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.EntityNotFoundErrorCode, "no user with this id");
+            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no user with this id");
         }
 
         return ToDto(user);
