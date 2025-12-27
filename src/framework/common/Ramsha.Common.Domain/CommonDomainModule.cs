@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Security;
 using Ramsha.Settings;
 using Ramsha.UnitOfWork.Abstractions;

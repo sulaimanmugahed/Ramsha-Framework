@@ -3,11 +3,11 @@ using LiteBus.Queries.Abstractions;
 namespace Ramsha.LocalMessaging.Abstractions;
 
 
-public interface IRamshaQuery<TResult> : IQuery<TResult>, IRamshaQuery
+public interface IRamshaQuery<TResult> : IQuery<TResult>, IRamshaRequest
 {
 
 }
-public interface IRamshaQuery : IQuery
+public interface IRamshaQuery : IRamshaQuery<IRamshaResult>
 {
 
 }

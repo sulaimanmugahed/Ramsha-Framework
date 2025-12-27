@@ -4,7 +4,7 @@ using Ramsha.LocalMessaging.Abstractions;
 
 namespace DemoApp;
 
-public class TestQuery : Query<string>
+public class TestQuery : IRamshaQuery<string>
 {
 
 }

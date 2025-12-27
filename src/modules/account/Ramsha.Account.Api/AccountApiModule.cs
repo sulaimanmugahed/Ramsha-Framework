@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Account.Contracts;
-using Ramsha.Core.Modularity.Contexts;
 
 namespace Ramsha.Account.Api;
 

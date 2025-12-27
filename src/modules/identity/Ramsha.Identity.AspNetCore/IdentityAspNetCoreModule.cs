@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Identity.Domain;
 
 namespace Ramsha.Identity.AspNetCore;

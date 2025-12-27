@@ -9,7 +9,8 @@ public readonly record struct ValueSuccessResult<TValue>(TValue Value)
     /// <summary>The default status code for value success results.</summary>
     public static ResultStatus DefaultStatus => ResultStatus.OK;
 
-   
+    public static implicit operator Task<IRamshaResult>(ValueSuccessResult<TValue> result)
+     => Task.FromResult<IRamshaResult>(result);
 }
 
 public readonly record struct SuccessResult

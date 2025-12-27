@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Ramsha.AspNetCore.Security.Claims;
 using Ramsha.Common.Domain;
-using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Security.Claims;
 using Ramsha.UnitOfWork.Abstractions;
 

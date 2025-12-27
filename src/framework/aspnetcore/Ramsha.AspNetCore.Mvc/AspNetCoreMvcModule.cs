@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Ramsha.Core.Modularity.Contexts;
 using Scalar.AspNetCore;
 
 namespace Ramsha.AspNetCore.Mvc;

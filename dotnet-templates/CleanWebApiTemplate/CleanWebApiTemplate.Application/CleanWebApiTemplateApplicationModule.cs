@@ -2,7 +2,6 @@
 using CleanWebApiTemplate.Domain;
 using Ramsha;
 using Ramsha.ApplicationAbstractions;
-using Ramsha.Core.Modularity.Contexts;
 using Ramsha.LocalMessaging.Abstractions;
 
 namespace CleanWebApiTemplate.Application;

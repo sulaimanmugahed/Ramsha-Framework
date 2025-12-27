@@ -15,6 +15,19 @@ public abstract class RamshaControllerBase : ControllerBase
     protected IUnitOfWorkManager UnitOfWorkManager => HttpContext.RequestServices.GetLazyRequiredService<IUnitOfWorkManager>().Value;
     protected IGlobalQueryFilterManager GlobalQueryFilterManager => HttpContext.RequestServices.GetLazyRequiredService<IGlobalQueryFilterManager>().Value;
 
+    protected virtual async Task<RamshaActionResult> Query(IRamshaQuery query)
+    {
+        IRamshaResult result = await Mediator.Send(query);
+        return RamshaResult(result);
+    }
+
+    protected virtual async Task<RamshaActionResult> Command(IRamshaCommand command)
+    {
+        IRamshaResult result = await Mediator.Send(command);
+        return RamshaResult(result);
+    }
+
+
     protected virtual RamshaActionResult RamshaResult(IRamshaResult result)
     {
         return new RamshaActionResult(result, HttpContext);

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ramsha.AspNetCore.Mvc;
-using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Identity.Contracts;
 using Ramsha.Identity.Shared;
 

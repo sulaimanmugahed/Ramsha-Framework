@@ -4,7 +4,6 @@ using Ramsha.Identity.Contracts;
 using Ramsha.Identity.Shared;
 using Ramsha.Identity.Domain;
 using Ramsha.LocalMessaging.Abstractions;
-using Ramsha.Core.Modularity.Contexts;
 using Ramsha.Common.Application;
 
 namespace Ramsha.Identity.Application;
@@ -22,10 +21,6 @@ public class IdentityApplicationModule : RamshaModule
     public override void Prepare(PrepareContext context)
     {
         base.Prepare(context);
-        context.Configure<LocalMessagingOptions>(messageOptions =>
-     {
-         messageOptions.AddCommandHandler(typeof(CreateRoleCommandHandler<,,>));
-     });
     }
     public override void BuildServices(BuildServicesContext context)
     {

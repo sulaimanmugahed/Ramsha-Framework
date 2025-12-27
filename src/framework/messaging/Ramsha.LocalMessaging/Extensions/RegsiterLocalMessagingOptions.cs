@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LiteBus.Commands;
+
 using LiteBus.Events;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
 using LiteBus.Queries;
-using Microsoft.Extensions.DependencyInjection;
+
+using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -18,9 +15,9 @@ public static class ServiceCollectionExtensions
         var assemblies = options.Assemblies;
         services.AddLiteBus(builder =>
         {
-            builder.AddCommandModule(module =>
+            builder.AddRamshaCommandModule(module =>
             {
-                
+
                 foreach (var handler in options.CommandHandlers)
                 {
                     module.Register(handler);
@@ -32,7 +29,7 @@ public static class ServiceCollectionExtensions
 
             });
 
-            builder.AddQueryModule(module =>
+            builder.AddRamshaQueryModule(module =>
           {
               foreach (var assembly in assemblies)
               {
@@ -49,4 +46,5 @@ public static class ServiceCollectionExtensions
           });
         });
     }
+
 }

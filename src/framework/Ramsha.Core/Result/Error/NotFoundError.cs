@@ -20,4 +20,7 @@ public readonly record struct NotFoundError(
 
     /// <summary>Cached instance for common not found errors.</summary>
     public static ref NotFoundError Value => ref _Self;
+
+    public static implicit operator Task<IRamshaResult>(NotFoundError error)
+     => Task.FromResult<IRamshaResult>(error);
 }

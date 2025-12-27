@@ -1,19 +1,15 @@
 
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ramsha;
 using Ramsha.AspNetCore.Mvc;
+using Ramsha.LocalMessaging;
+using Ramsha.LocalMessaging.Abstractions;
 
 namespace DemoApp.Controllers;
 
 public class TestResultController : RamshaApiController
 {
-
-    [HttpGet("record")]
-    public ActionResult Record()
-    {
-        return Ok(TestRecord.Value.Code);
-    }
-
     [HttpGet("{id}")]
     public ActionResult Get(int id)
     {
@@ -26,14 +22,33 @@ public class TestResultController : RamshaApiController
         return RamshaResult(RamshaResults.Success(entity));
     }
 
+    [HttpGet("mediator/{id}")]
+    public async Task<ActionResult> GetWithMediator(int id)
+      => await Query(new FakeQuery { Id = id });
+
 }
 
 
-public record struct TestRecord(string Code = "default code")
+public class FakeQuery : IRamshaQuery
 {
-    private static TestRecord _Self = new("default code");
-    public static ref TestRecord Value => ref _Self;
+    public int Id { get; set; }
 }
+
+public class FakeQueryHandler : RamshaQueryHandler<FakeQuery>
+{
+    public override async Task<IRamshaResult> HandleAsync(FakeQuery message, CancellationToken cancellationToken = default)
+    {
+        var entity = FakeRepo.Find(message.Id);
+        if (entity is null)
+        {
+            return NotFound("no entity was found");
+        }
+        return Success(entity);
+    }
+}
+
+
+
 public static class FakeRepo
 {
     private static List<FakeEntity> rows = new()
