@@ -8,4 +8,6 @@ namespace Ramsha.AspNetCore;
 public class AspNetCoreOptions
 {
     public bool HttpsRedirection { get; set; } = true;
+    public bool ExceptionHandler { get; set; } = true;
+
 }

@@ -34,6 +34,8 @@ public class AspNetCoreModule : RamshaModule
         context.Services.AddHttpContextAccessor();
         context.Services.AddSingleton<IPrincipalAccessor, HttpPrincipalAccessor>();
         context.Services.TryAddSingleton<IAppPipeline<IApplicationBuilder>, AppPipeline<IApplicationBuilder>>();
+        context.Services.AddProblemDetails();
+        context.Services.AddExceptionHandler<RamshaGlobalExceptionHandler>();
     }
 
     public override void OnInit(InitContext context)
@@ -48,6 +50,11 @@ public class AspNetCoreModule : RamshaModule
             CanMove = false,
             CanRemove = false
         };
+
+        appPipeline.Use(AspNetCorePipelineEntries.ExceptionHandler, app =>
+        {
+            app.UseExceptionHandler();
+        }, entryOptions, () => aspNetCoreOptions.ExceptionHandler);
 
         appPipeline.Use(AspNetCorePipelineEntries.HttpsRedirection, app =>
         {

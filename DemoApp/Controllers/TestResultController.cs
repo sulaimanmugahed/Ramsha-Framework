@@ -16,7 +16,7 @@ public class TestResultController : RamshaApiController
         var entity = FakeRepo.Find(id);
         if (entity is null)
         {
-            return RamshaResult(RamshaResults.Invalid());
+            throw new RamshaErrorException(ResultStatus.Forbidden, "this is message");
         }
 
         return RamshaResult(RamshaResults.Success(entity));
