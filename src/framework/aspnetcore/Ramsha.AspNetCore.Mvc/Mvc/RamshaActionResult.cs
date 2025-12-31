@@ -12,7 +12,7 @@ public class RamshaActionResult : ObjectResult
         [ActionResultObjectValue] IRamshaResult result,
         HttpContext httpContext
     ) : base(
-            result is IRamshaValueSuccessResult valueSuccessResult ? valueSuccessResult.Value : result is not IRamshaErrorResult error ? result : new RamshaActionResultError(error, httpContext)
+            result is IRamshaValueSuccessResult valueSuccessResult ? valueSuccessResult.Value : result is not RamshaErrorResult error ? result : new RamshaActionResultError(error, httpContext)
         )
     {
         MapStatus(result);
@@ -25,7 +25,7 @@ public class RamshaActionResult : ObjectResult
 
 }
 
-public class RamshaActionResultError(IRamshaErrorResult error, HttpContext context)
+public class RamshaActionResultError(RamshaErrorResult error, HttpContext context)
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ConnectionId { get; } =
@@ -56,7 +56,6 @@ public class RamshaActionResultError(IRamshaErrorResult error, HttpContext conte
             : new(
                 CorrelationId: error.Context.CorrelationId,
                 ExceptionMeta: error.Context.ExceptionMeta,
-                ActivityMeta: error.Context.ActivityMeta,
                 SourceName: error.Context.SourceName
             );
 }

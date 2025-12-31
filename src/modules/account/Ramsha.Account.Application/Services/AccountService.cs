@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Ramsha.Account.Contracts;
 using Ramsha.Common.Application;
 using Ramsha.Identity.Domain;
@@ -30,18 +27,18 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
 where TRegisterDto : RamshaRegisterDto, new()
 {
 
-    public async Task<RamshaResult<string>> RegisterAsync(TRegisterDto registerDto)
+    public async Task<IRamshaResult> RegisterAsync(TRegisterDto registerDto)
     {
         var user = MapCreate(registerDto);
         var createResult = await userManager.CreateAsync(user, registerDto.Password);
         if (!createResult.Succeeded)
         {
-            return createResult.MapToRamshaErrors();
+            return createResult.MapToRamshaError();
         }
 
         await userManager.AddToBaseRoles(user);
 
-        return user.Id.ToString();
+        return Success(user.Id.ToString());
     }
 
 

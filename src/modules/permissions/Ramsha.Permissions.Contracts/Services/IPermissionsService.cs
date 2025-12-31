@@ -10,7 +10,7 @@ public interface IPermissionsService
 {
     Task<RamshaResult<PermissionInfo>> GetAsync(string permissionName, string providerName, string providerKey);
     Task<RamshaResult<List<PermissionInfo>>> GetAllAsync(string providerName, string providerKey);
-    Task<RamshaResult> AssignAsync(string permissionName, string providerName, string providerKey);
-    Task<RamshaResult> RevokeAsync(string permissionName, string providerName, string providerKey);
+    Task<IRamshaResult> AssignAsync(string permissionName, string providerName, string providerKey);
+    Task<IRamshaResult> RevokeAsync(string permissionName, string providerName, string providerKey);
 
 }

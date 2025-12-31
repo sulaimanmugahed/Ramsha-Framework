@@ -12,22 +12,22 @@ where TUpdateDto : UpdateRamshaIdentityUserDto
     Task<RamshaResult<TDto>> Get(TId id);
     Task<RamshaResult<List<TDto>>> GetList(TId id);
     Task<RamshaResult<string>> Create(TCreateDto createDto);
-    Task<RamshaResult> Update(TId id, TUpdateDto updateDto);
-    Task<RamshaResult> Delete(TId id);
-    Task<RamshaResult> AddToRoleAsync(TId id, string roleName);
-    Task<RamshaResult> ChangePasswordAsync(TId id, string oldPassword, string newPassword);
-    Task<RamshaResult> ConfirmEmailAsync(TId id, string token);
+    Task<IRamshaResult> Update(TId id, TUpdateDto updateDto);
+    Task<IRamshaResult> Delete(TId id);
+    Task<IRamshaResult> AddToRoleAsync(TId id, string roleName);
+    Task<IRamshaResult> ChangePasswordAsync(TId id, string oldPassword, string newPassword);
+    Task<IRamshaResult> ConfirmEmailAsync(TId id, string token);
     Task<RamshaResult<string>> GenerateEmailConfirmationTokenAsync(TId id);
     Task<RamshaResult<string>> GeneratePasswordResetTokenAsync(TId id);
     Task<RamshaResult<List<string>>> GetRolesAsync(TId id);
-    Task<RamshaResult> RemoveFromRoleAsync(TId id, string roleName);
-    Task<RamshaResult> ResetPasswordAsync(TId id, string token, string newPassword);
-    Task<RamshaResult> SetEmailAsync(TId id, string email);
-    Task<RamshaResult> SetLockoutAsync(TId id, DateTimeOffset? end);
-    Task<RamshaResult> SetPasswordAsync(TId id, string newPassword);
-    Task<RamshaResult> SetRolesAsync(TId id, IEnumerable<string> roleNames);
-    Task<RamshaResult> SetUserNameAsync(TId id, string username);
-    Task<RamshaResult> UnlockAsync(TId id);
+    Task<IRamshaResult> RemoveFromRoleAsync(TId id, string roleName);
+    Task<IRamshaResult> ResetPasswordAsync(TId id, string token, string newPassword);
+    Task<IRamshaResult> SetEmailAsync(TId id, string email);
+    Task<IRamshaResult> SetLockoutAsync(TId id, DateTimeOffset? end);
+    Task<IRamshaResult> SetPasswordAsync(TId id, string newPassword);
+    Task<IRamshaResult> SetRolesAsync(TId id, IEnumerable<string> roleNames);
+    Task<IRamshaResult> SetUserNameAsync(TId id, string username);
+    Task<IRamshaResult> UnlockAsync(TId id);
 }
 
 public interface IRamshaIdentityUserServiceBase;

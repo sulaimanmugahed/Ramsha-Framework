@@ -11,7 +11,7 @@ public interface IPermissionManager
 {
     Task<PermissionInfo> GetAsync(string name, string providerName, string providerKey);
     Task<List<PermissionInfo>> GetAllAsync(string providerName, string providerKey);
-    Task<RamshaResult> AssignAsync(string name, string providerName, string providerKey);
-    Task<RamshaResult> RevokeAsync(string name, string providerName, string providerKey);
+    Task<IRamshaResult> AssignAsync(string name, string providerName, string providerKey);
+    Task<IRamshaResult> RevokeAsync(string name, string providerName, string providerKey);
 
 }

@@ -1,3 +1,4 @@
+using DemoApp.Controllers;
 using DemoApp.Data;
 using DemoApp.Entities;
 using DemoApp.Permissions;
@@ -130,6 +131,12 @@ public class AppModule : RamshaModule
         {
             options.DefinitionProviders.Add<ProductSettingDefinitions>();
         });
+
+
+        context.Services.AddRamshaDomainManager<FakeManager>();
+        context.Services.AddRamshaService<FakeAppService>();
+
+
 
     }
 

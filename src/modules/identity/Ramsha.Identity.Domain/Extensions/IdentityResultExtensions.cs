@@ -6,16 +6,21 @@ using Microsoft.AspNetCore.Identity;
 using Ramsha.Core;
 using Ramsha.Identity.Shared;
 
+using static Ramsha.Identity.Shared.RamshaIdentityErrorsCodes;
+
 namespace Ramsha.Identity.Domain;
 
 public static class IdentityResultExtensions
 {
-    public static List<RamshaError> MapToRamshaErrors(this IdentityResult result)
+    public static RamshaErrorResult MapToRamshaError(
+     this IdentityResult result,
+     RamshaResultStatus status = RamshaResultStatus.Invalid)
     {
-        return result.Errors
-        .Select(error =>
-         RamshaError.Create(RamshaIdentityErrorsCodes.Prefix + error.Code, error.Description)
-         )
-         .ToList();
+        List<NamedError> errors = result
+        .Errors
+        .Select(e => new NamedError(e.Code, e.Description, e.Code))
+        .ToList();
+
+        return new RamshaErrorResult(status, "Identity Errors happened .", IDENTITY_DEFAULT, errors);
     }
 }

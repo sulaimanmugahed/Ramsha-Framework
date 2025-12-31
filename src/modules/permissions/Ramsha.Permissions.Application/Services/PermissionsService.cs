@@ -11,7 +11,7 @@ namespace Ramsha.Permissions.Application;
 
 public class PermissionsService(IPermissionManager permissionManager) : RamshaService, IPermissionsService
 {
-    public async Task<RamshaResult> AssignAsync(string permissionName, string providerName, string providerKey)
+    public async Task<IRamshaResult> AssignAsync(string permissionName, string providerName, string providerKey)
     {
         return await permissionManager.AssignAsync(permissionName, providerName, providerKey);
     }
@@ -27,7 +27,7 @@ public class PermissionsService(IPermissionManager permissionManager) : RamshaSe
 
     }
 
-    public async Task<RamshaResult> RevokeAsync(string permissionName, string providerName, string providerKey)
+    public async Task<IRamshaResult> RevokeAsync(string permissionName, string providerName, string providerKey)
     {
         return await permissionManager.RevokeAsync(permissionName, providerName, providerKey);
 

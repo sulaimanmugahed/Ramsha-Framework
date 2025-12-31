@@ -4,7 +4,7 @@ namespace Ramsha;
 public class RamshaErrorException : RamshaException
 {
     public RamshaErrorException(
-        ResultStatus status,
+        RamshaResultStatus status,
         string? message = null,
         IEnumerable<NamedError>? errors = null,
         RamshaErrorContext? context = null,
@@ -20,7 +20,7 @@ public class RamshaErrorException : RamshaException
 
     public IEnumerable<NamedError>? Errors { get; }
     public RamshaErrorContext? Context { get; }
-    public ResultStatus Status { get; }
+    public RamshaResultStatus Status { get; }
 
     public RamshaErrorException WithData(string name, object value)
     {

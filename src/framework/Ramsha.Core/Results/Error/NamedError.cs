@@ -12,8 +12,8 @@ namespace Ramsha;
 public record NamedError(
     string Key,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        IEnumerable<NamedErrorDetails>? Details = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] object? Data = null
+    string? Message = null,
+    string? Code = null
 );
 
 /// <summary>
@@ -24,8 +24,7 @@ public record NamedError(
 /// <param name="Severity">Severity of the error detail.</param>
 /// <param name="Meta">Optional extensibility payload.</param>
 public record NamedErrorDetails(
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Message,
-    string? Code = null,
+
     ErrorSeverity Severity = ErrorSeverity.Error,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] object? Meta = null
 );

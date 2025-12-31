@@ -14,6 +14,6 @@ public class RamshaAccountController<TRegisterDto>(IRamshaAccountService<TRegist
 where TRegisterDto : RamshaRegisterDto, new()
 {
     [HttpPost("register")]
-    public async Task<RamshaResult<string>> Register(TRegisterDto registerDto)
-    => await UnitOfWork(() => accountService.RegisterAsync(registerDto));
+    public async Task<ActionResult> Register(TRegisterDto registerDto)
+    => await UnitOfWork(async () => RamshaResult(await accountService.RegisterAsync(registerDto)));
 }

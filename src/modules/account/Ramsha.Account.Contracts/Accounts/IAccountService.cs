@@ -8,7 +8,7 @@ namespace Ramsha.Account.Contracts;
 public interface IRamshaAccountService<TRegisterDto> : IRamshaAccountServiceBase
 where TRegisterDto : RamshaRegisterDto, new()
 {
-    Task<RamshaResult<string>> RegisterAsync(TRegisterDto registerDto);
+    Task<IRamshaResult> RegisterAsync(TRegisterDto registerDto);
 }
 
 

@@ -25,7 +25,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         var role = await manager.FindByIdAsync(id.ToString());
         if (role is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no role found with this id");
+            return NotFound(message: "no role found with this id");
         }
 
         return ToDto(role);
@@ -36,7 +36,7 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         var result = await manager.CreateAsync(newRole);
         if (!result.Succeeded)
         {
-            return result.MapToRamshaErrors();
+            return result.MapToRamshaError();
         }
 
         return newRole.Id.ToString()!;
@@ -79,39 +79,39 @@ where TRole : RamshaIdentityRole<TId, TUserRole, TRoleClaim>, new()
         return user;
     }
 
-    public async Task<RamshaResult> Delete(TId id)
+    public async Task<IRamshaResult> Delete(TId id)
     {
         var role = await manager.FindByIdAsync(id.ToString());
         if (role is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no role found with this id");
+            return NotFound(message: "no role found with this id");
         }
 
         var result = await manager.DeleteAsync(role);
 
         if (!result.Succeeded)
         {
-            return result.MapToRamshaErrors();
+            return result.MapToRamshaError();
         }
-        return RamshaResult.Ok();
+        return Success();
 
     }
 
-    public async Task<RamshaResult> Update(TId id, TUpdateDto updateDto)
+    public async Task<IRamshaResult> Update(TId id, TUpdateDto updateDto)
     {
         var role = await manager.FindByIdAsync(id.ToString());
         if (role is null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no role found with this id");
+            return NotFound(message: "no role found with this id");
         }
 
         MapUpdate(role, updateDto);
         var result = await manager.UpdateAsync(role);
         if (!result.Succeeded)
         {
-            return result.MapToRamshaErrors();
+            return result.MapToRamshaError();
         }
-        return RamshaResult.Ok();
+        return Success();
     }
 
     public async Task<RamshaResult<List<TDto>>> GetList(TId id)

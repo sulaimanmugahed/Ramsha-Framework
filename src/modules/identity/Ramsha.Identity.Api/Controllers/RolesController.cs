@@ -17,26 +17,26 @@ where TCreateDto : CreateRamshaIdentityRoleDto
 where TUpdateDto : UpdateRamshaIdentityRoleDto
 where TDto : RamshaIdentityRoleDto
 {
-    [HttpGet("{id}")]
-    public async Task<RamshaResult<TDto>> Get(TId id)
-    => await UnitOfWork(() => roleService.Get(id));
+  [HttpGet("{id}")]
+  public async Task<ActionResult<TDto>> Get(TId id)
+  => RamshaResult(await UnitOfWork(() => roleService.Get(id)));
 
-    [HttpGet]
-    public async Task<RamshaResult<List<TDto>>> GetList(TId id)
-  => await UnitOfWork(() => roleService.GetList(id));
+  [HttpGet]
+  public async Task<ActionResult<List<TDto>>> GetList(TId id)
+=> RamshaResult(await UnitOfWork(() => roleService.GetList(id)));
 
-    [HttpPost]
-    public async Task<RamshaResult<string>> Create(TCreateDto createDto)
-    => await UnitOfWork(() => roleService.Create(createDto));
+  [HttpPost]
+  public async Task<ActionResult<string>> Create(TCreateDto createDto)
+  => RamshaResult(await UnitOfWork(() => roleService.Create(createDto)));
 
-    [HttpPut("{id}")]
-    public async Task<RamshaResult> Update(TId id, TUpdateDto updateDto)
-   => await UnitOfWork(() => roleService.Update(id, updateDto));
+  [HttpPut("{id}")]
+  public async Task<IActionResult> Update(TId id, TUpdateDto updateDto)
+ => RamshaResult(await UnitOfWork(() => roleService.Update(id, updateDto)));
 
 
-    [HttpDelete("{id}")]
-    public async Task<RamshaResult> Delete(TId id)
-    => await UnitOfWork(() => roleService.Delete(id));
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> Delete(TId id)
+  => RamshaResult(await UnitOfWork(() => roleService.Delete(id)));
 
 
 

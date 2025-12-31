@@ -55,15 +55,15 @@ public class PermissionManager(
     }
 
 
-    public async Task<RamshaResult> AssignAsync(string name, string providerName, string providerKey)
+    public async Task<IRamshaResult> AssignAsync(string name, string providerName, string providerKey)
     {
-        return await UnitOfWork(async () =>
+        return await UnitOfWork<IRamshaResult>(async () =>
           {
               var permission = await definitionManager.GetPermissionAsync(name);
 
               if (permission is null)
               {
-                  return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, $"no permission exist with this name: {name}");
+                  return NotFound(message: $"no permission exist with this name: {name}");
               }
 
               var exist = await assignmentRepository.FindAsync(x => x.Name == name && x.ProviderKey == providerKey && x.ProviderName == providerName);
@@ -81,19 +81,19 @@ public class PermissionManager(
                   await assignmentRepository.AddAsync(assignment);
               }
 
-              return RamshaResult.Ok();
+              return Success();
           });
     }
 
-    public async Task<RamshaResult> RevokeAsync(string name, string providerName, string providerKey)
+    public async Task<IRamshaResult> RevokeAsync(string name, string providerName, string providerKey)
     {
-        return await UnitOfWork(async () =>
+        return await UnitOfWork<IRamshaResult>(async () =>
           {
               var permission = await definitionManager.GetPermissionAsync(name);
 
               if (permission is null)
               {
-                  return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, $"no permission exist with this name: {name}");
+                  return NotFound(message: $"no permission exist with this name: {name}");
               }
 
               var exist = await assignmentRepository.FindAsync(x => x.Name == name && x.ProviderKey == providerKey && x.ProviderName == providerName);
@@ -103,7 +103,7 @@ public class PermissionManager(
                   await assignmentRepository.DeleteAsync(exist);
               }
 
-              return RamshaResult.Ok();
+              return Success();
           });
     }
 }

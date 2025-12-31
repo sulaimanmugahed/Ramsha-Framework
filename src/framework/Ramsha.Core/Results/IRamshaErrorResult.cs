@@ -23,9 +23,3 @@ public interface IRamshaErrorResult : IRamshaResult
     /// <summary>Additional context data for diagnostics and tracing.</summary>
     RamshaErrorContext? Context { get; }
 }
-
-/// <summary>
-/// Generic marker interface to pair an error result with its own type.
-/// </summary>
-public interface IRamshaErrorResult<T> : IRamshaErrorResult, IRamshaResult<T>
-    where T : IRamshaErrorResult<T>;

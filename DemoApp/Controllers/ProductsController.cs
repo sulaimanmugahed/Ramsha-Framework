@@ -18,13 +18,13 @@ namespace DemoApp.Controllers;
 public class ProductsController(ProductManager productManager, IGlobalQueryFilterManager dataFilter, IProductRepository repository, IServiceScopeFactory serviceScopeFactory, IOptionsMonitor<TestSetting> options) : RamshaApiController
 {
     [HttpDelete("{id}")]
-    public async Task<RamshaResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        return await productManager.Delete(id);
+        return RamshaResult(await productManager.Delete(id));
     }
 
     [HttpGet("{id}")]
-    public async Task<RamshaResult<Product?>> Get(Guid id)
+    public async Task<ActionResult<Product?>> Get(Guid id)
     {
         var enabled = GlobalQueryFilterManager.IsEnabled<ISoftDelete>();
 
@@ -39,9 +39,9 @@ public class ProductsController(ProductManager productManager, IGlobalQueryFilte
     }
 
     [HttpPost]
-    public async Task<RamshaResult<string>> Create(string name, decimal price)
+    public async Task<ActionResult<string>> Create(string name, decimal price)
     {
-        return await productManager.Create(name, price);
+        return RamshaResult(await productManager.Create(name, price));
     }
 
 

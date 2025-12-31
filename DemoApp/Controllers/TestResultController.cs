@@ -1,14 +1,45 @@
 
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Ramsha;
 using Ramsha.AspNetCore.Mvc;
+using Ramsha.Common.Application;
+using Ramsha.Common.Domain;
 using Ramsha.LocalMessaging;
 using Ramsha.LocalMessaging.Abstractions;
 
 namespace DemoApp.Controllers;
 
-public class TestResultController : RamshaApiController
+public class FakeManager : RamshaDomainManager
+{
+    public RamshaResult<FakeEntity> Get(int id)
+    {
+        var entity = FakeRepo.Find(id);
+        if (entity is null)
+        {
+            return NotFound(message: "no fake entity was found");
+        }
+
+        return entity;
+    }
+}
+
+
+public class FakeAppService(FakeManager manager) : RamshaService
+{
+    public RamshaResult<FakeEntity> Get(int id)
+    {
+        var result = manager.Get(id);
+        if (!result.Succeeded)
+        {
+            return result.Error;
+        }
+
+        return result;
+    }
+}
+
+public class TestResultController(FakeAppService appService) : RamshaApiController
 {
     [HttpGet("{id}")]
     public ActionResult Get(int id)
@@ -16,7 +47,7 @@ public class TestResultController : RamshaApiController
         var entity = FakeRepo.Find(id);
         if (entity is null)
         {
-            throw new RamshaErrorException(ResultStatus.Forbidden, "this is message");
+            throw new RamshaErrorException(RamshaResultStatus.Forbidden, "this is message");
         }
 
         return RamshaResult(RamshaResults.Success(entity));
@@ -25,6 +56,19 @@ public class TestResultController : RamshaApiController
     [HttpGet("mediator/{id}")]
     public async Task<ActionResult> GetWithMediator(int id)
       => await Query(new FakeQuery { Id = id });
+
+    [HttpGet("use-service/{id}")]
+    public async Task<ActionResult> GetWithService(int id)
+    {
+        var result = appService.Get(id);
+
+        if (!result.Succeeded)
+        {
+            return RamshaResult(result.Error);
+        }
+
+        return RamshaResult(result);
+    }
 
 }
 

@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha;
 using Ramsha.UnitOfWork.Abstractions;
+using static Ramsha.RamshaErrorsCodes;
 
 namespace Ramsha.Common.Domain;
 
@@ -14,7 +12,6 @@ public abstract class RamshaDomainManager
     [Injectable]
     public IServiceProvider ServiceProvider { get; set; } = default!;
     protected IUnitOfWorkManager UnitOfWorkManager => ServiceProvider.GetLazyService<IUnitOfWorkManager>().Value;
-
 
 
     protected Task<T> TransactionalUnitOfWork<T>(Func<Task<T>> action)
@@ -76,4 +73,45 @@ public abstract class RamshaDomainManager
             await uow.CompleteAsync();
         }
     }
+
+    protected NoContentResult NoContent => RamshaResults.NoContent;
+
+    protected SuccessResult Success()
+    => RamshaResults.Success();
+
+    protected SuccessResult<TValue> Success<TValue>(TValue value)
+        => RamshaResults.Success(value);
+
+    protected AcceptedResult Accepted(JobInfo job) => RamshaResults.Accepted(job);
+
+    protected NotFoundError NotFound()
+        => RamshaResults.NotFound();
+
+    protected NotFoundError NotFound(string code = NOT_FOUND, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.NotFound(code, message, errors);
+
+    protected InvalidError Invalid()
+    => RamshaResults.Invalid();
+
+    protected InvalidError Invalid(string code = INVALID, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.Invalid(code, message, errors);
+
+
+    protected UnauthenticatedError Unauthenticated()
+        => RamshaResults.Unauthenticated();
+
+    protected UnauthenticatedError Unauthenticated(string code = UNAUTHENTICATED, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.Unauthenticated(code, message, errors);
+
+    protected ForbiddenError Forbidden()
+        => RamshaResults.Forbidden();
+
+    protected ForbiddenError Forbidden(string code = FORBIDDEN, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.Forbidden(code, message, errors);
+
+    protected InternalError InternalError()
+        => RamshaResults.InternalError();
+
+    protected InternalError InternalError(string code = INTERNAL_ERROR, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.InternalError(code, message, errors);
 }

@@ -13,28 +13,28 @@ public class ProductManager(IProductRepository repository)
 {
 
 
-    public async Task<RamshaResult> Delete(Guid id)
+    public async Task<IRamshaResult> Delete(Guid id)
     {
-        return await UnitOfWork(async () =>
+        return await UnitOfWork<IRamshaResult>(async () =>
         {
             var product = await repository.FindAsync(id);
             if (product is null)
             {
-                return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND);
+                return NotFound();
             }
 
             await repository.DeleteAsync(id);
-            return RamshaResult.Ok();
+            return Success();
         });
     }
     public async Task<RamshaResult<string>> Create(string name, decimal price)
     {
-        return await UnitOfWork(async () =>
+        return await UnitOfWork<RamshaResult<string>>(async () =>
         {
             var product = await repository.AddAsync(Product.Create(Guid.NewGuid(), name, price));
             if (product is null)
             {
-                return RamshaResult<string>.Failure();
+                return Invalid();
             }
 
             return product.Id.ToString();

@@ -13,25 +13,24 @@ namespace Ramsha.Permissions.Api;
 public class PermissionsController(IPermissionsService permissionsService) : RamshaApiController
 {
     [HttpPost]
-    public Task<RamshaResult> AssignAsync(string permissionName, string providerName, string providerKey)
+    public async Task<IActionResult> AssignAsync(string permissionName, string providerName, string providerKey)
     {
-        return permissionsService.AssignAsync(permissionName, providerName, providerKey);
+        return RamshaResult(await permissionsService.AssignAsync(permissionName, providerName, providerKey));
     }
     [HttpGet("all")]
-    public Task<RamshaResult<List<PermissionInfo>>> GetAllAsync(string providerName, string providerKey)
+    public async Task<ActionResult<List<PermissionInfo>>> GetAllAsync(string providerName, string providerKey)
     {
-        return permissionsService.GetAllAsync(providerName, providerKey);
+        return RamshaResult(await permissionsService.GetAllAsync(providerName, providerKey));
     }
     [HttpGet]
-    public Task<RamshaResult<PermissionInfo>> GetAsync(string permissionName, string providerName, string providerKey)
+    public async Task<ActionResult<PermissionInfo>> GetAsync(string permissionName, string providerName, string providerKey)
     {
-        return permissionsService.GetAsync(permissionName, providerName, providerKey);
+        return RamshaResult(await permissionsService.GetAsync(permissionName, providerName, providerKey));
 
     }
     [HttpDelete]
-    public Task<RamshaResult> RevokeAsync(string permissionName, string providerName, string providerKey)
+    public async Task<IRamshaResult> RevokeAsync(string permissionName, string providerName, string providerKey)
     {
-        return permissionsService.RevokeAsync(permissionName, providerName, providerKey);
-
+        return await permissionsService.RevokeAsync(permissionName, providerName, providerKey);
     }
 }

@@ -82,78 +82,40 @@ public abstract class RamshaQueryHandler<TQuery> : RamshaQueryHandler<TQuery, IR
     protected SuccessResult Success()
     => RamshaResults.Success();
 
-    protected ValueSuccessResult<TValue> Success<TValue>(TValue value)
+    protected SuccessResult<TValue> Success<TValue>(TValue value)
         => RamshaResults.Success(value);
-
-    protected CreatedResult<TId> Created<TId>(TId id, string? url = null)
-    where TId : IEquatable<TId>, IComparable<TId> => RamshaResults.Created(id, url);
-
-    protected CreatedValueResult<TId, TValue> Created<TId, TValue>(
-        TId id,
-        TValue value,
-        string? url = null)
-    where TId : IEquatable<TId>, IComparable<TId> => RamshaResults.Created(id, value, url);
 
     protected AcceptedResult Accepted(JobInfo job) => RamshaResults.Accepted(job);
 
     protected NotFoundError NotFound()
         => RamshaResults.NotFound();
 
-    protected NotFoundError NotFound(string message, string code = NOT_FOUND, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.NotFound(message, code, errors);
+    protected NotFoundError NotFound(string code = NOT_FOUND, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.NotFound(code, message, errors);
 
     protected InvalidError Invalid()
     => RamshaResults.Invalid();
 
-    protected InvalidError Invalid(string message, string code = INVALID, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.Invalid(message, code, errors);
+    protected InvalidError Invalid(string code = INVALID, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.Invalid(code, message, errors);
 
-    protected NetworkError NetworkProblem()
-        => RamshaResults.NetworkProblem();
-
-    protected NetworkError NetworkProblem(string message, string code = NETWORK_ERROR, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.NetworkProblem(message, code, errors);
 
     protected UnauthenticatedError Unauthenticated()
         => RamshaResults.Unauthenticated();
 
-    protected UnauthenticatedError Unauthenticated(string message, string code = UNAUTHENTICATED, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.Unauthenticated(message, code, errors);
+    protected UnauthenticatedError Unauthenticated(string code = UNAUTHENTICATED, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.Unauthenticated(code, message, errors);
 
     protected ForbiddenError Forbidden()
         => RamshaResults.Forbidden();
 
-    protected ForbiddenError Forbidden(string message, string code = FORBIDDEN, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.Forbidden(message, code, errors);
-
-    protected PaymentRequiredError PaymentRequired()
-        => RamshaResults.PaymentRequired();
-
-    protected PaymentRequiredError PaymentRequired(string message, string code = PAYMENT_REQUIRED, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.PaymentRequired(message, code, errors);
-
-    protected AbortedError Aborted()
-        => RamshaResults.Aborted();
-
-    protected AbortedError Aborted(string message, string code = ABORTED, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.Aborted(message, code, errors);
-
-    protected NotImplementedError NotImplemented()
-        => RamshaResults.NotImplemented();
-
-    protected NotImplementedError NotImplemented(string message, string code = NOT_IMPLEMENTED, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.NotImplemented(message, code, errors);
-
-    protected InsufficientStorageError InsufficientStorage()
-        => RamshaResults.InsufficientStorage();
-
-    protected InsufficientStorageError InsufficientStorage(string message, string code = INSUFFICIENT_STORAGE, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.InsufficientStorage(message, code, errors);
+    protected ForbiddenError Forbidden(string code = FORBIDDEN, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.Forbidden(code, message, errors);
 
     protected InternalError InternalError()
         => RamshaResults.InternalError();
 
-    protected InternalError InternalError(string message, string code = INTERNAL_ERROR, IEnumerable<NamedError>? errors = null)
-        => RamshaResults.InternalError(message, code, errors);
+    protected InternalError InternalError(string code = INTERNAL_ERROR, string? message = null, IEnumerable<NamedError>? errors = null)
+        => RamshaResults.InternalError(code, message, errors);
 }
 

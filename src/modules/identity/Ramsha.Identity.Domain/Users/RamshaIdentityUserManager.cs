@@ -129,7 +129,7 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
         var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
         if (user == null)
         {
-            return RamshaError.Create(RamshaErrorsCodes.NOT_FOUND, "no user found with this id");
+            return RamshaResults.NotFound(message: "no user found with this id");
         }
 
         return user;
@@ -304,6 +304,6 @@ where TRoleClaim : RamshaIdentityRoleClaim<TId>, new()
         }
 
         Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
-        return RamshaError.Create(RamshaIdentityErrorsCodes.GenerateUsernameErrorCode, "Could not get a valid username for the given email address");
+        return RamshaResults.Invalid(RamshaIdentityErrorsCodes.GenerateUsernameErrorCode, "Could not get a valid username for the given email address");
     }
 }

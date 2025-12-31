@@ -13,8 +13,8 @@ public interface IRamshaIdentityRoleService<TDto, TCreateDto, TUpdateDto, TId> :
     where TDto : RamshaIdentityRoleDto
 {
     Task<RamshaResult<string>> Create(TCreateDto createDto);
-    Task<RamshaResult> Update(TId id, TUpdateDto updateDto);
-    Task<RamshaResult> Delete(TId id);
+    Task<IRamshaResult> Update(TId id, TUpdateDto updateDto);
+    Task<IRamshaResult> Delete(TId id);
     Task<RamshaResult<TDto>> Get(TId id);
     Task<RamshaResult<List<TDto>>> GetList(TId id);
 }

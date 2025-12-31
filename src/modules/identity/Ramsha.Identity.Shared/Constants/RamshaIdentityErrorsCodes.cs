@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Ramsha.Identity.Shared;
 
-public class RamshaIdentityErrorsCodes
+public static class RamshaIdentityErrorsCodes
 {
-    public const string Prefix = "identity:";
-    public const string GenerateUsernameErrorCode = "identity:30";
+    public const string IDENTITY_PREFIX = "identity:";
+    public const string IDENTITY_DEFAULT = IDENTITY_PREFIX + "default";
+    public const string GenerateUsernameErrorCode = IDENTITY_PREFIX + "generateUsername";
 
 }

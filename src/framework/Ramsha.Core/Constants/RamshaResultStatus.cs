@@ -2,7 +2,7 @@ using System.Net;
 
 namespace Ramsha;
 
-public enum ResultStatus : ushort
+public enum RamshaResultStatus : ushort
 {
     _ = 999,
     Unknown = _,
