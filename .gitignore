@@ -369,3 +369,6 @@ src-packages/
 
 dotnet-templates/container/mtr/content
 dotnet-templates/templates-packages
+
+
+up-dotnet.ps1
