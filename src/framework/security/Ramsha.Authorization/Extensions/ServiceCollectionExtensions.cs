@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
 
         var permissionResolverInterfaceType = typeof(IPermissionValueResolver);
 
-        var permissionResolvers = RamshaTypeHelpers.GetRamshaTypes<AuthorizationModule>(permissionResolverInterfaceType);
+        var permissionResolvers = RamshaTypeHelpers.GetImplementationTypes<AuthorizationModule>(permissionResolverInterfaceType);
         foreach (var resolver in permissionResolvers)
         {
             services.AddTransient(permissionResolverInterfaceType, resolver);
@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
 
 
         var definitionProviderInterfaceType = typeof(IPermissionDefinitionProvider);
-        var definitionProviderTypes = RamshaTypeHelpers.GetRamshaTypes<AuthorizationModule>(definitionProviderInterfaceType);
+        var definitionProviderTypes = RamshaTypeHelpers.GetImplementationTypes<AuthorizationModule>(definitionProviderInterfaceType);
         foreach (var provider in definitionProviderTypes)
         {
             services.AddTransient(provider);

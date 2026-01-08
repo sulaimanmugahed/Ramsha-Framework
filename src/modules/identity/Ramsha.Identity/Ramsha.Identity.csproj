@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ramsha.Identity.Api\Ramsha.Identity.Api.csproj" />
+    <ProjectReference Include="..\Ramsha.Identity.AspNetCore\Ramsha.Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\Ramsha.Identity.Application\Ramsha.Identity.Application.csproj" />
+    <ProjectReference Include="..\Ramsha.Identity.Persistence\Ramsha.Identity.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

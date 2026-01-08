@@ -17,7 +17,7 @@ public class IdentityAspNetCoreModule : RamshaModule
     {
         base.Prepare(context);
 
-        context.Configure<RamshaIdentityOptions>(options =>
+        context.PrepareOptions<RamshaIdentityOptions>(options =>
         {
             options.ConfigureIdentity(builder =>
             {

@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
 
         var settingManagerResolverInterfaceType = typeof(ISettingManagerResolver);
 
-        var permissionResolvers = RamshaTypeHelpers.GetRamshaTypes<SettingsModule>(settingManagerResolverInterfaceType);
+        var permissionResolvers = RamshaTypeHelpers.GetImplementationTypes<SettingsModule>(settingManagerResolverInterfaceType);
         foreach (var resolver in permissionResolvers)
         {
             services.AddTransient(settingManagerResolverInterfaceType, resolver);

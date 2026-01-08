@@ -24,17 +24,16 @@ public static class ServiceCollectionExtensions
 
         var settingValueResolverInterfaceType = typeof(ISettingValueResolver);
 
-        var permissionResolvers = RamshaTypeHelpers.GetRamshaTypes<SettingsModule>(settingValueResolverInterfaceType);
+        var permissionResolvers = RamshaTypeHelpers.GetImplementationTypes<SettingsModule>(settingValueResolverInterfaceType);
         foreach (var resolver in permissionResolvers)
         {
             services.AddTransient(settingValueResolverInterfaceType, resolver);
             services.AddTransient(resolver);
-
         }
 
 
         var definitionProviderInterfaceType = typeof(ISettingDefinitionProvider);
-        var definitionProviderTypes = RamshaTypeHelpers.GetRamshaTypes<SettingsModule>(definitionProviderInterfaceType);
+        var definitionProviderTypes = RamshaTypeHelpers.GetImplementationTypes<SettingsModule>(definitionProviderInterfaceType);
         foreach (var provider in definitionProviderTypes)
         {
             services.AddTransient(provider);

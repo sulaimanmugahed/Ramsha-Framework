@@ -3,97 +3,88 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Ramsha;
 
 public static class AppFactory
 {
-    public async static Task<IRamshaAppWithInternalServiceProvider> CreateAsync<TStartupModule>(
-        Action<AppCreationOptions>? optionsAction = null,
-        IRamshaModule? startupModuleInstance = null)
+    public static IInternalRamshaAppEngine Create<TStartupModule>(
+      Action<AppCreationOptions>? optionsAction = null)
+      where TStartupModule : IRamshaModule
+    {
+        return CreateApp(typeof(TStartupModule), optionsAction);
+    }
+
+    public static IInternalRamshaAppEngine CreateApp(
+        [NotNull] Type startupModuleType,
+        Action<AppCreationOptions>? optionsAction = null)
+    {
+        var app = new InternalRamshaAppEngine(startupModuleType, optionsAction);
+        Task.Run(() => app.ConfigureAsync()).GetAwaiter().GetResult();
+        return app;
+    }
+    public async static Task<IInternalRamshaAppEngine> CreateAppAsync<TStartupModule>(
+        Action<AppCreationOptions>? optionsAction = null)
         where TStartupModule : IRamshaModule
     {
-        var app = Create(typeof(TStartupModule), options =>
+        var app = CreateApp(typeof(TStartupModule), optionsAction);
+        await app.ConfigureAsync();
+        return app;
+    }
+
+    public async static Task<IInternalRamshaAppEngine> CreateAppAsync(
+        [NotNull] Type startupModuleType,
+        Action<AppCreationOptions>? optionsAction = null)
+    {
+        var app = new InternalRamshaAppEngine(startupModuleType, optionsAction);
+        await app.ConfigureAsync();
+        return app;
+    }
+
+    public async static Task<IExternalRamshaAppEngine> CreateAppAsync<TStartupModule>(
+        [NotNull] IServiceCollection services,
+        Action<AppCreationOptions>? optionsAction = null)
+        where TStartupModule : IRamshaModule
+    {
+        return await CreateAppAsync(typeof(TStartupModule), services, optionsAction);
+    }
+
+    public async static Task<IExternalRamshaAppEngine> CreateAppAsync(
+        [NotNull] Type startupModuleType,
+        [NotNull] IServiceCollection services,
+        Action<AppCreationOptions>? optionsAction = null)
+    {
+        var app = new ExternalRamshaAppEngine(startupModuleType, services, optionsAction);
+        await app.ConfigureAsync();
+        return app;
+    }
+
+
+
+    public static IExternalRamshaAppEngine CreateApp<TStartupModule>(
+        [NotNull] IServiceCollection services,
+        Action<AppCreationOptions>? optionsAction = null)
+        where TStartupModule : IRamshaModule
+    {
+        return CreateApp(typeof(TStartupModule), services, optionsAction);
+    }
+
+    public static IExternalRamshaAppEngine CreateApp(
+    Type startupModuleType,
+    [NotNull] IServiceCollection services,
+    Action<AppCreationOptions>? optionsAction = null)
+    {
+        var app = new ExternalRamshaAppEngine(startupModuleType, services, options =>
         {
-            options.SkipConfigureServices = true;
             optionsAction?.Invoke(options);
         });
-        await app.ConfigureServicesAsync();
+        Task.Run(() => app.ConfigureAsync()).GetAwaiter().GetResult();
         return app;
     }
 
-    public async static Task<IRamshaAppWithInternalServiceProvider> CreateAsync(
-        [NotNull] Type startupModuleType,
-        Action<AppCreationOptions>? optionsAction = null)
-    {
-        var app = new RamshaAppWithInternalServiceProvider(startupModuleType, options =>
-        {
-            options.SkipConfigureServices = true;
-            optionsAction?.Invoke(options);
-        });
-        await app.ConfigureServicesAsync();
-        return app;
-    }
 
-    public async static Task<IRamshaAppWithExternalServiceProvider> CreateAsync<TStartupModule>(
-        [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction = null)
-        where TStartupModule : IRamshaModule
-    {
-        var app = Create(typeof(TStartupModule), services, options =>
-        {
-            options.SkipConfigureServices = true;
-            optionsAction?.Invoke(options);
-        });
-        await app.ConfigureServicesAsync();
-        return app;
-    }
 
-    public async static Task<IRamshaAppWithExternalServiceProvider> CreateAsync(
-        [NotNull] Type startupModuleType,
-        [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction = null,
-         IRamshaModule? startupModuleInstance = null)
-    {
-        var app = new RamshaAppWithExternalServiceProvider(startupModuleType, services, options =>
-        {
-            options.SkipConfigureServices = true;
-            optionsAction?.Invoke(options);
-        },startupModuleInstance);
-        await app.ConfigureServicesAsync();
-        return app;
-    }
-
-    public static IRamshaAppWithInternalServiceProvider Create<TStartupModule>(
-        Action<AppCreationOptions>? optionsAction = null)
-        where TStartupModule : IRamshaModule
-    {
-        return Create(typeof(TStartupModule), optionsAction);
-    }
-
-    public static IRamshaAppWithInternalServiceProvider Create(
-        [NotNull] Type startupModuleType,
-        Action<AppCreationOptions>? optionsAction = null)
-    {
-        return new RamshaAppWithInternalServiceProvider(startupModuleType, optionsAction);
-    }
-
-    public static IRamshaAppWithExternalServiceProvider Create<TStartupModule>(
-        [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction = null)
-        where TStartupModule : IRamshaModule
-    {
-        return Create(typeof(TStartupModule), services, optionsAction);
-    }
-
-    public static IRamshaAppWithExternalServiceProvider Create(
-        [NotNull] Type startupModuleType,
-        [NotNull] IServiceCollection services,
-        Action<AppCreationOptions>? optionsAction = null,
-        IRamshaModule? startupModuleInstance = null
-        )
-    {
-        return new RamshaAppWithExternalServiceProvider(startupModuleType, services, optionsAction,startupModuleInstance);
-    }
 }

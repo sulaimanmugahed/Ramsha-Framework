@@ -8,6 +8,12 @@ namespace Ramsha;
 
 public class RamshaTypeHelpers
 {
+
+    public static Type[] GetRamshaTypes(Type baseType)
+    {
+        return GetImplementationTypes<IRamshaModule>(baseType);
+
+    }
     public static TId? ConvertId<TId>(string stringId)
   where TId : IEquatable<TId>
     {
@@ -24,11 +30,18 @@ public class RamshaTypeHelpers
         }
         return id;
     }
-    public static Type[] GetRamshaTypes<TAssemblyMarker>(Type baseType)
+    public static Type[] GetImplementationTypes<TAssemblyMarker>(Type baseType)
     {
-        return RamshaAssemblyHelpers.GetAssemblies(typeof(TAssemblyMarker))
+        //     RamshaAssemblyHelpers.LoadAllDlls();
+        //     return RamshaAssemblyHelpers.GetAssembliesWithAccessTo(typeof(TAssemblyMarker))
+        //          .SelectMany(a => a.GetTypes())
+        //    .Where(t => t.IsClass && !t.IsAbstract && baseType.IsAssignableFrom(t))
+        //    .ToArray();
+        return RamshaAssemblyHelpers.GetAssembliesWithAccessTo(typeof(TAssemblyMarker))
      .SelectMany(a => a.GetTypes())
      .Where(t => t.IsClass && !t.IsAbstract && baseType.IsAssignableFrom(t))
      .ToArray();
     }
+
+
 }

@@ -20,13 +20,13 @@ public abstract class RamshaDesignTimeDbContext<TModule, TContext> : IDesignTime
 
     protected virtual async Task<TContext> CreateDbContextAsync(string[] args)
     {
-        var application = await AppFactory.CreateAsync<TModule>(options =>
+        var application = await AppFactory.CreateAppAsync<TModule>(options =>
         {
             options.Services.ReplaceConfiguration(BuildConfiguration());
             ConfigureServices(options.Services);
         });
 
-        await application.InitAsync();
+        await application.Initialize();
 
         return application.ServiceProvider.GetRequiredService<TContext>();
     }

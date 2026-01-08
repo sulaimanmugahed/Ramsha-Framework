@@ -4,10 +4,22 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated</InterceptorsNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\framework\aspnetcore\Ramsha.AspNetCore.Mvc\Ramsha.AspNetCore.Mvc.csproj" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+      
+    <ProjectReference Include="..\src\framework\entity-framework-core\Ramsha.EntityFrameworkCore.SqlServer\Ramsha.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\src\modules\identity\Ramsha.Identity\Ramsha.Identity.csproj" />
+
   </ItemGroup>
+
+  <!-- <ItemGroup>
+    <ProjectReference Include="..\src\framework\aspnetcore\Ramsha.AspNetCore.Mvc\Ramsha.AspNetCore.Mvc.csproj" />
+    <ProjectReference Include="..\src\framework\common\Ramsha.Common.Domain\Ramsha.Common.Domain.csproj" />
+    <ProjectReference Include="..\src\framework\settings\Ramsha.Settings\Ramsha.Settings.csproj" />
+  </ItemGroup> -->
 
 </Project>

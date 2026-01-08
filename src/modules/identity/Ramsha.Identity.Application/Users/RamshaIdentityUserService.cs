@@ -39,25 +39,29 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
 
     public virtual async Task<RamshaResult<string>> Create(TCreateDto createDto)
     {
-        var user = MapCreate(createDto);
-        var identityResult = await userManager.CreateAsync(user, createDto.Password);
-        if (!identityResult.Succeeded)
+        return await UnitOfWork<RamshaResult<string>>(async () =>
         {
-            return identityResult.MapToRamshaError();
-        }
-
-        if (createDto.Roles is not null)
-        {
-            var roleResult = await userManager.AddToRolesAsync(user, createDto.Roles);
-            if (!roleResult.Succeeded)
+            var user = MapCreate(createDto);
+            var identityResult = await userManager.CreateAsync(user, createDto.Password);
+            if (!identityResult.Succeeded)
             {
-                return roleResult.MapToRamshaError();
+                return identityResult.MapToRamshaError();
             }
-        }
 
-        await userManager.AddToBaseRoles(user);
+            if (createDto.Roles is not null)
+            {
+                var roleResult = await userManager.AddToRolesAsync(user, createDto.Roles);
+                if (!roleResult.Succeeded)
+                {
+                    return roleResult.MapToRamshaError();
+                }
+            }
 
-        return user.Id.ToString()!;
+            await userManager.AddToBaseRoles(user);
+
+            return user.Id.ToString()!;
+        });
+
     }
 
     protected virtual TUser MapCreate(TCreateDto createDto)
@@ -66,7 +70,8 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
         {
             Id = GenerateId(),
             UserName = createDto.Username,
-            Email = createDto.Email
+            Email = createDto.Email,
+            PhoneNumber = createDto.PhoneNumber
         };
 
     }
@@ -102,36 +107,43 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
 
     public virtual async Task<IRamshaResult> Delete(TId id)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded)
+        return await UnitOfWork<IRamshaResult>(async () =>
         {
-            return getUser.Error!;
-        }
-        var result = await userManager.DeleteAsync(getUser.Value);
-        if (!result.Succeeded)
-        {
-            return result.MapToRamshaError();
-        }
+            var getUser = await userManager.GetByIdAsync(id);
+            if (!getUser.Succeeded)
+            {
+                return getUser.Error!;
+            }
+            var result = await userManager.DeleteAsync(getUser.Value);
+            if (!result.Succeeded)
+            {
+                return result.MapToRamshaError();
+            }
 
-        return Success();
+            return Success();
+        });
+
     }
 
     public virtual async Task<IRamshaResult> Update(TId id, TUpdateDto updateDto)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded)
+        return await UnitOfWork<IRamshaResult>(async () =>
         {
-            return getUser.Error!;
-        }
-        var user = getUser.Value;
-        user = MapUpdate(user, updateDto);
-        var result = await userManager.UpdateAsync(user);
-        if (!result.Succeeded)
-        {
-            return result.MapToRamshaError();
-        }
+            var getUser = await userManager.GetByIdAsync(id);
+            if (!getUser.Succeeded)
+            {
+                return getUser.Error!;
+            }
+            var user = getUser.Value;
+            user = MapUpdate(user, updateDto);
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return result.MapToRamshaError();
+            }
 
-        return Success();
+            return Success();
+        });
     }
 
     public async Task<RamshaResult<TDto>> Get(TId id)
@@ -156,14 +168,17 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
     //role management
     public async Task<IRamshaResult> AddToRoleAsync(TId id, string roleName)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+        {
+            var getUser = await userManager.GetByIdAsync(id);
+            if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.AddToRoleAsync(getUser.Value, roleName);
-        if (!result.Succeeded)
-            return result.MapToRamshaError();
+            var result = await userManager.AddToRoleAsync(getUser.Value, roleName);
+            if (!result.Succeeded)
+                return result.MapToRamshaError();
 
-        return Success();
+            return Success();
+        });
     }
 
     public async Task<IRamshaResult> RemoveFromRoleAsync(TId id, string roleName)
@@ -179,28 +194,36 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
 
     public async Task<IRamshaResult> SetRolesAsync(TId id, IEnumerable<string> roleNames)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+        {
+            var getUser = await userManager.GetByIdAsync(id);
+            if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.SetRolesAsync(getUser.Value, roleNames);
-        if (!result.Succeeded) return result.MapToRamshaError();
+            var result = await userManager.SetRolesAsync(getUser.Value, roleNames);
+            if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+            return Success();
+        });
+
     }
 
     public async Task<RamshaResult<List<string>>> GetRolesAsync(TId id)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<RamshaResult<List<string>>>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var roles = await userManager.GetRolesAsync(getUser.Value);
-        return roles.ToList();
+           var roles = await userManager.GetRolesAsync(getUser.Value);
+           return roles.ToList();
+       });
     }
 
 
     //password management
     public async Task<IRamshaResult> ChangePasswordAsync(TId id, string oldPassword, string newPassword)
     {
+
         var getUser = await userManager.GetByIdAsync(id);
         if (!getUser.Succeeded) return getUser.Error!;
 
@@ -212,27 +235,33 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
 
     public async Task<IRamshaResult> ResetPasswordAsync(TId id, string token, string newPassword)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.ResetPasswordAsync(getUser.Value, token, newPassword);
-        if (!result.Succeeded) return result.MapToRamshaError();
+           var result = await userManager.ResetPasswordAsync(getUser.Value, token, newPassword);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+           return Success();
+       });
     }
 
     public async Task<IRamshaResult> SetPasswordAsync(TId id, string newPassword)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.RemovePasswordAsync(getUser.Value);
-        if (!result.Succeeded) return result.MapToRamshaError();
+           var result = await userManager.RemovePasswordAsync(getUser.Value);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        result = await userManager.AddPasswordAsync(getUser.Value, newPassword);
-        if (!result.Succeeded) return result.MapToRamshaError();
+           result = await userManager.AddPasswordAsync(getUser.Value, newPassword);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+           return Success();
+       });
 
     }
 
@@ -241,48 +270,60 @@ where TUpdateDto : UpdateRamshaIdentityUserDto, new()
     //email and username
     public async Task<IRamshaResult> SetEmailAsync(TId id, string email)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.SetEmailAsync(getUser.Value, email);
-        if (!result.Succeeded) return result.MapToRamshaError();
+           var result = await userManager.SetEmailAsync(getUser.Value, email);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+           return Success();
+       });
     }
 
     public async Task<IRamshaResult> ConfirmEmailAsync(TId id, string token)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.ConfirmEmailAsync(getUser.Value, token);
-        if (!result.Succeeded) return result.MapToRamshaError();
+           var result = await userManager.ConfirmEmailAsync(getUser.Value, token);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+           return Success();
+       });
     }
 
     public async Task<IRamshaResult> SetUserNameAsync(TId id, string username)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.SetUserNameAsync(getUser.Value, username);
-        if (!result.Succeeded) return result.MapToRamshaError();
+           var result = await userManager.SetUserNameAsync(getUser.Value, username);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+           return Success();
+       });
     }
 
 
     //lockout
     public async Task<IRamshaResult> SetLockoutAsync(TId id, DateTimeOffset? end)
     {
-        var getUser = await userManager.GetByIdAsync(id);
-        if (!getUser.Succeeded) return getUser.Error!;
+        return await UnitOfWork<IRamshaResult>(async () =>
+       {
+           var getUser = await userManager.GetByIdAsync(id);
+           if (!getUser.Succeeded) return getUser.Error!;
 
-        var result = await userManager.SetLockoutEndDateAsync(getUser.Value, end);
-        // if (!result.Succeeded) return result.MapToRamshaErrors();
+           var result = await userManager.SetLockoutEndDateAsync(getUser.Value, end);
+           if (!result.Succeeded) return result.MapToRamshaError();
 
-        return Success();
+           return Success();
+       });
     }
 
     public Task<IRamshaResult> UnlockAsync(TId id)

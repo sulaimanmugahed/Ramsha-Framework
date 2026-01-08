@@ -1,21 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ramsha;
 
 public class PrepareContext(IServiceCollection services)
 {
-  public PrepareContext Configure<TOptions>(Action<TOptions> optionsAction)
+  public PrepareContext PrepareOptions<TOptions>(Action<TOptions> optionsAction)
     where TOptions : class
   {
-    services.PrepareConfigure(optionsAction);
+    services.PrepareOptions(optionsAction);
     return this;
   }
 
-  public TOptions? Configure<TOptions>()
+  public TOptions? PrepareOptions<TOptions>()
     where TOptions : class, new()
   {
     return services.ExecutePreparedOptions<TOptions>();

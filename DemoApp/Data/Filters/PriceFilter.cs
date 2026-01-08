@@ -16,6 +16,11 @@ public class TestSetting
     public bool Value { get; set; }
 }
 
+public interface IPrice
+{
+    decimal Price { get; set; }
+}
+
 
 public class PriceFilterProvider : EFGlobalQueryFilterProvider<AppDbContext, IPrice>
 {

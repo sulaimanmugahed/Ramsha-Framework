@@ -18,7 +18,7 @@ public class IdentityPersistenceModule : RamshaModule
     public override void Prepare(PrepareContext context)
     {
         base.Prepare(context);
-        context.Configure<RamshaIdentityOptions>(options =>
+        context.PrepareOptions<RamshaIdentityOptions>(options =>
      {
          options.AddEntityFrameworkCore();
      });

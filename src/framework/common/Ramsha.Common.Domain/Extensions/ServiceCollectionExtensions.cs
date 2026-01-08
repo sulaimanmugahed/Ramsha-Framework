@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(typeof(IGlobalQueryFilterManager<>), typeof(GlobalQueryFilterManager<>));
 
 
-        var managerTypes = RamshaAssemblyHelpers.GetAssemblies(typeof(CommonDomainModule))
+        var managerTypes = RamshaAssemblyHelpers.GetAssembliesWithAccessTo(typeof(CommonDomainModule))
     .SelectMany(a => a.GetTypes())
     .Where(t => t.IsClass &&
                 !t.IsAbstract &&

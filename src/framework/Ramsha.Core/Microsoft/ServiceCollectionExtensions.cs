@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
+
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +11,33 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
 
-  
+    public static IExternalRamshaEngine AddRamsha(this IServiceCollection services, Action<RamshaBuilder> action)
+    {
+        var builder = new RamshaBuilder();
+        action(builder);
+
+        var engine = services.GetSingletonInstanceOrNull<RamshaAsServiceEngine>()
+        ?? new RamshaAsServiceEngine(services, builder.Modules, builder.PrepareActions);
+
+        Task.Run(() => engine.ConfigureAsync())
+            .GetAwaiter().GetResult();
+
+        return engine;
+    }
+
+    public static async Task<IExternalRamshaEngine> AddRamshaAsync(this IServiceCollection services, Action<RamshaBuilder> action)
+    {
+        var builder = new RamshaBuilder();
+        action(builder);
+
+        var engine = services.GetSingletonInstanceOrNull<RamshaAsServiceEngine>()
+        ?? new RamshaAsServiceEngine(services, builder.Modules, builder.PrepareActions);
+
+        await engine.ConfigureAsync();
+
+        return engine;
+    }
+
 
     public static IServiceProvider BuildRamshaServiceProvider(this IServiceCollection services, ServiceProviderOptions? options = null, IServiceProviderResolver? resolver = null)
     {
@@ -22,73 +45,37 @@ public static class ServiceCollectionExtensions
         return new RamshaServiceProvider(services, options, resolver);
     }
 
-    public static IServiceCollection AddServiceProviderHook<THook>(
-        this IServiceCollection services,
-        ServiceLifetime lifetime = ServiceLifetime.Singleton)
-        where THook : class, IServiceProviderHook
-    {
-        ArgumentNullException.ThrowIfNull(services, nameof(services));
-        return lifetime switch
-        {
-            ServiceLifetime.Scoped => services.AddScoped<IServiceProviderHook, THook>(),
-            ServiceLifetime.Transient => services.AddTransient<IServiceProviderHook, THook>(),
-            _ => services.AddSingleton<IServiceProviderHook, THook>()
-        };
-    }
-
-    public static IServiceCollection AddServiceProviderResolver<TResolver>(this IServiceCollection services) where TResolver : class, IServiceProviderResolver
-    {
-        ArgumentNullException.ThrowIfNull(services, nameof(services));
-        return services.AddSingleton<IServiceProviderResolver, TResolver>();
-    }
-
-
-
-    public static IRamshaAppWithExternalServiceProvider AddApplication<TStartupModule>(
+    public static IExternalRamshaAppEngine AddRamshaApp<TStartupModule>(
      [NotNull] this IServiceCollection services,
      Action<AppCreationOptions>? optionsAction = null)
      where TStartupModule : IRamshaModule
     {
-        return AppFactory.Create<TStartupModule>(services, optionsAction);
+        return AppFactory.CreateApp<TStartupModule>(services, optionsAction);
     }
 
-    public static IRamshaAppWithExternalServiceProvider AddApplication(
+    public static IExternalRamshaAppEngine AddRamshaApp(
         [NotNull] this IServiceCollection services,
         [NotNull] Type startupModuleType,
         Action<AppCreationOptions>? optionsAction = null)
     {
-        return AppFactory.Create(startupModuleType, services, optionsAction);
+        return AppFactory.CreateApp(startupModuleType, services, optionsAction);
     }
 
-    public async static Task<IRamshaAppWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
+    public async static Task<IExternalRamshaAppEngine> AddRamshaAppAsync<TStartupModule>(
         [NotNull] this IServiceCollection services,
         Action<AppCreationOptions>? optionsAction = null)
         where TStartupModule : IRamshaModule
     {
-        return await AppFactory.CreateAsync<TStartupModule>(services, optionsAction);
+        return await AppFactory.CreateAppAsync<TStartupModule>(services, optionsAction);
     }
 
-    public async static Task<IRamshaAppWithExternalServiceProvider> AddApplicationAsync(
-        [NotNull] this IServiceCollection services,
-         Action<DefaultStartupModuleBuilder>? defaultModuleBuilder = null,
-        Action<AppCreationOptions>? optionsAction = null)
-    {
-        var fluentModuleBuilder = new DefaultStartupModuleBuilder();
-        defaultModuleBuilder?.Invoke(fluentModuleBuilder);
 
-        var defaultModule = fluentModuleBuilder.Build();
-        var defaultModuleType = defaultModule.GetType();
-        services.AddSingleton(defaultModuleType, defaultModule);
-
-        return await AppFactory.CreateAsync(defaultModuleType, services, optionsAction, defaultModule);
-    }
-
-    public async static Task<IRamshaAppWithExternalServiceProvider> AddApplicationAsync(
+    public async static Task<IExternalRamshaAppEngine> AddRamshaAppAsync(
       [NotNull] this IServiceCollection services,
       [NotNull] Type startupModuleType,
       Action<AppCreationOptions>? optionsAction = null)
     {
-        return await AppFactory.CreateAsync(startupModuleType, services, optionsAction);
+        return await AppFactory.CreateAppAsync(startupModuleType, services, optionsAction);
     }
 
     public static string? GetApplicationName(this IServiceCollection services)
@@ -204,14 +191,11 @@ public static class ServiceCollectionExtensions
         return serviceProviderFactory.CreateServiceProvider(builder);
     }
 
-    /// <summary>
-    /// Resolves a dependency using given <see cref="IServiceCollection"/>.
-    /// This method should be used only after dependency injection registration phase completed.
-    /// </summary>
+
     internal static T? GetService<T>(this IServiceCollection services)
     {
         return services
-            .GetSingletonInstance<IRamshaApp>()
+            .GetSingletonInstance<IRamshaEngine>()
             .ServiceProvider
             .GetService<T>();
     }
@@ -220,7 +204,7 @@ public static class ServiceCollectionExtensions
     internal static object? GetService(this IServiceCollection services, Type type)
     {
         return services
-            .GetSingletonInstance<IRamshaApp>()
+            .GetSingletonInstance<IRamshaEngine>()
             .ServiceProvider
             .GetService(type);
     }
@@ -229,7 +213,7 @@ public static class ServiceCollectionExtensions
     public static T GetRequiredService<T>(this IServiceCollection services) where T : notnull
     {
         return services
-            .GetSingletonInstance<IRamshaApp>()
+            .GetSingletonInstance<IRamshaEngine>()
             .ServiceProvider
             .GetRequiredService<T>();
     }
@@ -238,7 +222,7 @@ public static class ServiceCollectionExtensions
     public static object GetRequiredService(this IServiceCollection services, Type type)
     {
         return services
-            .GetSingletonInstance<IRamshaApp>()
+            .GetSingletonInstance<IRamshaEngine>()
             .ServiceProvider
             .GetRequiredService(type);
     }

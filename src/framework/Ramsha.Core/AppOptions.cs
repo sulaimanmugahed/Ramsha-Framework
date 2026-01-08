@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ramsha;
@@ -15,8 +13,6 @@ public class AppCreationOptions
 
     [NotNull]
     public ConfigurationBuilderOptions Configuration { get; }
-
-    public bool SkipConfigureServices { get; set; }
 
     public string? AppName { get; set; }
 

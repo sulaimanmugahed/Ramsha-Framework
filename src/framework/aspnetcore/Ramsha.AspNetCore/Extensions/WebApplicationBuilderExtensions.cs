@@ -1,61 +1,57 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Ramsha;
-using Ramsha.AspNetCore;
-
-namespace Ramsha.AspNetCore
-{
-
-}
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAsync<TStartupModule>(
+
+        public static IExternalRamshaAppEngine AddRamshaApp<TStartupModule>(
+           [NotNull] this WebApplicationBuilder builder,
+           Action<AppCreationOptions>? optionsAction = null)
+           where TStartupModule : IRamshaModule
+        {
+            return builder.AddRamshaApp(typeof(TStartupModule), optionsAction);
+        }
+
+
+        public static IExternalRamshaAppEngine AddRamshaApp(
+           [NotNull] this WebApplicationBuilder builder,
+            [NotNull] Type startupModuleType,
+           Action<AppCreationOptions>? optionsAction = null)
+
+        {
+            return builder.Services.AddRamshaApp(startupModuleType, options =>
+            {
+                options.Services.ReplaceConfiguration(builder.Configuration);
+                optionsAction?.Invoke(options);
+                if (string.IsNullOrWhiteSpace(options.Environment))
+                {
+                    options.Environment = builder.Environment.EnvironmentName;
+                }
+            });
+        }
+
+
+
+
+        public static async Task<IExternalRamshaAppEngine> AddRamshaAppAsync<TStartupModule>(
              [NotNull] this WebApplicationBuilder builder,
              Action<AppCreationOptions>? optionsAction = null)
              where TStartupModule : IRamshaModule
         {
-            return await builder.Services.AddApplicationAsync<TStartupModule>(options =>
-            {
-                options.Services.ReplaceConfiguration(builder.Configuration);
-                optionsAction?.Invoke(options);
-                if (string.IsNullOrWhiteSpace(options.Environment))
-                {
-                    options.Environment = builder.Environment.EnvironmentName;
-                }
-            });
+            return await builder.AddRamshaAppAsync(typeof(TStartupModule), optionsAction);
         }
 
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAsync(
-        [NotNull] this WebApplicationBuilder builder,
-        Action<DefaultStartupModuleBuilder>? moduleBuilder = null,
-        Action<AppCreationOptions>? optionsAction = null)
-        {
-            return await builder.Services.AddApplicationAsync(moduleBuilder, options =>
-            {
-                options.Services.ReplaceConfiguration(builder.Configuration);
-                optionsAction?.Invoke(options);
-                if (string.IsNullOrWhiteSpace(options.Environment))
-                {
-                    options.Environment = builder.Environment.EnvironmentName;
-                }
-            });
-        }
-
-        public static async Task<IRamshaAppWithExternalServiceProvider> AddRamshaAsync(
+        public static async Task<IExternalRamshaAppEngine> AddRamshaAppAsync(
             [NotNull] this WebApplicationBuilder builder,
             [NotNull] Type startupModuleType,
             Action<AppCreationOptions>? optionsAction = null)
         {
-            builder.Host.UseRamshaServiceProvider();
-            return await builder.Services.AddApplicationAsync(startupModuleType, options =>
+            return await builder.Services.AddRamshaAppAsync(startupModuleType, options =>
             {
+                options.Services.ReplaceConfiguration(builder.Configuration);
                 optionsAction?.Invoke(options);
                 if (string.IsNullOrWhiteSpace(options.Environment))
                 {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ramsha.Common.Domain;
 using Ramsha.UnitOfWork;
-using Ramsha.UnitOfWork.Abstractions;
+
 
 namespace Ramsha.EntityFrameworkCore;
 
@@ -46,30 +46,12 @@ public class EntityFrameworkCoreModule : RamshaModule
        });
 
         context.Services.AddSingleton(typeof(EFGlobalQueryFilterApplier<>));
-
         context.Services.AddTransient<IEfDbContextTypeProvider, EfDbContextTypeProvider>();
-
-
         context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UoWDbContextProvider<>));
-    }
 
-
-    public override async Task OnInitAsync(InitContext context)
-    {
-        base.OnInit(context);
-
-        var provider = context.ServiceProvider;
-
-        var uowManager = provider.GetRequiredService<IUnitOfWorkManager>();
-
-        using var uow = uowManager.Begin(new UnitOfWorkOptions { IsTransactional = false });
-        var dbProvider = provider.GetService<IDbContextProvider<IRamshaEFDbContext>>();
-        if (dbProvider is not null)
+        context.Services.Configure<RamshaHooksOptions>(options =>
         {
-            var db = await dbProvider.GetDbContextAsync();
-            await db.Database.EnsureCreatedAsync();
-        }
-
-        await uow.CompleteAsync();
+            options.InitHookContributors.Add<EntityFrameworkCoreInitHookContributor>();
+        });
     }
 }

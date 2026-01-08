@@ -129,6 +129,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.EntityFrameworkCore.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.EntityFrameworkCore.PostgreSql", "src\framework\entity-framework-core\Ramsha.EntityFrameworkCore.PostgreSql\Ramsha.EntityFrameworkCore.PostgreSql.csproj", "{2129ECF0-536C-4E2B-B0E9-54B52400E56F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramsha.Identity", "src\modules\identity\Ramsha.Identity\Ramsha.Identity.csproj", "{F3665D3F-2816-434C-A771-D8EB7FFC9C57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -691,6 +693,18 @@ Global
 		{2129ECF0-536C-4E2B-B0E9-54B52400E56F}.Release|x64.Build.0 = Release|Any CPU
 		{2129ECF0-536C-4E2B-B0E9-54B52400E56F}.Release|x86.ActiveCfg = Release|Any CPU
 		{2129ECF0-536C-4E2B-B0E9-54B52400E56F}.Release|x86.Build.0 = Release|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Debug|x64.Build.0 = Debug|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Debug|x86.Build.0 = Debug|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Release|x64.ActiveCfg = Release|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Release|x64.Build.0 = Release|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Release|x86.ActiveCfg = Release|Any CPU
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -754,5 +768,6 @@ Global
 		{7275F83A-B1DC-4280-BE6C-6C0CD9E7171D} = {C8A1BA8F-C707-E767-5989-C0E1CF0A04C7}
 		{12EB66E3-CC4B-4008-96AB-EF2225C628B1} = {71B26CA9-AFE7-F2E3-1AB1-CD956805BB92}
 		{2129ECF0-536C-4E2B-B0E9-54B52400E56F} = {71B26CA9-AFE7-F2E3-1AB1-CD956805BB92}
+		{F3665D3F-2816-434C-A771-D8EB7FFC9C57} = {0EC62A1A-9858-3A60-8A0C-FC9AACFA2EC7}
 	EndGlobalSection
 EndGlobal

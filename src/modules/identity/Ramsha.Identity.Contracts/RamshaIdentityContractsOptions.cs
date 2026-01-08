@@ -7,6 +7,7 @@ namespace Ramsha.Identity.Contracts;
 
 public class RamshaIdentityContractsOptions
 {
+    public Type KeyType { get; set; }
     public Dictionary<Type, Type?> ReplacedDtosTypes { get; } = [];
 
     public Type? ReplacedUserServiceType { get; private set; }

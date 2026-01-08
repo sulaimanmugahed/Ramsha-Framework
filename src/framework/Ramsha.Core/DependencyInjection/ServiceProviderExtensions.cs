@@ -1,5 +1,4 @@
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using Ramsha;
 
 
@@ -11,36 +10,47 @@ public static class ServiceProviderExtensions
     {
         var instance = ActivatorUtilities.CreateInstance<T>(provider);
 
-        var injectableProps = typeof(T)
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.CanWrite &&
-                        p.IsDefined(typeof(InjectableAttribute), true));
-
-        foreach (var prop in injectableProps)
+        foreach (var prop in GetInjectableProperties(typeof(T)))
         {
-            var value = provider.GetRequiredService(prop.PropertyType);
-            prop.SetValue(instance, value);
+            var attribute = prop.GetCustomAttribute<InjectableAttribute>();
+            object? value = attribute?.ServiceKey != null
+                ? provider.GetKeyedService(prop.PropertyType, attribute.ServiceKey)
+                : provider.GetService(prop.PropertyType);
+
+            if (value != null)
+                prop.SetValue(instance, value);
         }
 
         return instance;
     }
+
+
     public static object CreateInstanceWithPropInjection(this IServiceProvider provider, Type type)
     {
         var instance = ActivatorUtilities.CreateInstance(provider, type);
 
-        var injectableProps = type
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.CanWrite &&
-                        p.IsDefined(typeof(InjectableAttribute), true));
-
-        foreach (var prop in injectableProps)
+        foreach (var prop in GetInjectableProperties(type))
         {
-            var value = provider.GetRequiredService(prop.PropertyType);
-            prop.SetValue(instance, value);
+            var attribute = prop.GetCustomAttribute<InjectableAttribute>();
+            object? value = attribute?.ServiceKey != null
+                ? provider.GetKeyedService(prop.PropertyType, attribute.ServiceKey)
+                : provider.GetService(prop.PropertyType);
+
+            if (value != null)
+                prop.SetValue(instance, value);
         }
 
         return instance;
     }
+
+    private static IEnumerable<PropertyInfo> GetInjectableProperties(Type type)
+    {
+        return type
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(p => p.CanWrite &&
+                        p.IsDefined(typeof(InjectableAttribute), true));
+    }
+
     public static Lazy<T> GetLazyService<T>(this IServiceProvider serviceProvider) where T : class
     {
         return new GenericLazy<T>(() => serviceProvider.GetService<T>()!);

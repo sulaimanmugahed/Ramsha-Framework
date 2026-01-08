@@ -3,13 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ramsha.Security;
 using Ramsha.Settings;
-using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.Common.Domain;
 
 public class CommonDomainModule : RamshaModule
 {
-
     public override void Register(RegisterContext context)
     {
         base.Register(context);
@@ -18,15 +16,11 @@ public class CommonDomainModule : RamshaModule
         .DependsOn<SettingsModule>();
 
     }
-
-
-
-
     public override void Prepare(PrepareContext context)
     {
         base.Prepare(context);
 
-        context.Configure<TestDomainOptions>(options =>
+        context.PrepareOptions<TestDomainOptions>(options =>
         {
             options.Name = "domain";
         });
@@ -53,13 +47,5 @@ public class CommonDomainModule : RamshaModule
         context.Services.Configure<GlobalQueryFilterOptions>(config);
 
         context.Services.AddCommonDomainServices();
-
-
-
-
     }
-}
-public interface IPrice
-{
-    decimal Price { get; }
 }

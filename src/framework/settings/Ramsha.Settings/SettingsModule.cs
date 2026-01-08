@@ -1,4 +1,6 @@
-﻿namespace Ramsha.Settings;
+﻿
+
+namespace Ramsha.Settings;
 
 public class SettingsModule : RamshaModule
 {

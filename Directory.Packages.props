@@ -17,6 +17,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.1" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
     <PackageVersion Include="System.Management" Version="10.0.1" />
+     <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="10.0.1" />
   <!-- core -->
 
 

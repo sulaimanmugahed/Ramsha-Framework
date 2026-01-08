@@ -38,8 +38,8 @@ public static class ServiceCollectionExtensions
         services.TryAddTransient(dbContextType, sp => sp.CreateInstanceWithPropInjection(dbContextType));
 
         services.AddTransient(dbContextInterfaceType, sp => sp.GetRequiredService(dbContextType));
-        services.TryAddTransient(typeof(IRamshaEFDbContext), sp => sp.GetRequiredService(dbContextType));
-        services.TryAddTransient(typeof(IEFDbContext), sp => sp.GetRequiredService(dbContextType));
+        services.AddTransient(typeof(IRamshaEFDbContext), sp => sp.GetRequiredService(dbContextType));
+        services.AddTransient(typeof(IEFDbContext), sp => sp.GetRequiredService(dbContextType));
 
         var options = new EfDbContextRegistrationOptions(dbContextType, services);
 
@@ -58,7 +58,7 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient(dbContextInterfaceType, sp => sp.GetRequiredService(dbContextType));
 
-        // Handle replaced contexts
+
         foreach (var entry in options.ReplacedDbContextTypes)
         {
             var originalDbContextType = entry.Key;
@@ -94,8 +94,8 @@ public static class ServiceCollectionExtensions
         services.TryAddTransient(sp => sp.CreateInstanceWithPropInjection<TDbContext>());
 
 
-        services.TryAddTransient<IRamshaEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
-        services.TryAddTransient<IEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
+        services.AddTransient<IRamshaEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
+        services.AddTransient<IEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
 
 
         var options = new EfDbContextRegistrationOptions(typeof(TDbContext), services);
@@ -134,8 +134,8 @@ public static class ServiceCollectionExtensions
 
         services.TryAddTransient(sp => sp.CreateInstanceWithPropInjection<TDbContext>());
 
-        services.TryAddTransient<IRamshaEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
-        services.TryAddTransient<IEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
+        services.AddTransient<IRamshaEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
+        services.AddTransient<IEFDbContext>(sp => sp.GetRequiredService<TDbContext>());
 
         var options = new EfDbContextRegistrationOptions(typeof(TDbContext), services);
 

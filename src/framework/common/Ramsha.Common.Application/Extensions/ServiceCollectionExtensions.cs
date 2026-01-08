@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
     }
     public static IServiceCollection AddCommonApplicationServices(this IServiceCollection services)
     {
-        var appServiceTypes = RamshaAssemblyHelpers.GetAssemblies(typeof(CommonApplicationModule))
+        var appServiceTypes = RamshaAssemblyHelpers.GetAssembliesWithAccessTo(typeof(CommonApplicationModule))
 .SelectMany(a => a.GetTypes())
 .Where(t => t.IsClass &&
            !t.IsAbstract &&

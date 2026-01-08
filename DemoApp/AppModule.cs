@@ -56,23 +56,23 @@ public class AppModule : RamshaModule
     public override void Prepare(PrepareContext context)
     {
         base.Prepare(context);
-        context.Configure<LocalMessagingOptions>(options =>
+        context.PrepareOptions<LocalMessagingOptions>(options =>
        {
            options.AddMessagesFromAssembly<AppModule>();
        });
 
-        context.Configure<RamshaIdentityTypesOptions>(options =>
+        context.PrepareOptions<RamshaIdentityTypesOptions>(options =>
         {
             options.UserType = typeof(AppIdentityUser);
         });
-        context.Configure<RamshaIdentityContractsOptions>(options =>
+        context.PrepareOptions<RamshaIdentityContractsOptions>(options =>
         {
             options.ReplaceDto<CreateRamshaIdentityUserDto, CreateAppUserDto>();
             options.ReplaceDto<UpdateRamshaIdentityUserDto, UpdateAppUserDto>();
             options.ReplaceUserService<AppUserService>();
         });
 
-        context.Configure<RamshaAccountContractsOptions>(options =>
+        context.PrepareOptions<RamshaAccountContractsOptions>(options =>
         {
             options.ReplaceDto<RamshaRegisterDto, AppRegisterDto>();
             options.ReplaceAccountService<AppAccountService>();
@@ -107,11 +107,6 @@ public class AppModule : RamshaModule
         });
 
 
-        context.Services.Configure<GlobalQueryFilterOptions>(options =>
-       {
-           options.DefaultStates[typeof(IPrice)] = new GlobalQueryFilterState(true);
-       });
-
         context.Services.Configure<TestSetting>(configuration.GetSection(nameof(TestSetting)));
 
         context.Services.Configure<RamshaClaimsPrincipalFactoryOptions>(options =>
@@ -140,10 +135,7 @@ public class AppModule : RamshaModule
 
     }
 
-    public override void OnInit(InitContext context)
-    {
-        base.OnInit(context);
-    }
+
 }
 
 

@@ -1,16 +1,16 @@
 using DemoApp;
-using DemoModule;
-using Ramsha;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-await builder.AddRamshaAsync<AppModule>();
-
-
+builder.Services.AddRamsha(ramsha =>
+{
+    ramsha.AddModule<AppModule>();
+});
 
 var app = builder.Build();
 
-await app.UseRamshaAsync();
-await app.RunAsync();
+app.UseRamsha();
+app.Run();
 
 

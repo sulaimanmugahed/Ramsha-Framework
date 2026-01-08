@@ -245,3 +245,5 @@ where TId : IEquatable<TId>
     public string? DeletedBy { get; set; }
     public DateTime? DeletionDate { get; set; }
 }
+
+

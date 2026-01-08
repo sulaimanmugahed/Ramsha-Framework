@@ -21,12 +21,6 @@ public class AspNetCoreMvcModule : RamshaModule
 
     }
 
-    public override void Prepare(PrepareContext context)
-    {
-        base.Prepare(context);
-    }
-
-
 
     public override void BuildServices(BuildServicesContext context)
     {
@@ -67,11 +61,6 @@ public class AspNetCoreMvcModule : RamshaModule
          });
 
 
-    }
-
-    public override void OnInit(InitContext context)
-    {
-        base.OnInit(context);
     }
 
 }

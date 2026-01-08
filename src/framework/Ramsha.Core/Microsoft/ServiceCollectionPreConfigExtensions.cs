@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionPreConfigExtensions
 {
-    public static IServiceCollection PrepareConfigure<TOptions>(this IServiceCollection services, Action<TOptions> optionsAction)
+    public static IServiceCollection PrepareOptions<TOptions>(this IServiceCollection services, Action<TOptions> optionsAction)
     {
         services.GetPrepareConfigureActions<TOptions>().Add(optionsAction);
         return services;

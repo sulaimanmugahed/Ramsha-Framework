@@ -17,7 +17,7 @@ public class IdentityApiModule : RamshaModule
     public override void Prepare(PrepareContext context)
     {
         base.Prepare(context);
-        context.Configure<IMvcBuilder>(builder =>
+        context.PrepareOptions<IMvcBuilder>(builder =>
         {
             builder.AddIdentityGenericControllers();
         });

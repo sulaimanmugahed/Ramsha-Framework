@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AutoRegisterPrincipalTransformers(this IServiceCollection services)
     {
-        var assemblies = RamshaAssemblyHelpers.GetAllRamshaAssemblies();
+        var assemblies = RamshaAssemblyHelpers.GetAssembliesWithAccessToRamsha();
         var modifierTypes = assemblies
        .SelectMany(a =>
        {

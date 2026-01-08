@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,82 +14,88 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public async static Task UseRamshaAsync([NotNull] this IApplicationBuilder app)
+        public static void UseRamsha(this IApplicationBuilder app)
         {
-
-            var application = app.ApplicationServices.GetRequiredService<IRamshaAppWithExternalServiceProvider>();
+            var engine = app.ApplicationServices.GetRequiredService<IExternalRamshaEngine>();
             var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
             applicationLifetime.ApplicationStopping.Register(() =>
             {
-                AsyncHelper.RunSync(() => application.ShutdownAsync());
+                AsyncHelper.RunSync(() => engine.ShutdownAsync());
             });
 
-            applicationLifetime.ApplicationStopped.Register(() =>
+            if (engine is IDisposable disposableEngine)
             {
-                application.Dispose();
-            });
+                applicationLifetime.ApplicationStopped.Register(disposableEngine.Dispose);
+            }
 
-            await application.InitAsync(app.ApplicationServices);
+            Task.Run(() => engine.Initialize(app.ApplicationServices))
+            .GetAwaiter()
+            .GetResult();
 
-            var pipeline = app.ApplicationServices.GetRequiredService<IAppPipeline<IApplicationBuilder>>();
-            pipeline.Apply(app);
-
+            var pipeline = app.ApplicationServices.GetService<IAppPipeline<IApplicationBuilder>>();
+            if (pipeline is not null)
+            {
+                pipeline.Apply(app);
+            }
         }
 
-        public static void UseRamsha([NotNull] this IApplicationBuilder app)
+        public static async Task UseRamshaAsync(
+          this IApplicationBuilder app)
         {
-
-            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
-            var application = app.ApplicationServices.GetRequiredService<IRamshaAppWithExternalServiceProvider>();
+            var engine = app.ApplicationServices.GetRequiredService<IExternalRamshaEngine>();
             var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
             applicationLifetime.ApplicationStopping.Register(() =>
             {
-                application.Shutdown();
+                AsyncHelper.RunSync(() => engine.ShutdownAsync());
             });
 
-            applicationLifetime.ApplicationStopped.Register(() =>
+            if (engine is IDisposable disposableEngine)
             {
-                application.Dispose();
-            });
+                applicationLifetime.ApplicationStopped.Register(disposableEngine.Dispose);
+            }
 
-            application.Init(app.ApplicationServices);
+            await engine.Initialize(app.ApplicationServices);
 
-            var pipeline = app.ApplicationServices.GetRequiredService<IAppPipeline<IApplicationBuilder>>();
-            pipeline.Apply(app);
+            var pipeline = app.ApplicationServices.GetService<IAppPipeline<IApplicationBuilder>>();
+            if (pipeline is not null)
+            {
+                pipeline.Apply(app);
+            }
         }
 
-         public static IApplicationBuilder UseRamshaEndpoints(
-        this IApplicationBuilder app,
-        Action<IEndpointRouteBuilder>? additionalConfigurationAction = null)
-    {
-        var options = app.ApplicationServices
-            .GetRequiredService<IOptions<RamshaEndpointRouterOptions>>()
-            .Value;
 
-        if (!options.EndpointConfigureActions.Any() && additionalConfigurationAction == null)
+        public static IApplicationBuilder UseRamshaEndpoints(
+       this IApplicationBuilder app,
+       Action<IEndpointRouteBuilder>? additionalConfigurationAction = null)
         {
-            return app;
-        }
+            var options = app.ApplicationServices
+                .GetRequiredService<IOptions<RamshaEndpointRouterOptions>>()
+                .Value;
 
-        return app.UseEndpoints(endpoints =>
-        {
-            using (var scope = app.ApplicationServices.CreateScope())
+            if (!options.EndpointConfigureActions.Any() && additionalConfigurationAction == null)
             {
-                if (options.EndpointConfigureActions.Any())
+                return app;
+            }
+
+            return app.UseEndpoints(endpoints =>
+            {
+                using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    var context = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
-
-                    foreach (var configureAction in options.EndpointConfigureActions)
+                    if (options.EndpointConfigureActions.Any())
                     {
-                        configureAction(context);
+                        var context = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
+
+                        foreach (var configureAction in options.EndpointConfigureActions)
+                        {
+                            configureAction(context);
+                        }
                     }
                 }
-            }
-            
-            additionalConfigurationAction?.Invoke(endpoints);
-        });
-    }
+
+                additionalConfigurationAction?.Invoke(endpoints);
+            });
+        }
     }
 }

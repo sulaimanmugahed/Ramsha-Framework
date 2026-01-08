@@ -20,7 +20,7 @@ public class IdentityDomainModule : RamshaModule
     {
         base.Prepare(context);
 
-        context.Configure<RamshaIdentityTypesOptions>(options =>
+        context.PrepareOptions<RamshaIdentityTypesOptions>(options =>
         {
             options.KeyType ??= typeof(Guid);
             options.UserType ??= typeof(RamshaIdentityUser);
@@ -32,7 +32,7 @@ public class IdentityDomainModule : RamshaModule
             options.UserRoleType ??= typeof(RamshaIdentityUserRole<Guid>);
         });
 
-        context.Configure<RamshaIdentityOptions>(options => { });
+        context.PrepareOptions<RamshaIdentityOptions>(options => { });
     }
 
 
