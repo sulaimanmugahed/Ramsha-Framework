@@ -4,7 +4,7 @@ using Ramsha.LocalMessaging.Abstractions;
 
 namespace CleanWebApiTemplate.Contracts;
 
-public class GetHelloWorldQuery : Query<RamshaResult<string>>
+public class GetHelloWorldQuery : IRamshaQuery
 {
 
 }

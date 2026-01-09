@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Settings;
 using Ramsha.SettingsManagement.Contracts;
-using Ramsha.SettingsManagement.Shared;
 
 namespace Ramsha.SettingsManagement.Api;
 

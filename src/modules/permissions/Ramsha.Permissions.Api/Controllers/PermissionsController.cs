@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Ramsha.AspNetCore.Mvc;
 using Ramsha.Permissions.Contracts;
@@ -9,7 +6,6 @@ using Ramsha.Permissions.Shared;
 
 namespace Ramsha.Permissions.Api;
 
-[Route("permissions")]
 public class PermissionsController(IPermissionsService permissionsService) : RamshaApiController
 {
     [HttpPost]

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ <Import Project="..\..\..\..\common.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ramsha.Account.Api\Ramsha.Account.Api.csproj" />
+    <ProjectReference Include="..\Ramsha.Account.Application\Ramsha.Account.Application.csproj" />
+    <ProjectReference Include="..\Ramsha.Account.Contracts\Ramsha.Account.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

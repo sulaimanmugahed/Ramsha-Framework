@@ -2,7 +2,7 @@ using CleanWebApiTemplate.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 
-await builder.AddRamshaAsync<CleanWebApiTemplateStartupModule>();
+await builder.AddRamshaAppAsync<CleanWebApiTemplateStartupModule>();
 
 var app = builder.Build();
 

@@ -8,7 +8,7 @@ using Ramsha.AspNetCore.Mvc;
 
 namespace Ramsha.Account.Api;
 
-[GenericControllerName("account")]
+[ControllerName("account")]
 public class RamshaAccountController<TRegisterDto>(IRamshaAccountService<TRegisterDto> accountService)
 : RamshaApiController
 where TRegisterDto : RamshaRegisterDto, new()

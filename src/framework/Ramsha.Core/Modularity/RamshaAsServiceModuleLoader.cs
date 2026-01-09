@@ -13,9 +13,6 @@ public class RamshaAsServiceModuleLoader
         var registry = new RamshaModuleRegistry();
         var allModules = new List<IRamshaModule>();
 
-        logger.LogInformation("Registering {Count} starter modules", starterModuleTypes.Length);
-
-
         foreach (var starterType in starterModuleTypes)
         {
             var starterInstance = Activator.CreateInstance(starterType) as IRamshaModule
@@ -43,7 +40,7 @@ public class RamshaAsServiceModuleLoader
         var descriptors = BuildDescriptorGraph(registry, logger);
         var sortedDescriptors = SortModulesByDependency(descriptors);
 
-        logger.LogInformation("Loaded {TotalCount} modules from {StarterCount} starters",
+        logger.LogInformation("Loaded {TotalCount} modules",
             sortedDescriptors.Count, starterModuleTypes.Length);
 
         ModuleLogHelper.LogModuleDiagram(logger, sortedDescriptors);

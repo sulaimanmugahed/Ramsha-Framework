@@ -5,7 +5,7 @@ using Ramsha.EntityFrameworkCore;
 namespace SimpleWebApiTemplate.Data;
 
 public class SimpleWebApiTemplateDbContextDesignTimeFactory
-: RamshaDesignTimeDbContext<DefaultStartupModule, SimpleWebApiTemplateDbContext>
+: RamshaDesignTimeDbContext<SimpleWebApiTemplateModule, SimpleWebApiTemplateDbContext>
 {
     protected override IConfigurationRoot BuildConfiguration()
     => ConfigurationHelper.BuildConfiguration();

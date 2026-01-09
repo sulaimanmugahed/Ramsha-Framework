@@ -8,10 +8,10 @@ namespace CleanWebApiTemplate.Api;
 public class HelloWorldController : RamshaApiController
 {
   [HttpGet]
-  public async Task<RamshaResult<string>> GetHelloWorld()
-    => await Mediator.Send(new GetHelloWorldQuery());
+  public async Task<IActionResult> GetHelloWorld()
+    => await Query(new GetHelloWorldQuery());
 
   [HttpPost]
-  public async Task<RamshaResult<string>> SayHello(SayHelloCommand command)
-    => await Mediator.Send(command);
+  public async Task<IActionResult> SayHello(SayHelloCommand command)
+    => await Command(command);
 }

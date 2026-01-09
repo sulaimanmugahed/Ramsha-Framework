@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Ramsha.Core;
 using Ramsha.Common.Domain;
 using Ramsha.LocalMessaging.Abstractions;
-using Ramsha.UnitOfWork;
 using Ramsha.UnitOfWork.Abstractions;
 
 namespace Ramsha.AspNetCore.Mvc;
 
-
+[CamelCaseControllerName]
+[Route("[controller]")]
 public abstract class RamshaControllerBase : ControllerBase
 {
     protected IRamshaMediator Mediator => HttpContext.RequestServices.GetLazyRequiredService<IRamshaMediator>().Value;

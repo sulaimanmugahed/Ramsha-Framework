@@ -10,7 +10,7 @@ using Ramsha.Identity.Contracts;
 
 namespace Ramsha.Identity.Api;
 
-[GenericControllerName("roles")]
+[ControllerName("roles")]
 public class RamshaIdentityRoleController<TDto, TCreateDto, TUpdateDto, TId>(IRamshaIdentityRoleService<TDto, TCreateDto, TUpdateDto, TId> roleService) : RamshaApiController
 where TId : IEquatable<TId>
 where TCreateDto : CreateRamshaIdentityRoleDto

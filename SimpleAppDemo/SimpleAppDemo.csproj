@@ -9,10 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
       
     <ProjectReference Include="..\src\framework\entity-framework-core\Ramsha.EntityFrameworkCore.SqlServer\Ramsha.EntityFrameworkCore.SqlServer.csproj" />
+      
+    <ProjectReference Include="..\src\modules\account\Ramsha.Account\Ramsha.Account.csproj" />
     <ProjectReference Include="..\src\modules\identity\Ramsha.Identity\Ramsha.Identity.csproj" />
+    <ProjectReference Include="..\src\modules\permissions\Ramsha.Permissions\Ramsha.Permissions.csproj" />
+    <ProjectReference Include="..\src\modules\settings-management\Ramsha.SettingsManagement\Ramsha.SettingsManagement.csproj" />
 
   </ItemGroup>
 

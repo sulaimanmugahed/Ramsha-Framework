@@ -1,16 +1,9 @@
-
-
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Ramsha;
-using Ramsha.Common.Domain;
 using Ramsha.EntityFrameworkCore;
 using Ramsha.EntityFrameworkCore.SqlServer;
 using Ramsha.Identity;
 using Ramsha.Identity.Persistence;
-using Ramsha.Settings;
-using SimpleAppDemo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 var ramsha = builder.Services.AddRamsha(ramsha =>
 {
     ramsha
-    .AddModule<AppModule>()
-    .AddIdentity()
-    .AddEFSqlServerProvider();
+    .AddIdentityModule()
+    .AddAccountModule()
+    .AddSettingsManagementModule()
+    .AddPermissionsModule()
+    .AddEFSqlServerModule();
+
 });
 
 builder.Services.AddRamshaDbContext<AppDbContext>();

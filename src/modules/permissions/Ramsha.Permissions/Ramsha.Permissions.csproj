@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ <Import Project="..\..\..\..\common.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ramsha.Permissions.Api\Ramsha.Permissions.Api.csproj" />
+    <ProjectReference Include="..\Ramsha.Permissions.Application\Ramsha.Permissions.Application.csproj" />
+    <ProjectReference Include="..\Ramsha.Permissions.Persistence\Ramsha.Permissions.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

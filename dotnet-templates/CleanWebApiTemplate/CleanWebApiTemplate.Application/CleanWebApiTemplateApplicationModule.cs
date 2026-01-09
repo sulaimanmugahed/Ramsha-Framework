@@ -1,7 +1,7 @@
 ﻿using CleanWebApiTemplate.Contracts;
 using CleanWebApiTemplate.Domain;
 using Ramsha;
-using Ramsha.ApplicationAbstractions;
+using Ramsha.Common.Application;
 using Ramsha.LocalMessaging.Abstractions;
 
 namespace CleanWebApiTemplate.Application;
@@ -22,7 +22,7 @@ public class CleanWebApiTemplateApplicationModule : RamshaModule
     {
         base.Prepare(context);
 
-        context.Configure<LocalMessagingOptions>(options =>
+        context.PrepareOptions<LocalMessagingOptions>(options =>
         {
             options.AddMessagesFromAssembly<CleanWebApiTemplateApplicationModule>();
         });
